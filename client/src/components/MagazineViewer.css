@@ -1,0 +1,172 @@
+.magazine-viewer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 10000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  animation: fadeIn 0.3s ease-out;
+  cursor: pointer;
+}
+
+.magazine-viewer-overlay.closing {
+  animation: fadeOut 0.4s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.magazine-viewer-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  max-height: calc(95vh - 80px);
+  margin-top: 80px;
+  background: #ffffff;
+  border-radius: 24px 24px 0 0;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  cursor: default;
+  overflow: hidden;
+}
+
+.magazine-viewer-container.slide-down {
+  animation: slideDown 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(100%);
+  }
+}
+
+.magazine-viewer-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.05);
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10001;
+  transition: all 0.3s ease;
+  color: #000000;
+}
+
+.magazine-viewer-close:hover {
+  background: rgba(0, 0, 0, 0.1);
+  transform: scale(1.05);
+}
+
+.magazine-viewer-content {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  padding: 4rem 3rem;
+  box-sizing: border-box;
+}
+
+.project-details {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.project-section {
+  padding: 2rem 0;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #000000;
+  margin: 0 0 1rem 0;
+  letter-spacing: -0.5px;
+}
+
+.section-text {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #333333;
+  margin: 0;
+  font-weight: 400;
+}
+
+.section-divider {
+  width: 100%;
+  height: 1px;
+  background: #e5e5e5;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .magazine-viewer-container {
+    max-height: 100vh;
+    border-radius: 0;
+  }
+
+  .magazine-viewer-close {
+    top: 15px;
+    right: 15px;
+    width: 40px;
+    height: 40px;
+  }
+
+  .magazine-viewer-content {
+    padding: 3rem 1.5rem;
+  }
+
+  .project-section {
+    padding: 1.5rem 0;
+  }
+
+  .section-title {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .section-text {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+}
+
