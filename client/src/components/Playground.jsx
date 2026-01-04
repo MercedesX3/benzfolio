@@ -1,11 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import './Playground.css';
 
-const Playground = ({ onImagesLoading }) => {
-  const [loadedImages, setLoadedImages] = useState(0);
+const Playground = () => {
   const [visibleImages, setVisibleImages] = useState(new Set());
-  const loaderTimerRef = useRef(null);
-  const startTimeRef = useRef(Date.now());
   
   const images = [
     'playground pics/IMG_0252.JPG',
@@ -22,41 +19,7 @@ const Playground = ({ onImagesLoading }) => {
     'playground pics/IMG_9152.JPG',
   ];
 
-  useEffect(() => {
-    startTimeRef.current = Date.now();
-    
-    // Start a timer - if images take more than 500ms to load, show loader
-    loaderTimerRef.current = setTimeout(() => {
-      if (loadedImages < images.length) {
-        if (onImagesLoading) {
-          onImagesLoading(true);
-        }
-      }
-    }, 500);
-
-    return () => {
-      if (loaderTimerRef.current) {
-        clearTimeout(loaderTimerRef.current);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    // If all images are loaded, hide loader
-    if (loadedImages === images.length) {
-      if (loaderTimerRef.current) {
-        clearTimeout(loaderTimerRef.current);
-      }
-      // Only hide loader if it was shown (i.e., loading took more than 500ms)
-      const loadTime = Date.now() - startTimeRef.current;
-      if (loadTime > 500 && onImagesLoading) {
-        onImagesLoading(false);
-      }
-    }
-  }, [loadedImages, images.length, onImagesLoading]);
-
   const handleImageLoad = (index) => {
-    setLoadedImages(prev => prev + 1);
     // Add a small delay for staggered animation
     setTimeout(() => {
       setVisibleImages(prev => new Set([...prev, index]));

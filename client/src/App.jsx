@@ -50,7 +50,7 @@ function App() {
     return (
       <>
         {isHomePage && <HomePage isVisible={true} />}
-        {currentPage === 'Playground' && <Playground onImagesLoading={handleImagesLoading} />}
+        {currentPage === 'Playground' && <Playground />}
         {isWorkPage && <WorkPage />}
         {currentPage === 'About' && <AboutPage />}
       </>
