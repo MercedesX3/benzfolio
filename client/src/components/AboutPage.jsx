@@ -74,7 +74,7 @@ const AboutPage = () => {
   ];
 
   const communityPhotos = [
-    { src: "/Community/Community Photos/100_0173.JPG", caption: "ACM Peechi Night" },
+    { src: "/Community/Community Photos/100_0173.jpeg", caption: "ACM Peechi Night" },
     { src: "/Community/Community Photos/DSC09356.JPG", caption: "Spring 2026 Kickoff" },
     { src: "/Community/Community Photos/DSC09698.JPG", caption: "Spring 2026 Board" },
     { src: "/Community/Community Photos/f25 eos-34.JPG", caption: "ACM Campus @ EOS" },
