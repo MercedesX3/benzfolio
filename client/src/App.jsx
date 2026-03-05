@@ -46,9 +46,9 @@ function App() {
   const renderContent = () => {
     const isWorkPage = currentPage === 'Work';
     const isHomePage = currentPage === 'Home' || currentPage === '';
-    
-    return (
-      <>
+
+  return (
+    <>
         {isHomePage && <HomePage isVisible={true} />}
         {currentPage === 'Playground' && <Playground />}
         {isWorkPage && <WorkPage />}
@@ -78,9 +78,9 @@ function App() {
       {isHomePage && (
         <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 3 }}>
           <Footer />
-        </div>
+      </div>
       )}
-    </div>
+      </div>
   )
 }
 

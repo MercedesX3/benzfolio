@@ -30,20 +30,17 @@
   overflow-x: hidden;
 }
 
-@media (max-width: 768px) {
-  .main-content.about-scrollable {
-    overflow-y: auto;
-    overflow-x: hidden;
-  }
+.main-content.about-scrollable {
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
 }
-
-

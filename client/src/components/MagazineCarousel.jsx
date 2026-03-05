@@ -11,50 +11,57 @@ const MagazineCarousel = ({ magazines = [] }) => {
 
   // Default magazines if none provided
   const defaultMagazines = [
-    { 
-      id: 1, 
-      title: 'Sage Cover', 
+    {
+      id: 1,
+      title: 'Sage Cover',
       image: '/magazine-covers/sage-cover.png',
-      context: 'Sage is a project management platform designed to help teams collaborate more effectively. The project was initiated to address the growing need for streamlined communication and task management in remote work environments.',
-      techStack: 'Built with React for the frontend, Node.js and Express for the backend API, MongoDB for data storage, and Socket.io for real-time collaboration features. Styled with Tailwind CSS and deployed on AWS.',
-      solutionOverview: 'Sage provides a comprehensive solution with features including real-time task tracking, team chat, file sharing, and project analytics. The platform integrates seamlessly with popular tools like Slack and GitHub.',
-      solutionImpact: 'Since launch, Sage has helped over 500 teams improve their project completion rates by 40%. User feedback indicates a 60% reduction in time spent on project coordination and a significant increase in team satisfaction.',
-      designOutcome: 'The design emphasizes clarity and efficiency with a clean, modern interface. The color scheme uses calming greens and blues to create a focused work environment, while intuitive navigation ensures users can quickly access the features they need.'
+      contextTitle: 'SAGE, your Student Advising Guidance Engine',
+      context: 'SAGE is your Student Advising Guidance Engine - an AI powered application made to advise and guide UTD students in course registration.',
+      techStack: 'Built with AWS Services like AWS Lambdas and AWS DynamoDB, SAGE is designed to be a serverless application with a focus on a clean frontend built with React.js and TailwindCSS',
+      solutionOverview: 'Sage provides a comprehensive solution with features including a chatbot, degree planning, and profile selections with accurate UTD Course data',
+      solutionImpact: 'Since launch, Sage has served 2,000+ UTD students with course selections.',
+      designOutcome: 'The design emphasizes clarity and efficiency with a clean, modern interface. The color scheme uses calming greens to create a focused work environment, while intuitive navigation ensures users can quickly access the features they need.',
+      github: 'https://github.com/acmutd/sage-site',
+      website: 'https://utdsage.com/',
     },
-    { 
-      id: 2, 
-      title: 'Lumina Cover', 
+    {
+      id: 2,
+      title: 'Lumina Cover',
       image: '/magazine-covers/lumina-cover.png',
-      context: 'Lumina is a data visualization tool that transforms complex datasets into interactive, easy-to-understand visualizations. The project was created to help businesses make data-driven decisions more effectively.',
-      techStack: 'Developed using D3.js for advanced data visualization, React for the user interface, Python Flask for backend processing, and PostgreSQL for data storage. The application uses WebGL for rendering large datasets efficiently.',
+      contextTitle: 'Bringing live weather data and celestial events right to space lovers\' pockets with a mobile application.',
+      context: 'Lumina is a mobile application for every space lover. It displays a collection of live weather data and celestial events near you.',
+      techStack: 'Developed using React Native for the frontend and is serverless for its backend functions with AWS Lambdas and DynamoDB tables to store data.',
       solutionOverview: 'Lumina offers drag-and-drop functionality for creating custom dashboards, real-time data updates, and export capabilities to various formats. The platform supports multiple data sources including CSV, JSON, and database connections.',
       solutionImpact: 'Lumina has been adopted by 200+ companies, resulting in a 50% reduction in time spent analyzing data. Users report making faster, more informed decisions with the visual insights provided by the platform.',
       designOutcome: 'The design focuses on data clarity with a dark theme that reduces eye strain during long analysis sessions. Interactive elements are clearly highlighted, and the layout prioritizes the visualization space while keeping controls easily accessible.'
     },
-    { 
-      id: 3, 
-      title: 'Archer Cover', 
+    {
+      id: 3,
+      title: 'Archer Cover',
       image: '/magazine-covers/archer-cover.png',
+      contextTitle: 'Bringing architecture\'s vocabulary and visual collections right to designers\' fingertips with a living dictionary.',
       context: 'The pocket spellbook of architecture - a living dictionary where blueprints meets vocabulary. Archer is built to allow users to browse terms based on category, era, or style. The visual collections that are built on archer are here to inspire useers with architectural examples, sketches, or reference images.',
       techStack: 'Built with Next.js for server-side rendering and SEO optimization, Stripe for payment processing, Shopify API for inventory management, and Redis for caching. The frontend uses React with styled-components for a cohesive design system.',
       solutionOverview: 'Archer features a comprehensive product catalog with advanced filtering, user reviews and ratings, wishlist functionality, and personalized recommendations. The platform includes a mobile-responsive design and fast checkout process.',
       solutionImpact: 'The platform has processed over $2M in sales in its first year, with a 35% increase in conversion rates compared to the previous system. Customer satisfaction scores have improved significantly, with 4.8/5 average rating.',
       designOutcome: 'The design captures the adventurous spirit of the brand with bold imagery and an earthy color palette. Product pages are designed to showcase gear effectively, with high-quality images and detailed specifications that help customers make informed decisions.'
     },
-    { 
-      id: 4, 
-      title: 'Finterest Cover', 
+    {
+      id: 4,
+      title: 'Finterest Cover',
       image: '/magazine-covers/finterest-cover.png',
+      contextTitle: 'Bringing social finance and investment opportunities right to users\' pockets with a mobile-first platform.',
       context: 'Finterest is a social finance app that helps users discover and share investment opportunities. The platform was created to democratize financial information and make investing more accessible to younger generations.',
       techStack: 'Developed using React Native for cross-platform mobile apps, Firebase for real-time data synchronization, Plaid API for secure financial data integration, and Node.js for backend services. Charts are rendered using Recharts library.',
       solutionOverview: 'Finterest provides users with investment insights, portfolio tracking, social features for sharing strategies, and educational content. The app includes real-time market data and personalized investment recommendations based on user preferences.',
       solutionImpact: 'Finterest has gained 10,000+ active users within 6 months of launch. Users report feeling more confident about investing, with 70% of users making their first investment through the platform. The app has helped users collectively invest over $5M.',
       designOutcome: 'The design uses a modern, clean aesthetic with a focus on financial data visualization. The color scheme incorporates trust-building blues and greens, while the interface prioritizes clarity and ease of use to make complex financial information approachable.'
     },
-    { 
-      id: 5, 
-      title: 'Windle Cover', 
+    {
+      id: 5,
+      title: 'Windle Cover',
       image: '/magazine-covers/windle-cover.png',
+      contextTitle: 'Bringing hyperlocal weather predictions and alerts right to users\' devices with a progressive web application.',
       context: 'Windle is a weather forecasting application that provides hyperlocal weather predictions and alerts. The project was developed to give users more accurate, location-specific weather information than traditional weather apps.',
       techStack: 'Built with Vue.js for the frontend, Python with FastAPI for the backend, integration with multiple weather APIs for data aggregation, and machine learning models for prediction accuracy. The app uses Progressive Web App (PWA) technology for offline functionality.',
       solutionOverview: 'Windle offers minute-by-minute weather forecasts, severe weather alerts, customizable notifications, and detailed weather maps. The app learns from user preferences to provide personalized weather insights and recommendations.',
@@ -88,7 +95,7 @@ const MagazineCarousel = ({ magazines = [] }) => {
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (isProcessingRef.current) return;
-      
+
       if (e.key === 'ArrowLeft') {
         e.preventDefault();
         e.stopPropagation();
@@ -123,8 +130,8 @@ const MagazineCarousel = ({ magazines = [] }) => {
   return (
     <div className="magazine-carousel-container">
       <div className="magazine-carousel">
-        <button 
-          className="carousel-button carousel-button-prev" 
+        <button
+          className="carousel-button carousel-button-prev"
           onClick={handlePrevious}
           aria-label="Previous magazine"
         >
@@ -135,7 +142,7 @@ const MagazineCarousel = ({ magazines = [] }) => {
           {items.map((magazine, index) => {
             const position = (index - currentIndex + items.length) % items.length;
             let transformClass = '';
-            
+
             if (position === 0) {
               transformClass = 'center';
             } else if (position === 1 || (position === items.length - 1 && items.length > 2)) {
@@ -158,8 +165,8 @@ const MagazineCarousel = ({ magazines = [] }) => {
                 onClick={() => setSelectedMagazine(magazine)}
               >
                 <div className="magazine-card">
-                  <img 
-                    src={magazine.image} 
+                  <img
+                    src={magazine.image}
                     alt={magazine.title || `Magazine ${index + 1}`}
                     loading="lazy"
                   />
@@ -172,8 +179,8 @@ const MagazineCarousel = ({ magazines = [] }) => {
           })}
         </div>
 
-        <button 
-          className="carousel-button carousel-button-next" 
+        <button
+          className="carousel-button carousel-button-next"
           onClick={handleNext}
           aria-label="Next magazine"
         >
@@ -193,9 +200,9 @@ const MagazineCarousel = ({ magazines = [] }) => {
       </div>
 
       {selectedMagazine && (
-        <MagazineViewer 
-          magazine={selectedMagazine} 
-          onClose={() => setSelectedMagazine(null)} 
+        <MagazineViewer
+          magazine={selectedMagazine}
+          onClose={() => setSelectedMagazine(null)}
         />
       )}
     </div>
