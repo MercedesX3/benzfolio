@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 import { DarkModeProvider } from './contexts/DarkModeContext'
+import { Analytics } from '@vercel/analytics/react'
 import BookLoader from './components/BookLoader'
 import Header from './components/Header'
 import Footer from './components/Footer'
@@ -78,6 +79,7 @@ function App() {
         </div>
         )}
         </div>
+      <Analytics />
     </DarkModeProvider>
   )
 }
