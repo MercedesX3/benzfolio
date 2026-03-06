@@ -9,6 +9,7 @@ import HomePage from './components/HomePage'
 import WorkPage from './components/WorkPage'
 import AboutPage from './components/AboutPage'
 import CursorFollower from './components/CursorFollower'
+import { Analytics } from '@vercel/analytics/react'
 
 function App() {
   const [isLoading, setIsLoading] = useState(true)
@@ -78,6 +79,7 @@ function App() {
         </div>
         )}
         </div>
+        <Analytics />
     </DarkModeProvider>
   )
 }
