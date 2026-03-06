@@ -66,3 +66,32 @@
   }
 }
 
+
+/* Dark Mode Styles */
+.dark-mode .footer {
+  background: rgba(10, 10, 10, 0.95) !important;
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: #b0b0b0;
+}
+
+.dark-mode .footer-icon {
+  color: #b0b0b0;
+}
+
+.dark-mode .footer-icon:hover {
+  color: #ffffff;
+  opacity: 1;
+}
+
+.dark-mode .footer-text {
+  color: #b0b0b0;
+}
+
+.dark-mode .footer-link {
+  color: #b0b0b0;
+}
+
+.dark-mode .footer-link:hover {
+  color: #ffffff;
+}

@@ -306,3 +306,37 @@
     border-radius: 6px;
   }
 }
+/* Dark Mode Styles */
+.dark-mode .magazine-viewer-container {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.dark-mode .section-title,
+.dark-mode .context-title {
+  color: var(--text-primary);
+}
+
+.dark-mode .section-text,
+.dark-mode .context-text {
+  color: var(--text-secondary);
+}
+
+.dark-mode .tech-stack-button {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.dark-mode .tech-stack-button:hover {
+  background: var(--border-color);
+}
+
+.dark-mode .project-link {
+  background: var(--text-primary);
+  color: var(--bg-primary);
+}
+
+.dark-mode .project-link:hover {
+  background: var(--text-secondary);
+}

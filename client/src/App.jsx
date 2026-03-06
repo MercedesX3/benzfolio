@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import './App.css'
+import { DarkModeProvider } from './contexts/DarkModeContext'
 import BookLoader from './components/BookLoader'
 import Header from './components/Header'
 import Footer from './components/Footer'
@@ -61,26 +62,23 @@ function App() {
   const isHomePage = currentPage === 'Home' || currentPage === '';
   
   return (
-    <div className="app-container">
-      <CursorFollower />
-      <Header />
-      <main 
-        className={`main-content ${currentPage === 'Playground' ? 'playground-scrollable' : ''} ${currentPage === 'About' ? 'about-scrollable' : ''}`}
-        style={{ 
-          paddingTop: isWorkPage || currentPage === 'Playground' || currentPage === 'About' ? '80px' : '0', 
-          background: '#ffffff', 
-          color: '#000000' 
-        }}
-      >
-        {renderContent()}
-      </main>
-      {!isHomePage && <Footer />}
-      {isHomePage && (
-        <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 3 }}>
-          <Footer />
-      </div>
-      )}
-      </div>
+    <DarkModeProvider>
+      <div className="app-container">
+        <CursorFollower />
+        <Header />
+        <main 
+          className={`main-content ${currentPage === 'Playground' ? 'playground-scrollable' : ''} ${currentPage === 'About' ? 'about-scrollable' : ''}`}
+        >
+          {renderContent()}
+        </main>
+        {!isHomePage && <Footer />}
+        {isHomePage && (
+          <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 3 }}>
+            <Footer />
+        </div>
+        )}
+        </div>
+    </DarkModeProvider>
   )
 }
 

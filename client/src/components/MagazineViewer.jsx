@@ -152,6 +152,15 @@ const MagazineViewer = ({ magazine, onClose }) => {
                   />
                 </div>
               )}
+              {(magazine.title?.toLowerCase().includes('lumina') || magazine.id === 2) && (
+                <div className="sage-image-container">
+                  <img
+                    src="/project-pictures/LUMINA-EVENT-OFFICIAL.png"
+                    alt="Lumina Event Official"
+                    className="sage-project-image"
+                  />
+                </div>
+              )}
             </div>
 
             <div className="project-section">

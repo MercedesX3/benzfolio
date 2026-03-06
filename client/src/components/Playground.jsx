@@ -40,12 +40,15 @@ const Playground = () => {
         (entries) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
-              setVisibleImages(prev => new Set([...prev, index]));
+              // Use requestAnimationFrame for smoother animation trigger
+              requestAnimationFrame(() => {
+                setVisibleImages(prev => new Set([...prev, index]));
+              });
               observer.unobserve(entry.target);
             }
           });
         },
-        { threshold: 0.1, rootMargin: '50px' }
+        { threshold: 0.05, rootMargin: '150px' }
       );
 
       observer.observe(ref);
@@ -74,6 +77,9 @@ const Playground = () => {
             key={index}
             ref={el => imageRefs.current[index] = el}
             className={`playground-item ${visibleImages.has(index) ? 'fade-in-item' : ''}`}
+            style={visibleImages.has(index) ? {
+              transitionDelay: `${index * 0.06}s`
+            } : {}}
           >
             <img
               src={`/${image}`}

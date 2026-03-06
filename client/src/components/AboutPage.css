@@ -1,14 +1,13 @@
 .about-page {
   width: 100%;
-  min-height: calc(100vh - 80px);
+  min-height: calc(100vh - 80px - 4rem);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   background: #ffffff;
   color: #000000;
-  padding: 2rem;
-  padding-bottom: 4rem;
+  padding: 0 2rem;
 }
 
 .about-container {
@@ -47,17 +46,6 @@
   gap: 1.5rem;
   max-width: 400px;
 }
-
-/* Sections Container - matches playground padding */
-.about-sections-container {
-  width: 100%;
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-}
-
 
 .about-text {
   font-size: 1.2rem;
@@ -106,13 +94,20 @@
 }
 
 /* Shelf Section */
+.about-sections-container {
+  width: 100%;
+  max-width: 100%;
+  padding: 0 2rem;
+}
+
 .shelf-section {
   width: 100%;
   max-width: 1400px;
   margin-top: 6rem;
-  opacity: 0;
-  transform: translateY(30px);
+  opacity: 1;
+  transform: translateY(0);
   transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  visibility: visible;
 }
 
 .shelf-section.fade-in-section {
@@ -215,19 +210,17 @@
 
 .shelf-item {
   flex: 0 0 auto;
+  width: 150px;
+  height: 225px;
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
 
-.shelf-item-book {
-  width: 150px;
-  height: 225px;
-}
-
 .shelf-item-music {
   width: 150px;
   height: 150px;
+  /* 1:1 ratio for music */
 }
 
 .shelf-item.fade-in-item {
@@ -252,10 +245,13 @@
 /* Communities Section */
 .communities-section {
   width: 100%;
+  max-width: 100%;
   margin-top: 6rem;
   opacity: 0;
   transform: translateY(30px);
   transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  padding: 0 2rem;
+  box-sizing: border-box;
 }
 
 .communities-section.fade-in-section {
@@ -304,6 +300,7 @@
   border-radius: 50%;
   object-fit: contain;
   display: block;
+  background: transparent;
 }
 
 .community-name {
@@ -323,15 +320,6 @@
 .community-social:hover {
   transform: scale(1.1);
 }
-.social-icon {
-  color: #000000;
-  transition: color 0.2s ease;
-}
-
-.community-social:hover .social-icon {
-  color: #E4405F;
-}
-
 
 .community-description {
   font-size: 1rem;
@@ -387,16 +375,6 @@
   object-fit: cover;
 }
 
-.community-photo.rotated-90 {
-  transform: rotate(90deg);
-}
-
-.community-photo.community-gathering-photo {
-  max-height: 250px;
-  width: auto;
-  object-fit: contain;
-}
-
 .community-photo-caption {
   font-size: 0.85rem;
   color: #666666;
@@ -404,169 +382,61 @@
   text-align: center;
 }
 
-.community-footer-text {
-  font-size: 0.95rem;
-  color: #666666;
-  margin: 2rem 0 0 0;
-  line-height: 1.6;
-}
-
-.community-link-text {
-  font-weight: 700;
-  color: #000000;
-  position: relative;
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-.community-link-text::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background-color: #000000;
-  transition: width 0.3s ease;
-}
-
-.community-link-text:hover::after {
-  width: 100%;
-}
-
-.community-link {
-  text-decoration: none;
-  color: #000000;
-}
-
-.community-link:hover {
-  text-decoration: none;
-}
-
-
 @media (max-width: 768px) {
   .about-text {
     font-size: 1rem;
   }
 
   .about-page {
-    padding: 1rem;
+    padding: 0 1.5rem;
     height: auto;
-    min-height: calc(100vh - 80px);
+    min-height: calc(100vh - 80px - 6rem);
     overflow-y: auto;
     align-items: flex-start;
-    padding-top: 2rem;
-    padding-bottom: 3rem;
   }
 
   .about-container {
     gap: 1.5rem;
-    padding: 1rem;
-    max-width: 100%;
-  }
-
-  .about-divider {
-    margin: 4rem auto 0;
-    max-width: calc(100% - 2rem);
-  }
-
-  .about-sections-container {
-    padding: 1rem;
-    width: 100%;
   }
 
   .shelf-section,
   .communities-section {
-    margin-top: 3rem;
-    width: 100%;
-    max-width: 100%;
-  }
-
-  .shelf-content {
-    gap: 3rem;
-  }
-
-  .shelf-category {
-    gap: 1rem;
+    margin-top: 4rem;
   }
 
   .shelf-header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.75rem;
-  }
-
-  .shelf-title {
-    font-size: 1.3rem;
-  }
-
-  .shelf-filters {
-    gap: 0.75rem;
-    flex-wrap: wrap;
-  }
-
-  .filter-year {
-    font-size: 0.85rem;
+    gap: 1rem;
   }
 
   .external-link {
     margin-left: 0;
-    font-size: 0.85rem;
   }
 
-  .shelf-grid {
-    gap: 1rem;
-    padding-bottom: 0.5rem;
-  }
-
-  .shelf-item-book {
-    width: 110px;
-    height: 165px;
+  .shelf-item {
+    width: 120px;
+    height: 180px;
   }
 
   .shelf-item-music {
-    width: 110px;
-    height: 110px;
+    width: 120px;
+    height: 120px;
+    /* 1:1 ratio for music on mobile */
   }
 
   .communities-title {
-    font-size: 1.8rem;
-  }
-
-  .communities-subtitle {
-    font-size: 0.9rem;
-    margin-bottom: 2rem;
-  }
-
-  .community-header {
-    flex-wrap: wrap;
-    gap: 0.75rem;
-  }
-
-  .community-icon {
-    width: 40px;
-    height: 40px;
-  }
-
-  .community-name {
-    font-size: 1.1rem;
-  }
-
-  .community-description {
-    font-size: 0.9rem;
-    line-height: 1.5;
+    font-size: 2rem;
   }
 
   .community-photos {
     flex-direction: column;
     align-items: center;
-    gap: 1.5rem;
-    width: 100%;
   }
 
   .community-photo {
     width: 100%;
-    max-width: 100%;
+    max-width: 300px;
   }
 
   .community-photo-wrapper {
@@ -575,10 +445,73 @@
     flex-direction: column;
     align-items: center;
   }
-
-  .community-photo-frame {
-    width: 100%;
-    max-width: 100%;
-  }
 }
 
+/* Dark Mode Styles */
+.dark-mode .about-page {
+  background: #0a0a0a;
+  color: #ffffff;
+}
+
+.dark-mode .about-container {
+  background: transparent;
+}
+
+.dark-mode .about-image-wrapper {
+  background: transparent;
+}
+
+.dark-mode .about-content {
+  background: transparent;
+}
+
+.dark-mode .about-text {
+  color: #b0b0b0;
+  background: transparent;
+}
+
+.dark-mode .about-divider {
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.2), transparent);
+}
+
+.dark-mode .shelf-title,
+.dark-mode .communities-title,
+.dark-mode .community-name {
+  color: #ffffff;
+}
+
+.dark-mode .shelf-count,
+.dark-mode .communities-subtitle,
+.dark-mode .community-description,
+.dark-mode .community-footer-text {
+  color: #b0b0b0;
+}
+
+.dark-mode .external-link {
+  color: #ffffff;
+}
+
+.dark-mode .external-link:hover {
+  opacity: 0.8;
+}
+
+.dark-mode .community-link-text {
+  color: #ffffff;
+}
+
+.dark-mode .community-link-text::after {
+  background-color: #ffffff;
+}
+
+.dark-mode .community-icon {
+  background: transparent;
+  object-fit: contain;
+}
+
+.dark-mode .filter-year {
+  color: #b0b0b0;
+}
+
+.dark-mode .filter-year:hover {
+  color: #ffffff;
+}

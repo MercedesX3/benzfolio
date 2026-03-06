@@ -259,3 +259,12 @@
   }
 }
 
+
+/* Dark Mode Styles */
+.dark-mode .magazine-carousel {
+  background: var(--bg-primary);
+}
+
+.dark-mode .magazine-title {
+  color: var(--text-primary);
+}

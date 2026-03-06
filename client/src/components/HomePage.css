@@ -37,6 +37,7 @@
   justify-content: center;
   width: 100%;
   height: 100%;
+  z-index: 10;
 }
 
 .home-text-box {
@@ -103,5 +104,31 @@
   .home-text::before {
     left: -10px;
   }
+}
+
+
+/* Dark Mode Styles */
+.dark-mode .home-page {
+  background: #0a0a0a;
+  color: #ffffff;
+}
+
+.dark-mode .home-canvas {
+  background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+  background-image: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.dark-mode .home-title,
+.dark-mode .home-subtitle {
+  color: #ffffff;
+}
+
+.dark-mode .home-text {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 

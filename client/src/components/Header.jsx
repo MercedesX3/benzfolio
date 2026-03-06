@@ -1,9 +1,11 @@
 import { useState } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Moon, Sun } from 'lucide-react';
+import { useDarkMode } from '../contexts/DarkModeContext';
 import './Header.css';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -40,6 +42,13 @@ const Header = () => {
           </a>
         </nav>
         <div className="header-right">
+          <button 
+            className="dark-mode-toggle"
+            onClick={toggleDarkMode}
+            aria-label="Toggle dark mode"
+          >
+            {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+          </button>
           <a href="mailto:mercedesx935@gmail.com" className="nav-link" onClick={closeMenu}>Contact</a>
           <button 
             className="menu-toggle"

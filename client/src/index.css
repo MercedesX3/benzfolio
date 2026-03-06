@@ -39,9 +39,18 @@ body {
   cursor: none;
 }
 
+.dark-mode body {
+  background-color: #0a0a0a !important;
+  color: #ffffff;
+}
+
 html {
   height: 100vh;
   overflow: hidden;
+}
+
+.dark-mode html {
+  background-color: #0a0a0a !important;
 }
 
 * {

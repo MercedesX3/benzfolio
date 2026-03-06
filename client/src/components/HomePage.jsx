@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
+import { useDarkMode } from '../contexts/DarkModeContext';
+import Fireworks from './Fireworks';
 import './HomePage.css';
 
 const HomePage = ({ isVisible = true }) => {
@@ -95,6 +97,7 @@ const HomePage = ({ isVisible = true }) => {
   return (
     <div className={`home-page ${!isVisible ? 'slide-up' : ''}`}>
       <div className="home-canvas">
+        <Fireworks />
         <div className="home-content">
           <div className="home-text-box">
             <span className="home-text">
