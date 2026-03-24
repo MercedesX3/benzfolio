@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import './App.css'
 import { DarkModeProvider } from './contexts/DarkModeContext'
 import {Analytics} from '@vercel/analytics/react'
-import BookLoader from './components/BookLoader'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import Playground from './components/Playground'
@@ -13,13 +12,9 @@ import CursorFollower from './components/CursorFollower'
 
 
 function App() {
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
   const [isImagesLoading, setIsImagesLoading] = useState(false)
   const [currentPage, setCurrentPage] = useState('')
-
-  const handleLoaderComplete = () => {
-    setIsLoading(false)
-  }
 
   const handleImagesLoading = (loading) => {
     setIsImagesLoading(loading)
@@ -37,14 +32,6 @@ function App() {
       window.removeEventListener('hashchange', handleHashChange)
     }
   }, [])
-
-  if (isLoading) {
-    return <BookLoader onComplete={handleLoaderComplete} />
-  }
-
-  if (isImagesLoading) {
-    return <BookLoader />
-  }
 
   const renderContent = () => {
     const isWorkPage = currentPage === 'Work';

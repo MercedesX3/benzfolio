@@ -30,55 +30,7 @@ const MagazineViewer = ({ magazine, onClose }) => {
 
   if (!magazine) return null;
 
-  // Parse tech stack into individual technologies
-  const parseTechStack = (techStack) => {
-    if (!techStack) return [];
-
-    // Known technologies to look for (order matters - more specific first)
-    const knownTechs = [
-      'AWS Lambdas',
-      'AWS DynamoDB',
-      'AWS Services',
-      'React Native',
-      'React.js',
-      'Next.js',
-      'Vue.js',
-      'TailwindCSS',
-      'Node.js',
-      'Python',
-      'FastAPI',
-      'Firebase',
-      'Stripe',
-      'Shopify API',
-      'Redis',
-      'Plaid API',
-      'Recharts',
-      'PWA',
-      'styled-components',
-      'DynamoDB',
-      'React',
-    ];
-
-    const foundTechs = [];
-    const usedIndices = new Set();
-
-    // Find matches (case-insensitive)
-    knownTechs.forEach((tech, index) => {
-      // Escape special regex characters
-      const escapedTech = tech.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      // Use word boundaries for alphanumeric, but allow periods and hyphens
-      const regex = new RegExp('(?:^|\\s|\\b)' + escapedTech + '(?:\\s|\\b|$|[.,])', 'gi');
-      if (regex.test(techStack) && !usedIndices.has(index)) {
-        foundTechs.push(tech);
-        usedIndices.add(index);
-      }
-    });
-
-    // Remove duplicates and return
-    return [...new Set(foundTechs)];
-  };
-
-  const techStackItems = parseTechStack(magazine.techStack);
+  const techStackItems = magazine.techStackItems || [];
 
   return (
     <div
