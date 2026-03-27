@@ -1,0 +1,90 @@
+#root {
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: #ffffff;
+}
+
+.dark-mode #root {
+  background-color: #0a0a0a !important;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  background-color: #ffffff;
+}
+
+.dark-mode .app-container {
+  background-color: #0a0a0a !important;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  animation: fadeIn 0.8s ease-in;
+  margin-top: 80px;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.main-content.playground-scrollable {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.main-content.about-scrollable {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    margin-top: 80px;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* Dark Mode Styles */
+:root.dark-mode,
+.dark-mode {
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #1a1a1a;
+  --text-primary: #ffffff;
+  --text-secondary: #b0b0b0;
+  --border-color: #333333;
+}
+
+:root:not(.dark-mode) {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f5f5f5;
+  --text-primary: #000000;
+  --text-secondary: #666666;
+  --border-color: #e5e5e5;
+}
+
+.dark-mode .main-content {
+  background: var(--bg-primary) !important;
+  color: var(--text-primary);
+}
