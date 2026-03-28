@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=DM+Sans:wght@300;400;500&display=swap');
+
+/* ── Page shell ──────────────────────────────── */
 .home-page {
   width: 100%;
   height: calc(100vh - 80px);
@@ -15,6 +18,7 @@
   transform: translateY(-100%);
 }
 
+/* ── Canvas ──────────────────────────────────── */
 .home-canvas {
   width: 100%;
   height: 100%;
@@ -30,6 +34,7 @@
   box-sizing: border-box;
 }
 
+/* ── Center content ──────────────────────────── */
 .home-content {
   position: relative;
   display: flex;
@@ -38,14 +43,42 @@
   width: 100%;
   height: 100%;
   z-index: 10;
+  background: transparent;
 }
 
 .home-text-box {
   position: relative;
+  z-index: 20;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 2rem 4rem;
+}
+
+/* Oval + cowboy hat: hat anchored to top-left of the bubble */
+.home-text-oval-cluster {
+  position: relative;
+  display: inline-block;
+}
+
+.home-sticker-wrapper--on-oval {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  pointer-events: none;
+  width: var(--sticker-w-max, 130px);
+  min-height: var(--sticker-w-max, 130px);
+}
+
+.home-sticker-wrapper--on-oval .home-sticker--on-oval {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(-42%, -48%) rotate(-14deg);
+  transform-origin: center center;
+  cursor: default;
+  pointer-events: none;
 }
 
 .home-text {
@@ -55,6 +88,7 @@
   margin: 0;
   text-align: center;
   position: relative;
+  z-index: 1;
   display: inline-block;
   padding: 1.5rem 3rem;
   background: #ffffff;
@@ -72,14 +106,257 @@
 }
 
 @keyframes blink {
-  0%, 50% {
-    opacity: 1;
-  }
-  51%, 100% {
-    opacity: 0;
-  }
+  0%, 50%  { opacity: 1; }
+  51%, 100% { opacity: 0; }
 }
 
+/* ── Sticker layer ───────────────────────────── */
+.home-stickers {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 12;
+  overflow: visible;
+}
+
+/* ── Sticker wrapper ─────────────────────────── */
+.home-sticker-wrapper {
+  position: absolute;
+  pointer-events: auto;
+}
+
+/* Explicit placement (avoid :has() — older browsers + clearer stacking) */
+.home-sticker-wrapper--tl { top: 6%;     left: 4%; }
+.home-sticker-wrapper--tr { top: 10%;    right: 5%; left: auto; }
+.home-sticker-wrapper--bl { bottom: 12%; left: 6%; top: auto; }
+.home-sticker-wrapper--br { bottom: 8%;  right: 4%; left: auto; top: auto; }
+
+/* ── Sticker images (size vars set on .home-sticker-wrapper from HomePage.jsx) ── */
+.home-sticker {
+  display: block;
+  width: clamp(var(--sticker-w-min, 72px), calc(var(--sticker-w-vw, 14) * 1vw), var(--sticker-w-max, 140px));
+  height: auto;
+  max-height: calc(var(--sticker-max-vh, 28) * 1vh);
+  object-fit: contain;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.12));
+  cursor: pointer;
+  transition:
+    transform 0.35s cubic-bezier(0.34, 1.4, 0.64, 1),
+    filter 0.2s ease;
+  position: static;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-sticker { transition: none; }
+}
+
+.home-sticker:hover,
+.home-sticker:focus-visible {
+  filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.22)) brightness(1.05);
+  outline: none;
+}
+
+.home-sticker.sticker-active {
+  filter: drop-shadow(0 6px 20px rgba(0, 0, 0, 0.25)) brightness(1.08);
+}
+
+.home-sticker--tl { transform: rotate(-14deg); }
+.home-sticker--tl:hover,
+.home-sticker--tl.sticker-active { transform: rotate(-14deg) translateX(12px) scale(1.08); }
+
+.home-sticker--tr { transform: rotate(10deg); }
+.home-sticker--tr:hover,
+.home-sticker--tr.sticker-active { transform: rotate(10deg) translateX(-12px) scale(1.08); }
+
+.home-sticker--bl { transform: rotate(8deg); }
+.home-sticker--bl:hover,
+.home-sticker--bl.sticker-active { transform: rotate(8deg) translateX(12px) scale(1.08); }
+
+.home-sticker--br { transform: rotate(-11deg); }
+.home-sticker--br:hover,
+.home-sticker--br.sticker-active { transform: rotate(-11deg) translateX(-12px) scale(1.08); }
+
+/* .home-sticker--on-oval — transforms set on wrapper (see above) */
+
+/* ══════════════════════════════════════════════
+   FUN FACT CARDS
+   ══════════════════════════════════════════════ */
+
+.fun-fact-card {
+  position: absolute;
+  width: 210px;
+  background: var(--card-bg, #fff9c4);
+  border-radius: 4px;
+  padding: 20px 18px 22px;
+  box-shadow:
+    3px 3px 0 rgba(0,0,0,0.08),
+    0 8px 30px rgba(0,0,0,0.14);
+  z-index: 200;
+  font-family: 'Caveat', cursive;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 27px,
+      rgba(0,0,0,0.04) 27px,
+      rgba(0,0,0,0.04) 28px
+    );
+}
+
+/* DROP DOWN — top stickers */
+.fun-fact-card--down {
+  top: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%) !important;
+  transform-origin: top center;
+  animation: cardDropDown 0.38s cubic-bezier(0.34, 1.45, 0.64, 1) forwards;
+}
+
+/* POP UP — bottom stickers */
+.fun-fact-card--up {
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%) !important;
+  transform-origin: bottom center;
+  animation: cardPopUp 0.38s cubic-bezier(0.34, 1.45, 0.64, 1) forwards;
+}
+
+@keyframes cardDropDown {
+  from { opacity: 0; transform: translateX(-50%) scaleY(0.6) translateY(-12px) !important; }
+  to   { opacity: 1; transform: translateX(-50%) scaleY(1) translateY(0) !important; }
+}
+
+@keyframes cardPopUp {
+  from { opacity: 0; transform: translateX(-50%) scaleY(0.6) translateY(12px) !important; }
+  to   { opacity: 1; transform: translateX(-50%) scaleY(1) translateY(0) !important; }
+}
+
+/* ── Tape strip ──────────────────────────────── */
+.fun-fact-tape {
+  position: absolute;
+  width: 52px;
+  height: 18px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-2deg);
+  border-radius: 2px;
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.fun-fact-card--down .fun-fact-tape { top: -9px; }
+.fun-fact-card--up  .fun-fact-tape  { bottom: -9px; transform: translateX(-50%) rotate(1.5deg); }
+
+.tape-pink   { background: rgba(255, 150, 180, 0.55); }
+.tape-yellow { background: rgba(255, 214, 80,  0.55); }
+.tape-blue   { background: rgba(100, 180, 255, 0.55); }
+.tape-green  { background: rgba(80,  210, 140, 0.55); }
+.tape-purple { background: rgba(180, 120, 255, 0.55); }
+
+/* ── Close button ────────────────────────────── */
+.fun-fact-close {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  background: none;
+  border: none;
+  font-size: 1.3rem;
+  line-height: 1;
+  color: rgba(0,0,0,0.35);
+  cursor: pointer;
+  padding: 2px 4px;
+  transition: color 0.15s, transform 0.15s;
+  font-family: 'DM Sans', sans-serif;
+}
+.fun-fact-close:hover {
+  color: rgba(0,0,0,0.7);
+  transform: scale(1.2);
+}
+
+/* ── Label ───────────────────────────────────── */
+.fun-fact-label {
+  margin: 0 0 4px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(0,0,0,0.4);
+}
+
+/* ── Emoji accent ────────────────────────────── */
+.fun-fact-emoji {
+  font-size: 1.8rem;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+/* ── Fact text ───────────────────────────────── */
+.fun-fact-text {
+  margin: 0;
+  font-family: 'Caveat', cursive;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: rgba(0,0,0,0.78);
+  line-height: 1.45;
+}
+
+/* ── Corner fold ─────────────────────────────── */
+.fun-fact-fold {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 0 18px 18px;
+  border-color: transparent transparent rgba(0,0,0,0.10) transparent;
+  border-radius: 0 0 3px 0;
+}
+
+/* ── Dark mode ───────────────────────────────── */
+.dark-mode .home-page  { background: #0a0a0a; color: #ffffff; }
+.dark-mode .home-canvas {
+  background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+  background-image: none;
+  position: relative;
+  /* overflow: hidden clipped fun-fact cards; clip fireworks inside Fireworks if needed */
+  overflow: visible;
+}
+.dark-mode .home-title,
+.dark-mode .home-subtitle { color: #ffffff; }
+.dark-mode .home-text {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.dark-mode .home-sticker {
+  filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.45));
+}
+.dark-mode .home-sticker:hover,
+.dark-mode .home-sticker:focus-visible,
+.dark-mode .home-sticker.sticker-active {
+  filter: drop-shadow(0 6px 20px rgba(0,0,0,0.6)) brightness(1.1);
+}
+.dark-mode .fun-fact-card {
+  box-shadow:
+    3px 3px 0 rgba(0,0,0,0.3),
+    0 8px 30px rgba(0,0,0,0.5);
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 27px,
+      rgba(255,255,255,0.04) 27px,
+      rgba(255,255,255,0.04) 28px
+    );
+}
+.dark-mode .fun-fact-text  { color: rgba(0,0,0,0.85); }
+.dark-mode .fun-fact-label { color: rgba(0,0,0,0.5); }
+.dark-mode .fun-fact-close { color: rgba(0,0,0,0.4); }
+.dark-mode .fun-fact-close:hover { color: rgba(0,0,0,0.75); }
+
+/* ── Misc ────────────────────────────────────── */
 .home-carousel-wrapper {
   width: 100%;
   background: #ffffff;
@@ -88,47 +365,15 @@
 }
 
 @media (max-width: 768px) {
-  .home-canvas {
-    padding: 2rem 1rem;
+  .home-canvas    { padding: 2rem 1rem; }
+  .home-text-box  { padding: 1.5rem 2rem; }
+  .home-text      { font-size: 1.5rem; padding: 1rem 2rem; }
+  .home-sticker {
+    width: clamp(
+      min(calc(var(--sticker-w-min, 72px) * 0.8), 100px),
+      calc(var(--sticker-w-vw, 14) * 1.55 * 1vw),
+      min(var(--sticker-w-max, 140px), 100px)
+    );
   }
-
-  .home-text-box {
-    padding: 1.5rem 2rem;
-  }
-
-  .home-text {
-    font-size: 1.5rem;
-    padding: 1rem 2rem;
-  }
-
-  .home-text::before {
-    left: -10px;
-  }
+  .fun-fact-card  { width: 170px; font-size: 0.95rem; }
 }
-
-
-/* Dark Mode Styles */
-.dark-mode .home-page {
-  background: #0a0a0a;
-  color: #ffffff;
-}
-
-.dark-mode .home-canvas {
-  background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
-  background-image: none;
-  position: relative;
-  overflow: hidden;
-}
-
-.dark-mode .home-title,
-.dark-mode .home-subtitle {
-  color: #ffffff;
-}
-
-.dark-mode .home-text {
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-

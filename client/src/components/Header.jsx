@@ -1,4 +1,7 @@
+'use client';
+
 import { useState } from 'react';
+import Link from 'next/link';
 import { Menu, X, Moon, Sun } from 'lucide-react';
 import { useDarkMode } from '../contexts/DarkModeContext';
 import './Header.css';
@@ -15,26 +18,26 @@ const Header = () => {
     setIsMenuOpen(false);
   };
 
-  const handleLogoClick = (e) => {
-    e.preventDefault();
-    window.location.hash = '';
-    closeMenu();
-  };
-
   return (
     <header className="header">
       <div className="header-container">
-        <a href="#" className="logo" onClick={handleLogoClick}>
+        <Link href="/" className="logo" onClick={closeMenu}>
           <h1>MX</h1>
-        </a>
+        </Link>
         <nav className={`nav ${isMenuOpen ? 'nav-open' : ''}`}>
-          <a href="#Work" className="nav-link" onClick={closeMenu}>Work</a>
-          <a href="#Playground" className="nav-link" onClick={closeMenu}>Playground</a>
-          <a href="#About" className="nav-link" onClick={closeMenu}>About</a>
-          <a 
-            href="/Mercedes_Xiong_Resume_Spring2026.pdf" 
-            className="nav-link" 
-            target="_blank" 
+          <Link href="/work" className="nav-link" onClick={closeMenu}>
+            Work
+          </Link>
+          <Link href="/playground" className="nav-link" onClick={closeMenu}>
+            Playground
+          </Link>
+          <Link href="/about" className="nav-link" onClick={closeMenu}>
+            About
+          </Link>
+          <a
+            href="/Mercedes_Xiong_Resume_Spring2026.pdf"
+            className="nav-link"
+            target="_blank"
             rel="noopener noreferrer"
             onClick={closeMenu}
           >
@@ -42,15 +45,19 @@ const Header = () => {
           </a>
         </nav>
         <div className="header-right">
-          <button 
+          <button
+            type="button"
             className="dark-mode-toggle"
             onClick={toggleDarkMode}
             aria-label="Toggle dark mode"
           >
             {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
           </button>
-          <a href="mailto:mercedesx935@gmail.com" className="nav-link" onClick={closeMenu}>Contact</a>
-          <button 
+          <a href="mailto:mercedesx935@gmail.com" className="nav-link" onClick={closeMenu}>
+            Contact
+          </a>
+          <button
+            type="button"
             className="menu-toggle"
             onClick={toggleMenu}
             aria-label="Toggle menu"
@@ -64,5 +71,3 @@ const Header = () => {
 };
 
 export default Header;
-
-

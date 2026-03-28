@@ -1,3 +1,5 @@
+'use client';
+
 import { createContext, useContext, useState, useEffect } from 'react';
 
 const DarkModeContext = createContext();
@@ -11,34 +13,31 @@ export const useDarkMode = () => {
 };
 
 export const DarkModeProvider = ({ children }) => {
-  const [isDarkMode, setIsDarkMode] = useState(() => {
-    // Check localStorage first
-    const saved = localStorage.getItem('darkMode');
-    if (saved !== null) {
-      return JSON.parse(saved);
-    }
-    // Check system preference
-    return window.matchMedia('(prefers-color-scheme: dark)').matches;
-  });
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    // Save to localStorage
-    localStorage.setItem('darkMode', JSON.stringify(isDarkMode));
+    const saved = localStorage.getItem('darkMode');
+    if (saved !== null) {
+      setIsDarkMode(JSON.parse(saved));
+    } else {
+      setIsDarkMode(window.matchMedia('(prefers-color-scheme: dark)').matches);
+    }
+    setReady(true);
+  }, []);
 
-    // Apply dark mode class to document
+  useEffect(() => {
+    if (!ready) return;
+    localStorage.setItem('darkMode', JSON.stringify(isDarkMode));
     if (isDarkMode) {
       document.documentElement.classList.add('dark-mode');
     } else {
       document.documentElement.classList.remove('dark-mode');
     }
-  }, [isDarkMode]);
-
-  const toggleDarkMode = () => {
-    setIsDarkMode(prev => !prev);
-  };
+  }, [isDarkMode, ready]);
 
   return (
-    <DarkModeContext.Provider value={{ isDarkMode, toggleDarkMode }}>
+    <DarkModeContext.Provider value={{ isDarkMode, toggleDarkMode: () => setIsDarkMode((prev) => !prev) }}>
       {children}
     </DarkModeContext.Provider>
   );

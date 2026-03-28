@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { Briefcase, Linkedin } from 'lucide-react';
 import './Footer.css';
 
@@ -6,9 +7,9 @@ const Footer = () => {
     <footer className="footer">
       <div className="footer-container">
         <div className="footer-left">
-          <a href="#Work" className="footer-icon" aria-label="Work">
+          <Link href="/work" className="footer-icon" aria-label="Work">
             <Briefcase size={20} />
-          </a>
+          </Link>
           <a 
             href="https://www.linkedin.com/in/mercedes-xiong" 
             className="footer-icon" 
