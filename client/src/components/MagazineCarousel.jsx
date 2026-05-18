@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import Image from 'next/image';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import MagazineViewer from './MagazineViewer';
 import './MagazineCarousel.css';
@@ -112,10 +113,12 @@ const MagazineCarousel = ({ magazines = [] }) => {
                 onClick={() => setSelectedMagazine(magazine)}
               >
                 <div className="magazine-card">
-                  <img
+                  <Image
                     src={magazine.image}
                     alt={magazine.title || `Magazine ${index + 1}`}
-                    loading="lazy"
+                    fill
+                    sizes="240px"
+                    style={{ objectFit: 'cover' }}
                   />
                   {magazine.title && (
                     <div className="magazine-title">{magazine.title}</div>

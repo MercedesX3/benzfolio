@@ -214,6 +214,8 @@
   flex: 0 0 auto;
   width: 150px;
   height: 225px;
+  position: relative;
+  overflow: hidden;
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 0.6s ease-out, transform 0.6s ease-out;
@@ -424,12 +426,15 @@
   .shelf-item {
     width: 120px;
     height: 180px;
+    position: relative;
+    overflow: hidden;
   }
 
   .shelf-item-music {
     width: 120px;
     height: 120px;
-    /* 1:1 ratio for music on mobile */
+    position: relative;
+    overflow: hidden;
   }
 
   .communities-title {

@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
+import Image from 'next/image';
 import { Instagram } from 'lucide-react';
 import './AboutPage.css';
 
@@ -84,9 +85,13 @@ const AboutPage = () => {
     <div className="about-page">
       <div className="about-container">
         <div className="about-image-wrapper">
-          <img
+          <Image
             src="/about_pic.JPG"
             alt="Mercedes Xiong"
+            width={0}
+            height={0}
+            sizes="300px"
+            style={{ width: '100%', height: 'auto' }}
             className={`about-image ${isVisible ? 'fade-in' : ''}`}
           />
         </div>
@@ -121,7 +126,7 @@ const AboutPage = () => {
               <div className="shelf-grid">
                 {books.map((book, index) => (
                   <div key={index} className={`shelf-item shelf-item-book ${shelfVisible ? 'fade-in-item' : ''}`} style={{ animationDelay: `${index * 0.1}s` }}>
-                    <img src={book.cover} alt={book.title} className="shelf-cover" />
+                    <Image src={book.cover} alt={book.title} fill sizes="150px" className="shelf-cover" />
                   </div>
                 ))}
               </div>
@@ -138,7 +143,7 @@ const AboutPage = () => {
               <div className="shelf-grid">
                 {music.map((album, index) => (
                   <div key={index} className={`shelf-item shelf-item-music ${shelfVisible ? 'fade-in-item' : ''}`} style={{ animationDelay: `${(books.length + index) * 0.1}s` }}>
-                    <img src={album.cover} alt={album.title} className="shelf-cover" />
+                    <Image src={album.cover} alt={album.title} fill sizes="150px" className="shelf-cover" />
                   </div>
                 ))}
               </div>
@@ -154,7 +159,7 @@ const AboutPage = () => {
           <div className="communities-content">
             <div className="community-info">
               <div className="community-header">
-                <img src="/Community/Peechi LOgo.png" alt="Pechi Logo" className="community-icon" />
+                <Image src="/Community/Peechi LOgo.png" alt="Pechi Logo" width={50} height={50} className="community-icon" />
                 <h3 className="community-name">ACM @ UTD</h3>
                 <a href="https://www.instagram.com/acmutd/?hl=en" target="_blank" rel="noopener noreferrer" className="community-social">
                   <Instagram size={20} className="social-icon" />
@@ -170,9 +175,13 @@ const AboutPage = () => {
             {communityPhotos.map((photo, index) => (
               <div key={index} className={`community-photo-wrapper ${communitiesVisible ? 'fade-in-item' : ''}`} style={{ animationDelay: `${index * 0.15}s` }}>
                 <div className="community-photo-frame">
-                  <img
+                  <Image
                     src={photo.src}
                     alt={photo.caption}
+                    width={0}
+                    height={0}
+                    sizes="(max-width: 768px) 100vw, 250px"
+                    style={{ width: '250px', height: 'auto', display: 'block', objectFit: 'cover' }}
                     className={`community-photo ${photo.caption === 'Community Gathering' ? 'community-gathering-photo' : ''}`}
                   />
                 </div>

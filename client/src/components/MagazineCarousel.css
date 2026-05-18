@@ -79,6 +79,7 @@
 }
 
 .magazine-card {
+  position: relative;
   width: 100%;
   height: 100%;
   background: #ffffff;
@@ -111,6 +112,7 @@
   bottom: 0;
   left: 0;
   right: 0;
+  z-index: 1;
   background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
   color: #ffffff;
   padding: 1.5rem 1rem 1rem;

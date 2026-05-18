@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
 import './Playground.css';
 
 const Playground = () => {
@@ -19,15 +20,6 @@ const Playground = () => {
     'playground pics/IMG_4628.jpg',
     'playground pics/IMG_9152.JPG',
   ];
-
-  // Preload first 4 images for immediate display
-  useEffect(() => {
-    const preloadImages = images.slice(0, 4);
-    preloadImages.forEach((image) => {
-      const img = new Image();
-      img.src = `/${image}`;
-    });
-  }, []);
 
   // Intersection Observer for scroll-triggered fade-in animations
   useEffect(() => {
@@ -60,13 +52,8 @@ const Playground = () => {
     };
   }, []);
 
-  const handleImageLoad = (index) => {
-    // Image loaded, but visibility is controlled by Intersection Observer
-  };
-
   const handleImageError = (index, e) => {
-    // Hide broken/missing images
-    e.target.style.display = 'none';
+    e.currentTarget.style.display = 'none';
   };
 
   return (
@@ -81,13 +68,14 @@ const Playground = () => {
               transitionDelay: `${index * 0.06}s`
             } : {}}
           >
-            <img
+            <Image
               src={`/${image}`}
               alt={`Playground ${index + 1}`}
-              loading={index < 4 ? 'eager' : 'lazy'}
-              fetchPriority={index < 4 ? 'high' : 'auto'}
-              decoding="async"
-              onLoad={() => handleImageLoad(index)}
+              width={0}
+              height={0}
+              sizes="(max-width: 480px) 100vw, (max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
+              style={{ width: '100%', height: 'auto' }}
+              priority={index < 4}
               onError={(e) => handleImageError(index, e)}
             />
           </div>

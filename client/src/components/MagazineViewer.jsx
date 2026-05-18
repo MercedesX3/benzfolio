@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { X, Github, Globe } from 'lucide-react';
 import './MagazineViewer.css';
 
@@ -97,19 +98,25 @@ const MagazineViewer = ({ magazine, onClose }) => {
               </div>
               {(magazine.title?.toLowerCase().includes('sage') || magazine.id === 1) && (
                 <div className="sage-image-container">
-                  <img
+                  <Image
                     src="/project-pictures/SAGE-TRIPLE-OFFICIAL.png"
                     alt="Sage Triple Official"
-                    className="sage-project-image"
+                    width={0}
+                    height={0}
+                    sizes="(max-width: 900px) 100vw, 900px"
+                    style={{ width: '100%', height: 'auto', borderRadius: '8px', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)' }}
                   />
                 </div>
               )}
               {(magazine.title?.toLowerCase().includes('lumina') || magazine.id === 2) && (
                 <div className="sage-image-container">
-                  <img
+                  <Image
                     src="/project-pictures/LUMINA-EVENT-OFFICIAL.png"
                     alt="Lumina Event Official"
-                    className="sage-project-image"
+                    width={0}
+                    height={0}
+                    sizes="(max-width: 900px) 100vw, 900px"
+                    style={{ width: '100%', height: 'auto', borderRadius: '8px', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)' }}
                   />
                 </div>
               )}
