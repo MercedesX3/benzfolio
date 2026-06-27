@@ -35,7 +35,7 @@ const Header = () => {
             About
           </Link>
           <a
-            href="/Mercedes_Xiong_Resume_Spring2026.pdf"
+            href="/Mercedes_Xiong_Resume_Summer2026.pdf"
             className="nav-link"
             target="_blank"
             rel="noopener noreferrer"
