@@ -1,160 +1,166 @@
-import { useEffect, useState } from 'react';
+'use client';
+
+import { useEffect, useState, useCallback, useRef } from 'react';
 import Image from 'next/image';
 import { X, Github, Globe } from 'lucide-react';
 import './MagazineViewer.css';
 
-const MagazineViewer = ({ magazine, onClose }) => {
+const SECTIONS = [
+  { key: 'techStack', title: 'Tech stack', accent: 'blue' },
+  { key: 'solutionOverview', title: 'Solution overview', accent: 'red' },
+  { key: 'solutionImpact', title: 'Impact', accent: 'yellow' },
+  { key: 'designOutcome', title: 'Design outcome', accent: 'blue' },
+];
+
+// Projects with a hero shot to show under the intro.
+const HERO_SHOTS = {
+  sage: '/project-pictures/SAGE-TRIPLE-OFFICIAL.png',
+  lumina: '/project-pictures/LUMINA-EVENT-OFFICIAL.png',
+};
+
+export default function MagazineViewer({ magazine, onClose }) {
   const [isClosing, setIsClosing] = useState(false);
+  const panelRef = useRef(null);
+
+  const handleClose = useCallback(() => {
+    setIsClosing(true);
+    window.setTimeout(onClose, 320);
+  }, [onClose]);
 
   useEffect(() => {
-    const handleEscape = (e) => {
-      if (e.key === 'Escape') {
-        handleClose();
-      }
+    const onKey = (e) => {
+      if (e.key === 'Escape') handleClose();
     };
+    document.addEventListener('keydown', onKey);
 
-    document.addEventListener('keydown', handleEscape);
+    // Lock both native scroll and Lenis while the overlay is up.
+    const lenis = window.__lenis;
+    lenis?.stop();
+    const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
 
-    return () => {
-      document.removeEventListener('keydown', handleEscape);
-      document.body.style.overflow = '';
-    };
-  }, []);
+    panelRef.current?.focus();
 
-  const handleClose = () => {
-    setIsClosing(true);
-    setTimeout(() => {
-      onClose();
-    }, 400); // Match animation duration
-  };
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      lenis?.start();
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [handleClose]);
 
   if (!magazine) return null;
 
   const techStackItems = magazine.techStackItems || [];
+  const heroShot = HERO_SHOTS[magazine.slug];
+  const title =
+    magazine.contextTitle || magazine.name || magazine.title?.replace(' Cover', '');
 
   return (
     <div
-      className={`magazine-viewer-overlay ${isClosing ? 'closing' : ''}`}
+      className={`viewer ${isClosing ? 'is-closing' : ''}`}
       onClick={handleClose}
+      role="presentation"
     >
       <div
-        className={`magazine-viewer-container ${isClosing ? 'slide-down' : ''}`}
+        className={`viewer__panel ${isClosing ? 'is-closing' : ''}`}
         onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-label={`${magazine.name} case study`}
+        tabIndex={-1}
+        ref={panelRef}
       >
+        <div className="viewer__bar" aria-hidden="true">
+          <i style={{ background: 'var(--red)' }} />
+          <i style={{ background: 'var(--yellow)' }} />
+          <i style={{ background: 'var(--blue)' }} />
+        </div>
+
         <button
-          className="magazine-viewer-close"
+          type="button"
+          className="viewer__close"
           onClick={handleClose}
-          aria-label="Close project details"
+          aria-label="Close case study"
         >
-          <X size={32} />
+          <X size={22} />
         </button>
 
-        <div className="magazine-viewer-content">
-          <div className="project-details">
-            <div className="project-section context-section">
-              <div className="context-header">
-                <h2 className="context-title">
-                  {magazine.contextTitle || magazine.title?.replace(' Cover', '') || 'Context of the Project'}
-                </h2>
-                <div className="context-content">
-                  <p className="context-text">
-                    {magazine.context || 'This project was developed to address a specific need in the market. The goal was to create a solution that would improve user experience and provide value to our target audience.'}
-                  </p>
-                  {techStackItems.length > 0 && (
-                    <div className="tech-stack-buttons">
-                      {techStackItems.map((tech, index) => (
-                        <span key={index} className="tech-stack-button">{tech}</span>
-                      ))}
-                    </div>
-                  )}
-                  {(magazine.github || magazine.website) && (
-                    <div className="project-links">
-                      {magazine.github && (
-                        <a
-                          href={magazine.github}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="project-link github-link"
-                        >
-                          <Github size={20} />
-                          <span>GitHub</span>
-                        </a>
-                      )}
-                      {magazine.website && (
-                        <a
-                          href={magazine.website}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="project-link website-link"
-                        >
-                          <Globe size={20} />
-                          <span>Website</span>
-                        </a>
-                      )}
-                    </div>
-                  )}
-                </div>
+        {/* Lenis calls preventDefault() on every wheel event while stopped,
+            which would kill native scrolling in here too. This attribute makes
+            it ignore gestures inside the panel, so the case study scrolls
+            while the page behind it stays frozen. */}
+        <div className="viewer__scroll" data-lenis-prevent>
+          <header className="viewer__head">
+            <p className="eyebrow" style={{ '--mark': 'var(--red)' }}>
+              {magazine.kicker || 'Case study'}
+            </p>
+            <h2 className="viewer__title display">{title}</h2>
+            <p className="viewer__intro">{magazine.context}</p>
+
+            {techStackItems.length > 0 && (
+              <ul className="chips viewer__chips">
+                {techStackItems.map((tech) => (
+                  <li className="chip" key={tech}>
+                    {tech}
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            {(magazine.github || magazine.website) && (
+              <div className="viewer__links">
+                {magazine.github && (
+                  <a
+                    href={magazine.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn--primary"
+                  >
+                    <Github size={18} /> GitHub
+                  </a>
+                )}
+                {magazine.website && (
+                  <a
+                    href={magazine.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn--ghost"
+                  >
+                    <Globe size={18} /> Live site
+                  </a>
+                )}
               </div>
-              {(magazine.title?.toLowerCase().includes('sage') || magazine.id === 1) && (
-                <div className="sage-image-container">
-                  <Image
-                    src="/project-pictures/SAGE-TRIPLE-OFFICIAL.png"
-                    alt="Sage Triple Official"
-                    width={0}
-                    height={0}
-                    sizes="(max-width: 900px) 100vw, 900px"
-                    style={{ width: '100%', height: 'auto', borderRadius: '8px', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)' }}
-                  />
-                </div>
-              )}
-              {(magazine.title?.toLowerCase().includes('lumina') || magazine.id === 2) && (
-                <div className="sage-image-container">
-                  <Image
-                    src="/project-pictures/LUMINA-EVENT-OFFICIAL.png"
-                    alt="Lumina Event Official"
-                    width={0}
-                    height={0}
-                    sizes="(max-width: 900px) 100vw, 900px"
-                    style={{ width: '100%', height: 'auto', borderRadius: '8px', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)' }}
-                  />
-                </div>
-              )}
-            </div>
+            )}
+          </header>
 
-            <div className="project-section">
-              <h2 className="section-title">Tech Stack</h2>
-              <p className="section-text">
-                {magazine.techStack || 'The project was built using modern web technologies including React for the frontend, Node.js for the backend, and various other tools and libraries to ensure optimal performance and user experience.'}
-              </p>
+          {heroShot && (
+            <div className="viewer__shot">
+              <Image
+                src={heroShot}
+                alt={`${magazine.name} interface`}
+                width={1200}
+                height={800}
+                sizes="(max-width: 900px) 92vw, 880px"
+                style={{ width: '100%', height: 'auto' }}
+              />
             </div>
+          )}
 
-            <div className="project-section">
-              <h2 className="section-title">Solution Overview</h2>
-              <p className="section-text">
-                {magazine.solutionOverview || 'The solution provides a comprehensive approach to solving the identified problem. It includes key features and functionalities that address user needs while maintaining a clean and intuitive interface.'}
-              </p>
-            </div>
-
-            <div className="project-section">
-              <h2 className="section-title">Solution Impact</h2>
-              <p className="section-text">
-                {magazine.solutionImpact || 'The implementation of this solution has resulted in significant improvements in user engagement, efficiency, and overall satisfaction. The project has achieved its intended goals and continues to provide value to users.'}
-              </p>
-            </div>
-
-            <div className="project-section">
-              <h2 className="section-title">Design Outcome</h2>
-              <p className="section-text">
-                {magazine.designOutcome || 'The design focuses on creating a visually appealing and user-friendly experience. Through careful consideration of user needs and modern design principles, we achieved a clean and professional aesthetic that enhances usability.'}
-              </p>
-            </div>
+          <div className="viewer__sections">
+            {SECTIONS.filter((s) => magazine[s.key]).map((section) => (
+              <section className="viewer__section" key={section.key}>
+                <h3
+                  className="viewer__section-title"
+                  style={{ '--accent': `var(--${section.accent})` }}
+                >
+                  {section.title}
+                </h3>
+                <p className="viewer__section-text">{magazine[section.key]}</p>
+              </section>
+            ))}
           </div>
         </div>
       </div>
     </div>
   );
-};
-
-export default MagazineViewer;
-
+}

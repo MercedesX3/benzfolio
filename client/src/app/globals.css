@@ -1,13 +1,47 @@
 @import "tailwindcss";
 
+/* ============================================================
+   BAUHAUS SCRAPBOOK — design tokens
+   Bauhaus is the system (grid, primaries, hard geometry).
+   Scrapbook is the content layer (tape, rotation, handwriting).
+   ============================================================ */
+
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  /* Surfaces */
+  --paper: #f3efe4;
+  --paper-2: #e9e3d2;
+  --paper-3: #ffffff;
+  --ink: #14110f;
+  --ink-soft: #4a423b;
+
+  /* Bauhaus primaries */
+  --red: #e0331c;
+  --blue: #1d3fc4;
+  --yellow: #f5b800;
+
+  /* Tints used for taped cards */
+  --red-tint: #f9d7d1;
+  --blue-tint: #d3dbf7;
+  --yellow-tint: #fbeec2;
+
+  /* Structure */
+  --rule: 3px;
+  --rule-thick: 6px;
+  --radius: 0px;
+  --shadow-hard: 6px 6px 0 var(--ink);
+  --shadow-hard-sm: 4px 4px 0 var(--ink);
+  --shadow-lift: 0 18px 40px -18px rgba(20, 17, 15, 0.45);
+
+  /* Rhythm */
+  --gutter: clamp(1.25rem, 4vw, 4rem);
+  --section-y: clamp(5rem, 12vh, 9rem);
+  --header-h: 76px;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 
   color-scheme: light;
-  color: #000000;
-  background-color: #ffffff;
+  color: var(--ink);
+  background-color: var(--paper);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -15,42 +49,186 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-html {
+:root.dark-mode {
+  --paper: #16130f;
+  --paper-2: #211c17;
+  --paper-3: #2a241d;
+  --ink: #f5f0e4;
+  --ink-soft: #b3a99a;
+
+  --red: #ff5a3d;
+  --blue: #6d86ff;
+  --yellow: #ffc72e;
+
+  --red-tint: #48211a;
+  --blue-tint: #1e2650;
+  --yellow-tint: #453309;
+
+  --shadow-hard: 6px 6px 0 #000000;
+  --shadow-hard-sm: 4px 4px 0 #000000;
+  --shadow-lift: 0 18px 40px -18px rgba(0, 0, 0, 0.8);
+
+  color-scheme: dark;
+}
+
+/* ── Reset / scroll ─────────────────────────────────────────
+   The old build locked html+body to 100vh with overflow:hidden
+   and scrolled inner divs instead. That made page-level smooth
+   scroll impossible and broke scroll-triggered reveals. The page
+   scrolls the document now. */
+
+*,
+*::before,
+*::after {
   box-sizing: border-box;
-  -webkit-font-smoothing: antialiased;
-  height: 100vh;
-  overflow: hidden;
 }
 
-* {
-  box-sizing: inherit;
-}
-
-*:before,
-*:after {
-  box-sizing: inherit;
+html {
+  height: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scroll-behavior: auto; /* Lenis drives smooth scrolling */
+  background-color: var(--paper);
 }
 
 body {
   margin: 0;
   padding: 0;
-  min-height: 100vh;
-  height: 100vh;
-  overflow: hidden;
-  background-color: #ffffff;
-  color: #000000;
-  cursor: none;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+  transition: background-color 0.4s ease, color 0.4s ease;
 }
 
-.dark-mode body {
-  background-color: #0a0a0a !important;
-  color: #ffffff;
+/* Custom cursor only where there is a real pointer */
+@media (pointer: fine) {
+  body,
+  body * {
+    cursor: none;
+  }
 }
 
-.dark-mode html {
-  background-color: #0a0a0a !important;
+img {
+  max-width: 100%;
+  display: block;
 }
 
-* {
-  cursor: none;
+::selection {
+  background: var(--yellow);
+  color: var(--ink);
+}
+
+/* ── Type ───────────────────────────────────────────────── */
+
+.display {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-weight: 400;
+  line-height: 0.88;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+}
+
+.hand {
+  font-family: var(--font-hand), cursive;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* ── Shared Bauhaus primitives ──────────────────────────── */
+
+.slab {
+  border: var(--rule) solid var(--ink);
+  background: var(--paper-3);
+  box-shadow: var(--shadow-hard);
+}
+
+.rule-h {
+  height: var(--rule);
+  background: var(--ink);
+  border: 0;
+  margin: 0;
+}
+
+/* Section eyebrow: a colored square + label, used to open sections */
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-family: var(--font-body), sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin: 0 0 1.25rem;
+}
+
+.eyebrow::before {
+  content: "";
+  width: 14px;
+  height: 14px;
+  background: var(--mark, var(--red));
+  flex: none;
+}
+
+/* Tape strip for scrapbook elements */
+.tape {
+  position: absolute;
+  width: 92px;
+  height: 26px;
+  background: var(--tape-color, rgba(245, 184, 0, 0.72));
+  border-left: 1px dashed rgba(20, 17, 15, 0.18);
+  border-right: 1px dashed rgba(20, 17, 15, 0.18);
+  box-shadow: 0 1px 3px rgba(20, 17, 15, 0.18);
+  pointer-events: none;
+  z-index: 4;
+}
+
+/* ── Scroll reveal ──────────────────────────────────────── */
+
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+[data-reveal].is-revealed {
+  opacity: 1;
+  transform: none;
+}
+
+/* Never let a reveal permanently hide content if JS/IO fails. */
+.no-js [data-reveal] {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Focus visibility survives the redesign */
+:focus-visible {
+  outline: var(--rule) solid var(--blue);
+  outline-offset: 3px;
 }

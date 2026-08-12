@@ -1,89 +1,81 @@
-import { useState, useEffect, useRef } from 'react';
+'use client';
+
 import Image from 'next/image';
 import './Playground.css';
 
-const Playground = () => {
-  const [visibleImages, setVisibleImages] = useState(new Set());
-  const imageRefs = useRef([]);
+/**
+ * Scrapbook photo wall.
+ *
+ * NOTE: captions are intentionally blank — I don't know where these were
+ * taken, and inventing captions on a portfolio is worse than having none.
+ * Fill in `caption` below and it renders automatically; leave it empty and
+ * the photo just shows its frame. A one-liner each is what turns this page
+ * from a camera roll into personality, so it's worth doing.
+ */
+const PHOTOS = [
+  { src: '/playground pics/IMG_0252.JPG', caption: '', tilt: -2.4, accent: 'red' },
+  { src: '/playground pics/IMG_0293.JPG', caption: '', tilt: 1.8, accent: 'blue' },
+  { src: '/playground pics/IMG_0406.JPG', caption: '', tilt: -1.2, accent: 'yellow' },
+  { src: '/playground pics/IMG_0509.JPG', caption: '', tilt: 2.6, accent: 'blue' },
+  { src: '/playground pics/IMG_0618.JPG', caption: '', tilt: -2.8, accent: 'yellow' },
+  { src: '/playground pics/IMG_0628.JPG', caption: '', tilt: 1.4, accent: 'red' },
+  { src: '/playground pics/IMG_0629.JPG', caption: '', tilt: -1.6, accent: 'blue' },
+  { src: '/playground pics/IMG_0630.JPG', caption: '', tilt: 2.2, accent: 'yellow' },
+  { src: '/playground pics/IMG_0639.JPG', caption: '', tilt: -2.1, accent: 'red' },
+  { src: '/playground pics/IMG_0652.JPG', caption: '', tilt: 1.7, accent: 'blue' },
+  { src: '/playground pics/IMG_4628.jpg', caption: '', tilt: -1.9, accent: 'yellow' },
+  { src: '/playground pics/IMG_9152.JPG', caption: '', tilt: 2.4, accent: 'red' },
+];
 
-  const images = [
-    'playground pics/IMG_0252.JPG',
-    'playground pics/IMG_0293.JPG',
-    'playground pics/IMG_0406.JPG',
-    'playground pics/IMG_0509.JPG',
-    'playground pics/IMG_0618.JPG',
-    'playground pics/IMG_0628.JPG',
-    'playground pics/IMG_0629.JPG',
-    'playground pics/IMG_0630.JPG',
-    'playground pics/IMG_0639.JPG',
-    'playground pics/IMG_0652.JPG',
-    'playground pics/IMG_4628.jpg',
-    'playground pics/IMG_9152.JPG',
-  ];
-
-  // Intersection Observer for scroll-triggered fade-in animations
-  useEffect(() => {
-    const observers = [];
-
-    imageRefs.current.forEach((ref, index) => {
-      if (!ref) return;
-
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              // Use requestAnimationFrame for smoother animation trigger
-              requestAnimationFrame(() => {
-                setVisibleImages(prev => new Set([...prev, index]));
-              });
-              observer.unobserve(entry.target);
-            }
-          });
-        },
-        { threshold: 0.05, rootMargin: '150px' }
-      );
-
-      observer.observe(ref);
-      observers.push(observer);
-    });
-
-    return () => {
-      observers.forEach(observer => observer.disconnect());
-    };
-  }, []);
-
-  const handleImageError = (index, e) => {
-    e.currentTarget.style.display = 'none';
-  };
-
+export default function Playground() {
   return (
-    <div className="playground-container">
-      <div className="playground-grid">
-        {images.map((image, index) => (
-          <div
-            key={index}
-            ref={el => imageRefs.current[index] = el}
-            className={`playground-item ${visibleImages.has(index) ? 'fade-in-item' : ''}`}
-            style={visibleImages.has(index) ? {
-              transitionDelay: `${index * 0.06}s`
-            } : {}}
-          >
-            <Image
-              src={`/${image}`}
-              alt={`Playground ${index + 1}`}
-              width={0}
-              height={0}
-              sizes="(max-width: 480px) 100vw, (max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
-              style={{ width: '100%', height: 'auto' }}
-              priority={index < 4}
-              onError={(e) => handleImageError(index, e)}
-            />
+    <div className="playground">
+      <div className="page-shell">
+        <header className="page-head">
+          <p className="eyebrow" style={{ '--mark': 'var(--yellow)' }}>
+            Camera roll
+          </p>
+          <h1 className="page-head__title">Playground</h1>
+          <p className="page-head__lede">
+            Buildings I liked, places I went, things I noticed. Sketching
+            architecture is the hobby; this is the evidence.
+          </p>
+          <div className="page-head__marks" aria-hidden="true">
+            <i className="mark mark--tri" />
+            <i className="mark mark--circle" />
+            <i className="mark mark--square" />
           </div>
-        ))}
+        </header>
+
+        <div className="wall">
+          {PHOTOS.map((photo, i) => (
+            <figure
+              key={photo.src}
+              className={`polaroid polaroid--${photo.accent}`}
+              style={{ '--tilt': `${photo.tilt}deg`, '--reveal-delay': `${(i % 3) * 90}ms` }}
+              data-reveal
+            >
+              <span className="tape polaroid__tape" />
+              <div className="polaroid__frame">
+                <Image
+                  src={photo.src}
+                  alt={photo.caption || 'Photo from Mercedes’ camera roll'}
+                  width={900}
+                  height={1200}
+                  sizes="(max-width: 560px) 90vw, (max-width: 1000px) 44vw, 30vw"
+                  className="polaroid__img"
+                  priority={i < 3}
+                />
+              </div>
+              {photo.caption && (
+                <figcaption className="polaroid__caption hand">
+                  {photo.caption}
+                </figcaption>
+              )}
+            </figure>
+          ))}
+        </div>
       </div>
     </div>
   );
-};
-
-export default Playground;
-
+}

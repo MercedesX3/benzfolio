@@ -1,35 +1,183 @@
 .work-page {
+  padding-bottom: clamp(2rem, 6vh, 4rem);
+}
+
+.work-grid {
+  display: grid;
+  gap: clamp(1.75rem, 3.5vw, 3rem);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr));
+  padding-block: clamp(2.5rem, 6vh, 4rem);
+}
+
+/* ── Card ─────────────────────────────────────────────── */
+
+.card {
+  --accent: var(--blue);
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 190px) minmax(0, 1fr);
+  gap: clamp(1.1rem, 2.4vw, 1.8rem);
+  padding: clamp(1.3rem, 2.6vw, 2rem);
+  background: var(--paper-3);
+  border: var(--rule) solid var(--ink);
+  box-shadow: var(--shadow-hard);
+  transition: transform 0.24s var(--ease-out), box-shadow 0.24s var(--ease-out);
+}
+
+.card:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 9px 9px 0 var(--ink);
+}
+
+.card--red {
+  --accent: var(--red);
+}
+.card--blue {
+  --accent: var(--blue);
+}
+.card--yellow {
+  --accent: var(--yellow);
+}
+
+/* Big Bauhaus numeral bleeding off the card's top-right corner */
+.card__index {
+  position: absolute;
+  top: -0.3rem;
+  right: 0.9rem;
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(2.6rem, 6vw, 4.4rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: color-mix(in srgb, var(--accent) 26%, transparent);
+  pointer-events: none;
+  user-select: none;
+}
+
+.card__media {
+  position: relative;
+  border: var(--rule) solid var(--ink);
+  background: var(--accent);
+  transform: rotate(-1.8deg);
+  transition: transform 0.3s var(--ease-out);
+  align-self: start;
+}
+
+.card:hover .card__media {
+  transform: rotate(1.4deg);
+}
+
+.card__tape {
+  --tape-color: rgba(245, 184, 0, 0.8);
+  top: -13px;
+  left: 50%;
+  margin-left: -46px;
+  transform: rotate(-4deg);
+}
+
+.card__img {
   width: 100%;
-  min-height: calc(100vh - 80px - 4rem);
-  height: calc(100vh - 80px - 4rem);
+  height: auto;
+  display: block;
+}
+
+.card__kicker {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.card__name {
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(1.7rem, 3.4vw, 2.6rem);
+  line-height: 0.9;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+  margin: 0.3rem 0 0;
+  color: var(--ink);
+}
+
+.card__metric {
   display: flex;
-  flex-direction: column;
+  align-items: baseline;
+  gap: 0.55rem;
+  margin: 0.9rem 0 0;
+  padding: 0.5rem 0.75rem;
+  background: var(--accent);
+  border: var(--rule) solid var(--ink);
+  width: fit-content;
+}
+
+.card__metric strong {
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.35rem;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+.card__metric span {
+  font-size: 0.74rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.card--yellow .card__metric strong,
+.card--yellow .card__metric span {
+  color: #14110f;
+}
+
+.card__blurb {
+  margin: 0.9rem 0 1rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+.card__chips {
+  margin-bottom: 1.2rem;
+}
+
+.card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.icon-link {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: #ffffff;
-  position: relative;
-  z-index: 2;
-  animation: slideInFromBottom 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 44px;
+  height: 44px;
+  border: var(--rule) solid var(--ink);
+  color: var(--ink);
+  background: var(--paper-3);
+  box-shadow: var(--shadow-hard-sm);
+  transition: transform 0.16s var(--ease-out), box-shadow 0.16s var(--ease-out),
+    background-color 0.16s var(--ease-out);
 }
 
-@keyframes slideInFromBottom {
-  from {
-    transform: translateY(100%);
-    opacity: 0;
+.icon-link:hover {
+  background: var(--yellow);
+  transform: translate(3px, 3px);
+  box-shadow: 1px 1px 0 var(--ink);
+}
+
+@media (max-width: 760px) {
+  .card {
+    grid-template-columns: 1fr;
   }
-  to {
-    transform: translateY(0);
-    opacity: 1;
+
+  .card__media {
+    max-width: 210px;
   }
-}
 
-
-/* Dark Mode Styles */
-.dark-mode .work-page {
-  background: var(--bg-primary);
-  color: var(--text-primary);
-}
-
-.dark-mode .work-title {
-  color: var(--text-primary);
+  .card__index {
+    top: -0.6rem;
+  }
 }

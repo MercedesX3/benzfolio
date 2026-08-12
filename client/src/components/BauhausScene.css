@@ -1,0 +1,25 @@
+/* Fills whatever cell it's dropped into — on desktop that's the hero's
+   right column, on mobile a dimmed layer behind the copy. */
+.bauhaus-scene {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.bauhaus-scene canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+@media (max-width: 900px) {
+  .bauhaus-scene {
+    opacity: 0.26;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bauhaus-scene {
+    opacity: 0.4;
+  }
+}

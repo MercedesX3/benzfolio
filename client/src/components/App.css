@@ -1,86 +1,190 @@
-#root {
-  width: 100%;
-  height: 100vh;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  background-color: #ffffff;
-}
-
-.dark-mode #root {
-  background-color: #0a0a0a !important;
-}
+/* ── App shell ─────────────────────────────────────────────
+   Document-level scrolling. No 100vh cages, no overflow:hidden
+   on the shell — the whole page is one continuous scroll. */
 
 .app-container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  min-height: 100dvh;
   width: 100%;
-  overflow: hidden;
-  background-color: #ffffff;
-}
-
-.dark-mode .app-container {
-  background-color: #0a0a0a !important;
+  position: relative;
+  background: var(--paper);
 }
 
 .main-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+  flex: 1 0 auto;
+  width: 100%;
+  padding-top: var(--header-h);
   position: relative;
-  /* No opacity animation here: it breaks position:fixed descendants (e.g. home grid)
-     while opacity < 1, then they snap when the fade completes. */
-  margin-top: 80px;
-  padding-top: 2rem;
-  padding-bottom: 2rem;
 }
 
-/* Let home sticker dropdowns / fun-fact cards paint outside the main box */
-.main-content.main-content--home {
-  overflow: visible;
+/* Shared page container */
+.page-shell {
+  width: 100%;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding-inline: var(--gutter);
 }
 
-.main-content.playground-scrollable {
-  overflow-y: auto;
-  overflow-x: hidden;
+/* Page header block used by Work / Playground / About */
+.page-head {
+  padding: clamp(3rem, 8vh, 5.5rem) 0 clamp(2rem, 5vh, 3rem);
+  border-bottom: var(--rule) solid var(--ink);
+  position: relative;
 }
 
-.main-content.about-scrollable {
-  overflow-y: auto;
-  overflow-x: hidden;
+.page-head__title {
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(3rem, 11vw, 8.5rem);
+  line-height: 0.85;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+  margin: 0;
+  color: var(--ink);
 }
 
-@media (max-width: 768px) {
-  .main-content {
-    margin-top: 80px;
-    padding-top: 1.5rem;
-    padding-bottom: 1.5rem;
+.page-head__lede {
+  max-width: 46ch;
+  margin: 1.5rem 0 0;
+  font-size: clamp(1rem, 1.6vw, 1.18rem);
+  color: var(--ink-soft);
+}
+
+/* Decorative Bauhaus marks that page heads can drop in */
+.page-head__marks {
+  position: absolute;
+  top: clamp(2rem, 6vh, 4rem);
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  pointer-events: none;
+}
+
+.mark {
+  width: clamp(32px, 5vw, 58px);
+  height: clamp(32px, 5vw, 58px);
+  flex: none;
+}
+
+.mark--circle {
+  border-radius: 50%;
+  background: var(--red);
+}
+
+.mark--square {
+  background: var(--blue);
+}
+
+.mark--tri {
+  background: var(--yellow);
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+
+.mark--quarter {
+  background: var(--blue);
+  border-radius: 100% 0 0 0;
+}
+
+@media (max-width: 720px) {
+  .page-head__marks {
+    display: none;
   }
 }
 
-/* Dark Mode Styles */
-:root.dark-mode,
-.dark-mode {
-  --bg-primary: #0a0a0a;
-  --bg-secondary: #1a1a1a;
-  --text-primary: #ffffff;
-  --text-secondary: #b0b0b0;
-  --border-color: #333333;
+/* ── Shared primitives ─────────────────────────────────── */
+
+/* Buttons: hard-edged slabs that press into their own shadow */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.85rem 1.4rem;
+  border: var(--rule) solid var(--ink);
+  background: var(--paper-3);
+  color: var(--ink);
+  font-family: var(--font-body), sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  box-shadow: var(--shadow-hard-sm);
+  transition: transform 0.16s var(--ease-out), box-shadow 0.16s var(--ease-out),
+    background-color 0.16s var(--ease-out);
 }
 
-:root:not(.dark-mode) {
-  --bg-primary: #ffffff;
-  --bg-secondary: #f5f5f5;
-  --text-primary: #000000;
-  --text-secondary: #666666;
-  --border-color: #e5e5e5;
+.btn:hover {
+  transform: translate(3px, 3px);
+  box-shadow: 1px 1px 0 var(--ink);
 }
 
-.dark-mode .main-content {
-  background: var(--bg-primary) !important;
-  color: var(--text-primary);
+.btn--primary {
+  background: var(--red);
+  color: #fff;
+}
+
+:root.dark-mode .btn--primary {
+  color: var(--paper);
+}
+
+.btn--ghost {
+  background: transparent;
+}
+
+.btn--ghost:hover {
+  background: var(--yellow);
+}
+
+/* Tech chips */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.chip {
+  font-size: 0.74rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.32rem 0.6rem;
+  border: 2px solid var(--ink);
+  background: var(--paper-2);
+  color: var(--ink);
+}
+
+/* Section scaffolding */
+.section {
+  padding-block: var(--section-y);
+  position: relative;
+}
+
+.section__head {
+  margin-bottom: clamp(2.5rem, 6vh, 4rem);
+}
+
+.section__title {
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(2.4rem, 7vw, 5.2rem);
+  line-height: 0.88;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+  margin: 0;
+  color: var(--ink);
+}
+
+.section__lede {
+  max-width: 48ch;
+  margin: 1.1rem 0 0;
+  color: var(--ink-soft);
+  font-size: 1.02rem;
+}
+
+.section__foot {
+  margin-top: clamp(2.5rem, 6vh, 3.5rem);
+  display: flex;
+  justify-content: center;
 }

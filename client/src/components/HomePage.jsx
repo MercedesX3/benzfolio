@@ -1,286 +1,382 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
-import Fireworks from './Fireworks';
-import './HomePage.css';
+"use client";
 
-const placementFromClass = (className) =>
-  className.match(/home-sticker--([a-z]+)/)?.[1] || 'tl';
+import { useState, useEffect, useRef, useCallback } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { ArrowRight, ArrowDown } from "lucide-react";
+import BauhausScene from "./BauhausScene";
+import { FEATURED_PROJECTS } from "../data/projects";
+import "./HomePage.css";
 
-/**
- * Default sticker image sizing (all optional fields on each sticker merge into this).
- * - widthMin / widthMax: px bounds for clamp()
- * - widthVw: middle term uses this many vw (fluid)
- * - maxHeightVh: max height in vh
- */
-const STICKER_SIZE_DEFAULT = {
-  widthMin: 72,
-  widthVw: 14,
-  widthMax: 140,
-  maxHeightVh: 28,
-};
+/* ── Scrapbook fun-fact cards ─────────────────────────────── */
 
-function stickerSizeStyle(sizeOverride = {}) {
-  const s = { ...STICKER_SIZE_DEFAULT, ...sizeOverride };
-  return {
-    '--sticker-w-min': `${s.widthMin}px`,
-    '--sticker-w-max': `${s.widthMax}px`,
-    '--sticker-w-vw': String(s.widthVw),
-    '--sticker-max-vh': String(s.maxHeightVh),
-  };
-}
-
-const HOME_STICKERS = [
+const STICKERS = [
   {
-    src: '/stickers/book.png',
-    className: 'home-sticker home-sticker--tl',
-    direction: 'down',
-    emoji: '',
-    label: 'Fun fact #1',
-    fact: 'I am 750 books away from having my own library.',
-    color: '#FFD6E0',
-    tape: 'tape-pink',
+    src: "/stickers/book.png",
+    label: "Fun fact #1",
+    fact: "I am 750 books away from having my own library.",
+    accent: "red",
+    rotate: -4,
   },
   {
-    src: '/stickers/5.png',
-    className: 'home-sticker home-sticker--tr',
-    direction: 'down',
-    emoji: '',
-    label: 'Fun fact #2',
-    fact: "I have never been out of the country but if I could I would love to go to Italy or the UK for the architecture.",
-    color: '#FFF3CD',
-    tape: 'tape-yellow',
+    src: "/stickers/5.png",
+    label: "Fun fact #2",
+    fact: "I've never been out of the country, but I'd love to see Italy or the UK for the architecture.",
+    accent: "blue",
+    rotate: 3,
   },
   {
-    src: '/stickers/coffee.png',
-    className: 'home-sticker home-sticker--bl',
-    direction: 'up',
-    emoji: '',
-    label: 'Fun fact #3',
-    fact: 'I drink at least one cup of coffe every day and my go-to order is a caramel iced coffee with oat milk.',
-    color: '#D4EDFF',
-    tape: 'tape-blue',
+    src: "/stickers/coffee.png",
+    label: "Fun fact #3",
+    fact: "One cup of coffee a day, minimum. Go-to order: caramel iced coffee with oat milk.",
+    accent: "yellow",
+    rotate: -2.5,
   },
   {
-    src: '/stickers/9.png',
-    className: 'home-sticker home-sticker--br',
-    direction: 'up',
-    emoji: '',
-    label: 'Fun fact #4',
-    fact: "I was born in California and one of my favorite memories is camping on the beach in Half Moon Bay.",
-    color: '#D4F5E0',
-    tape: 'tape-green',
-  },
-  {
-    src: '/stickers/cowboy-hat.png',
-    className: 'home-sticker home-sticker--on-oval',
-    placement: 'oval',
-    /* Decorative only — no fun-fact card. Sits on top-left of the greeting oval. */
-    size: { widthMin: 72, widthVw: 11, widthMax: 130, maxHeightVh: 22 },
+    src: "/stickers/9.png",
+    label: "Fun fact #4",
+    fact: "Born in California. One of my favorite memories is camping on the beach in Half Moon Bay.",
+    accent: "blue",
+    rotate: 4,
   },
 ];
 
-const FunFactCard = ({ sticker, onClose }) => {
-  const isDown = sticker.direction === 'down';
+const STATS = [
+  { value: "2,000+", label: "students served by SAGE", accent: "blue" },
+  { value: "180+", label: "ACM officers supported", accent: "red" },
+  { value: "9", label: "divisions coordinated", accent: "yellow" },
+  { value: "200+", label: "active ACM members", accent: "blue" },
+];
 
-  return (
-    <div
-      className={`fun-fact-card fun-fact-card--${isDown ? 'down' : 'up'}`}
-      style={{ '--card-bg': sticker.color }}
-      role="dialog"
-      aria-label={sticker.label}
-    >
-      <div className={`fun-fact-tape ${sticker.tape}`} />
+const MARQUEE = [
+  "Full-stack developer",
+  "CS @ UT Dallas",
+  "VP of ACM @ UTD",
+  "AWS · React · Python",
+  "Building things people use",
+];
 
-      <button
-        className="fun-fact-close"
-        onClick={(e) => { e.stopPropagation(); onClose(); }}
-        aria-label="Close"
-      >
-        ×
-      </button>
+/* ── Typed greeting (personality, not a gate) ─────────────── */
 
-      <p className="fun-fact-label">{sticker.label}</p>
-      <div className="fun-fact-emoji">{sticker.emoji}</div>
-      <p className="fun-fact-text">{sticker.fact}</p>
-      <div className="fun-fact-fold" />
-    </div>
-  );
-};
-
-const HomePage = ({ isVisible = true }) => {
-  const [displayText, setDisplayText] = useState('');
-  const [showCursor, setShowCursor] = useState(true);
-  const [activeSticker, setActiveSticker] = useState(null);
-  const timeoutsRef = useRef([]);
-  const isRunningRef = useRef(false);
-
-  const emojis = ['👋', '😊', '✨'];
-  const finalText = "Hi it's Mercedes!";
+function useTypedGreeting(finalText) {
+  const [text, setText] = useState("");
+  const timeouts = useRef([]);
 
   useEffect(() => {
-    if (activeSticker === null) return;
-    const onPointerDown = (e) => {
-      if (!e.target.closest('.home-sticker-wrapper')) {
-        setActiveSticker(null);
-      }
-    };
-    // Defer so the same gesture that opens the card doesn’t hit this listener first
-    const t = window.setTimeout(() => {
-      document.addEventListener('pointerdown', onPointerDown);
-    }, 0);
-    return () => {
-      window.clearTimeout(t);
-      document.removeEventListener('pointerdown', onPointerDown);
-    };
-  }, [activeSticker]);
+    const reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
 
-  useEffect(() => {
-    const handleKey = (e) => {
-      if (e.key === 'Escape') setActiveSticker(null);
-    };
-    document.addEventListener('keydown', handleKey);
-    return () => document.removeEventListener('keydown', handleKey);
-  }, []);
+    const queue = timeouts.current;
+    const after = (fn, delay) => queue.push(window.setTimeout(fn, delay));
 
-  const handleStickerClick = useCallback((index) => {
-    setActiveSticker(prev => (prev === index ? null : index));
-  }, []);
-
-  useEffect(() => {
-    const clearAll = () => {
-      timeoutsRef.current.forEach(t => clearTimeout(t));
-      timeoutsRef.current = [];
-    };
-
-    if (!isVisible) {
-      setDisplayText('');
-      isRunningRef.current = false;
-      clearAll();
-      return;
+    // Reduced motion still gets the line, just without the keystrokes.
+    if (reduced) {
+      after(() => setText(finalText), 0);
+      return () => {
+        queue.forEach(window.clearTimeout);
+        timeouts.current = [];
+      };
     }
 
-    if (isRunningRef.current) return;
-    isRunningRef.current = true;
-
-    const addTimeout = (fn, delay) => {
-      const timeout = setTimeout(fn, delay);
-      timeoutsRef.current.push(timeout);
+    let i = 0;
+    const type = () => {
+      if (i >= finalText.length) return;
+      i += 1;
+      setText(finalText.slice(0, i));
+      after(type, 55);
     };
-
-    addTimeout(() => {
-      let emojiIndex = 0;
-      const typeEmoji = () => {
-        if (emojiIndex < emojis.length) {
-          setDisplayText(emojis.slice(0, emojiIndex + 1).join(''));
-          emojiIndex++;
-          addTimeout(typeEmoji, 300);
-        } else {
-          addTimeout(() => {
-            let currentText = emojis.join('');
-            const deleteEmojis = () => {
-              if (currentText.length > 0) {
-                currentText = currentText.slice(0, -1);
-                setDisplayText(currentText);
-                addTimeout(deleteEmojis, 100);
-              } else {
-                addTimeout(() => {
-                  let textIndex = 0;
-                  const typeFinalText = () => {
-                    if (textIndex < finalText.length) {
-                      setDisplayText(finalText.slice(0, textIndex + 1));
-                      textIndex++;
-                      addTimeout(typeFinalText, 100);
-                    }
-                  };
-                  typeFinalText();
-                }, 500);
-              }
-            };
-            deleteEmojis();
-          }, 800);
-        }
-      };
-      typeEmoji();
-    }, 1000);
+    after(type, 350);
 
     return () => {
-      clearAll();
-      isRunningRef.current = false;
+      queue.forEach(window.clearTimeout);
+      timeouts.current = [];
     };
-  }, [isVisible]);
+  }, [finalText]);
 
-  useEffect(() => {
-    const id = setInterval(() => setShowCursor(p => !p), 530);
-    return () => clearInterval(id);
+  return text;
+}
+
+/* ── Page ─────────────────────────────────────────────────── */
+
+export default function HomePage() {
+  // A Set, not a single index: opening one fun fact used to close whichever
+  // was already open, so cards vanished as you clicked around. They're
+  // independent now — read them all at once if you like.
+  const [openStickers, setOpenStickers] = useState(() => new Set());
+  const greeting = useTypedGreeting("Hi, it's Mercedes!");
+
+  const toggleSticker = useCallback((index) => {
+    setOpenStickers((prev) => {
+      const next = new Set(prev);
+      if (next.has(index)) next.delete(index);
+      else next.add(index);
+      return next;
+    });
   }, []);
 
-  const ovalSticker = HOME_STICKERS.find((s) => s.placement === 'oval');
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === "Escape") setOpenStickers(new Set());
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, []);
 
   return (
-    <div className={`home-page ${!isVisible ? 'slide-up' : ''}`}>
-      <div className="home-canvas">
-        <Fireworks />
-        <div className="home-content">
-          <div className="home-text-box">
-            <div className="home-text-oval-cluster">
-              {ovalSticker && (
-                <div
-                  className="home-sticker-wrapper home-sticker-wrapper--on-oval"
-                  style={stickerSizeStyle(ovalSticker.size)}
-                >
-                  <img
-                    src={ovalSticker.src}
-                    alt=""
-                    className={ovalSticker.className}
-                    draggable={false}
-                    loading="eager"
-                    decoding="async"
-                    aria-hidden="true"
-                  />
-                </div>
-              )}
-              <span className="home-text">
-                {displayText}
-                {showCursor && <span className="cursor">|</span>}
+    <div className="home">
+      {/* ── HERO ─────────────────────────────────────────── */}
+      <section className="hero">
+        <div className="hero__grid" aria-hidden="true" />
+
+        <div className="hero__inner page-shell">
+          <div className="hero__col">
+            <p className="hero__greeting hand">
+              {greeting}
+              <span className="hero__caret" aria-hidden="true" />
+            </p>
+
+            <h1 className="hero__title display">
+              <span className="hero__line">Mercedes</span>
+              <span className="hero__line hero__line--offset">
+                Xiong
+                <i className="hero__dot" aria-hidden="true" />
               </span>
+            </h1>
+
+            <p className="hero__role">
+              Full-stack developer · CS @ UT Dallas · VP of ACM @ UTD
+            </p>
+
+            <p className="hero__lede">
+              I build things people actually use — most recently{" "}
+              <strong>SAGE</strong>, an AI advising platform that has helped{" "}
+              <strong>2,000+ UT Dallas students</strong> plan their degrees.
+            </p>
+
+            <div className="hero__actions">
+              <Link href="/work" className="btn btn--primary">
+                See the work <ArrowRight size={18} />
+              </Link>
+              <a
+                href="/Mercedes_Xiong_Resume_Summer2026.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn--ghost"
+              >
+                Resume
+              </a>
             </div>
+          </div>
+
+          {/* The 3D rig gets its own column so it can never sit on the type */}
+          <div className="hero__stage">
+            <BauhausScene />
           </div>
         </div>
 
-        <div className="home-stickers">
-          {HOME_STICKERS.map((sticker, index) =>
-            sticker.placement === 'oval' ? null : (
-            <div
-              key={sticker.src}
-              className={`home-sticker-wrapper home-sticker-wrapper--${placementFromClass(sticker.className)}`}
-              data-direction={sticker.direction}
-              style={stickerSizeStyle(sticker.size)}
-            >
-              <img
-                src={sticker.src}
-                alt={sticker.label}
-                className={`${sticker.className} ${activeSticker === index ? 'sticker-active' : ''}`}
-                draggable={false}
-                loading="eager"
-                decoding="async"
-                onClick={() => handleStickerClick(index)}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => e.key === 'Enter' && handleStickerClick(index)}
-                aria-expanded={activeSticker === index}
-                aria-haspopup="dialog"
-              />
-              {activeSticker === index && (
-                <FunFactCard
-                  sticker={sticker}
-                  onClose={() => setActiveSticker(null)}
-                />
-              )}
+        <div className="hero__cue" aria-hidden="true">
+          <ArrowDown size={18} />
+          <span>Scroll</span>
+        </div>
+      </section>
+
+      {/* ── MARQUEE ──────────────────────────────────────── */}
+      <div className="marquee" aria-hidden="true">
+        <div className="marquee__track">
+          {[0, 1].map((copy) => (
+            <div className="marquee__group" key={copy}>
+              {MARQUEE.map((item) => (
+                <span className="marquee__item" key={`${copy}-${item}`}>
+                  {item}
+                  <i className="marquee__dot" />
+                </span>
+              ))}
             </div>
           ))}
         </div>
       </div>
+
+      {/* ── FEATURED WORK ────────────────────────────────── */}
+      <section className="section section--work" id="work">
+        <div className="page-shell">
+          <header className="section__head" data-reveal>
+            <p className="eyebrow" style={{ "--mark": "var(--red)" }}>
+              Selected work
+            </p>
+            <h2 className="section__title display">Things I built</h2>
+          </header>
+
+          <div className="featured">
+            {FEATURED_PROJECTS.map((project, i) => (
+              <article
+                key={project.slug}
+                className={`feature feature--${project.accent}`}
+                data-reveal
+                style={{ "--reveal-delay": `${i * 110}ms` }}
+              >
+                <Link href="/work" className="feature__link">
+                  <div className="feature__media">
+                    <span className="tape feature__tape" />
+                    <Image
+                      src={project.image}
+                      alt={`${project.name} cover`}
+                      width={520}
+                      height={700}
+                      sizes="(max-width: 900px) 90vw, 460px"
+                      className="feature__img"
+                    />
+                  </div>
+
+                  <div className="feature__body">
+                    <p className="feature__kicker">{project.kicker}</p>
+                    <h3 className="feature__name display">{project.name}</h3>
+
+                    {project.metric && (
+                      <p className="feature__metric">
+                        <strong>{project.metric.value}</strong>
+                        <span>{project.metric.label}</span>
+                      </p>
+                    )}
+
+                    <p className="feature__blurb">{project.blurb}</p>
+
+                    <ul className="chips">
+                      {project.lead.map((tech) => (
+                        <li className="chip" key={tech}>
+                          {tech}
+                        </li>
+                      ))}
+                    </ul>
+
+                    <span className="feature__more">
+                      Read the case study <ArrowRight size={16} />
+                    </span>
+                  </div>
+                </Link>
+              </article>
+            ))}
+          </div>
+
+          <div className="section__foot" data-reveal>
+            <Link href="/work" className="btn btn--ghost">
+              All five projects <ArrowRight size={18} />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ── STATS BAND ───────────────────────────────────── */}
+      <section className="stats" id="stats">
+        <div className="page-shell">
+          <div className="stats__row">
+            {STATS.map((stat, i) => (
+              <div
+                className={`stat stat--${stat.accent}`}
+                key={stat.label}
+                data-reveal
+                style={{ "--reveal-delay": `${i * 90}ms` }}
+              >
+                <p className="stat__value display">{stat.value}</p>
+                <p className="stat__label">{stat.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── SCRAPBOOK ────────────────────────────────────── */}
+      <section className="section section--scrap" id="scrapbook">
+        <div className="page-shell">
+          <header className="section__head" data-reveal>
+            <p className="eyebrow" style={{ "--mark": "var(--yellow)" }}>
+              Off the clock
+            </p>
+            <h2 className="section__title display">The other stuff</h2>
+            <p className="section__lede">
+              Click a sticker. There is no deeper meaning to any of this.
+            </p>
+          </header>
+
+          <div className="scrapbook">
+            {STICKERS.map((sticker, i) => {
+              const isOpen = openStickers.has(i);
+              return (
+                <div
+                  key={sticker.src}
+                  className={`scrap scrap--${sticker.accent} ${isOpen ? "is-open" : ""}`}
+                  style={{
+                    "--rot": `${sticker.rotate}deg`,
+                    "--reveal-delay": `${i * 90}ms`,
+                  }}
+                  data-reveal
+                >
+                  <button
+                    type="button"
+                    className="scrap__button"
+                    onClick={() => toggleSticker(i)}
+                    aria-expanded={isOpen}
+                  >
+                    <span className="tape scrap__tape" />
+                    <Image
+                      src={sticker.src}
+                      alt=""
+                      width={200}
+                      height={200}
+                      className="scrap__img"
+                      aria-hidden="true"
+                    />
+                    <span className="scrap__label">{sticker.label}</span>
+                  </button>
+
+                  <div className="scrap__fact" hidden={!isOpen}>
+                    <p className="hand">{sticker.fact}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ── CONTACT ──────────────────────────────────────── */}
+      <section className="contact" id="contact">
+        <div className="page-shell contact__inner">
+          <div className="contact__marks" aria-hidden="true">
+            <i className="mark mark--circle" />
+            <i className="mark mark--tri" />
+            <i className="mark mark--square" />
+          </div>
+
+          <h2 className="contact__title display">
+            Let&apos;s build
+            <br />
+            something
+          </h2>
+
+          <p className="contact__lede">
+            I&apos;m looking for summer 2026 software engineering internships.
+            If you have one, I&apos;d love to hear about it.
+          </p>
+
+          <div className="contact__actions">
+            <a
+              href="mailto:mercedesx935@gmail.com"
+              className="btn btn--primary"
+            >
+              mercedesx935@gmail.com <ArrowRight size={18} />
+            </a>
+            <a
+              href="https://www.linkedin.com/in/mercedes-xiong"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn--ghost"
+            >
+              LinkedIn
+            </a>
+          </div>
+        </div>
+      </section>
     </div>
   );
-};
-
-export default HomePage;
+}
