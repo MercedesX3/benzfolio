@@ -216,7 +216,7 @@
 
 .challenge__link {
   display: grid;
-  grid-template-columns: minmax(0, 200px) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 240px) minmax(0, 1fr);
   gap: clamp(1.2rem, 2.5vw, 2rem);
   align-items: center;
   text-decoration: none;
@@ -233,11 +233,15 @@
   box-shadow: 9px 9px 0 var(--ink);
 }
 
-/* Phone screens carry their own dark ground, so the frame stays thin */
+/* The cover is a device mockup on a transparent ground with its own soft
+   shadow, so it sits on paper rather than the dark ground a raw screenshot
+   would want. The source is square; cropping to 3:4 lets the phone fill more
+   of the frame instead of floating in empty space. */
 .challenge__media {
   position: relative;
   border: var(--rule) solid var(--ink);
-  background: #1c1c1c;
+  background: var(--paper-2);
+  aspect-ratio: 3 / 4;
   transform: rotate(-1.8deg);
   transition: transform 0.3s var(--ease-out);
   overflow: hidden;
@@ -258,7 +262,8 @@
 
 .challenge__img {
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
   display: block;
 }
 

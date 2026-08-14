@@ -5,8 +5,17 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, ArrowDown } from "lucide-react";
 import BauhausScene from "./BauhausScene";
+import SectionNav from "./SectionNav";
 import { FEATURED_PROJECTS } from "../data/projects";
 import "./HomePage.css";
+
+const SECTIONS = [
+  { id: "top", label: "Intro" },
+  { id: "work", label: "Selected work" },
+  { id: "stats", label: "By the numbers" },
+  { id: "scrapbook", label: "Off the clock" },
+  { id: "contact", label: "Contact" },
+];
 
 /* ── Scrapbook fun-fact cards ─────────────────────────────── */
 
@@ -125,8 +134,10 @@ export default function HomePage() {
 
   return (
     <div className="home">
+      <SectionNav sections={SECTIONS} />
+
       {/* ── HERO ─────────────────────────────────────────── */}
-      <section className="hero">
+      <section className="hero" id="top">
         <div className="hero__grid" aria-hidden="true" />
 
         <div className="hero__inner page-shell">

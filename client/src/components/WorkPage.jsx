@@ -5,9 +5,15 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowUpRight, ArrowRight, Github, Globe } from 'lucide-react';
 import MagazineViewer from './MagazineViewer';
+import SectionNav from './SectionNav';
 import { PROJECTS } from '../data/projects';
 import { CHALLENGES } from '../data/challenges';
 import './WorkPage.css';
+
+const SECTIONS = [
+  { id: 'projects', label: 'Work' },
+  { id: 'design-challenges', label: 'Design challenges' },
+];
 
 /**
  * Replaces the auto-rotating cover carousel.
@@ -21,8 +27,10 @@ export default function WorkPage() {
 
   return (
     <div className="work-page">
+      <SectionNav sections={SECTIONS} />
+
       <div className="page-shell">
-        <header className="page-head">
+        <header className="page-head" id="projects">
           <p className="eyebrow" style={{ '--mark': 'var(--blue)' }}>
             Five projects
           </p>
@@ -152,9 +160,9 @@ export default function WorkPage() {
                     <Image
                       src={challenge.cover}
                       alt={`${challenge.name} home screen`}
-                      width={402}
-                      height={846}
-                      sizes="(max-width: 760px) 60vw, 240px"
+                      width={1920}
+                      height={1920}
+                      sizes="(max-width: 760px) 60vw, 260px"
                       className="challenge__img"
                     />
                   </div>

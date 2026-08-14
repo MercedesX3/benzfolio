@@ -2,7 +2,14 @@
 
 import Image from 'next/image';
 import { Instagram, ArrowUpRight } from 'lucide-react';
+import SectionNav from './SectionNav';
 import './AboutPage.css';
+
+const SECTIONS = [
+  { id: 'intro', label: 'About' },
+  { id: 'shelf', label: 'Books & music' },
+  { id: 'communities', label: 'Communities' },
+];
 
 /**
  * Every scroll-triggered animation on this page now goes through the shared
@@ -90,9 +97,11 @@ function Shelf({ title, count, linkLabel, linkHref, items, accent, wide }) {
 export default function AboutPage() {
   return (
     <div className="about">
+      <SectionNav sections={SECTIONS} />
+
       <div className="page-shell">
         {/* ── Intro ──────────────────────────────────────── */}
-        <header className="page-head about__head">
+        <header className="page-head about__head" id="intro">
           <p className="eyebrow" style={{ '--mark': 'var(--red)' }}>
             Who&apos;s behind this
           </p>
@@ -139,7 +148,7 @@ export default function AboutPage() {
       </div>
 
       {/* ── Shelves ──────────────────────────────────────── */}
-      <div className="about__band">
+      <div className="about__band" id="shelf">
         <div className="page-shell">
           <Shelf
             title="Books"

@@ -13,7 +13,8 @@ export const CHALLENGES = [
     kicker: 'Design challenge · Mobile app',
     summary:
       'A translation companion for GoPro users — voice, text, and camera, built for the moments when you are somewhere unfamiliar and need to understand what is being said or written around you.',
-    cover: '/challenges/gopro-translation/home.png',
+    /* Device mockup with a transparent ground — framed light on the card. */
+    cover: '/challenges/gopro-translation/card-cover.png',
     accent: 'blue',
     year: '2026',
     role: 'Product design · UI',
