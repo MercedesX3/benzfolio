@@ -4,16 +4,16 @@ import { useEffect, useRef } from 'react';
 import './ChallengeVideo.css';
 
 /**
- * Silent looping beauty shot for a challenge.
+ * Silent looping beauty shot — behaves like a GIF, not a video player.
  *
- * Autoplay is started from JS rather than the `autoplay` attribute so it can
- * be withheld under prefers-reduced-motion — those visitors get controls and
- * decide for themselves. If a browser refuses the play() promise (some power
- * or data-saver modes do), controls appear as the fallback rather than the
- * video sitting there looking broken.
+ * The `autoPlay` attribute is deliberate rather than a JS play() call: muted +
+ * playsInline + autoplay is the combination browsers whitelist at parse time,
+ * so it starts without asking. An earlier version drove playback from JS and
+ * paused it off-screen, which left it showing player controls and needing a
+ * click — exactly what a GIF shouldn't do.
  *
- * Playback pauses while off-screen so a looping video isn't burning CPU
- * halfway down a long page.
+ * No controls, ever. If something pauses it (tab switch, power saving), the
+ * listeners below quietly start it again.
  */
 export default function ChallengeVideo({ src, poster, label }) {
   const videoRef = useRef(null);
@@ -22,53 +22,22 @@ export default function ChallengeVideo({ src, poster, label }) {
     const video = videoRef.current;
     if (!video) return undefined;
 
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    if (reduced) {
-      video.controls = true;
-      // Nudge off frame zero so there's a real image to look at rather than
-      // an empty box, since nothing is going to autoplay for these visitors.
-      const paintFirstFrame = () => {
-        if (video.paused) video.currentTime = 0.5;
-      };
-      if (video.readyState >= 1) paintFirstFrame();
-      else video.addEventListener('loadedmetadata', paintFirstFrame, { once: true });
-      return undefined;
-    }
-
-    let allowed = true;
-    let onScreen = true;
-
-    const tryPlay = () => {
-      if (!allowed || !onScreen || document.hidden) return;
+    const resume = () => {
+      if (document.hidden || !video.paused) return;
       video.play().catch(() => {});
     };
 
-    video.play().catch(() => {
-      allowed = false;
-      video.controls = true;
-    });
+    // Kick it once on mount in case the attribute alone didn't take.
+    resume();
 
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        onScreen = entry.isIntersecting;
-        if (onScreen) tryPlay();
-        else video.pause();
-      },
-      { threshold: 0.1 }
-    );
-    io.observe(video);
-
-    // Browsers pause playback in a backgrounded tab, and coming back doesn't
-    // change intersection — so without this the hero sits frozen on return.
-    const onVisibility = () => {
-      if (!document.hidden) tryPlay();
-    };
-    document.addEventListener('visibilitychange', onVisibility);
+    document.addEventListener('visibilitychange', resume);
+    window.addEventListener('focus', resume);
+    video.addEventListener('loadeddata', resume);
 
     return () => {
-      io.disconnect();
-      document.removeEventListener('visibilitychange', onVisibility);
+      document.removeEventListener('visibilitychange', resume);
+      window.removeEventListener('focus', resume);
+      video.removeEventListener('loadeddata', resume);
     };
   }, []);
 
@@ -82,11 +51,13 @@ export default function ChallengeVideo({ src, poster, label }) {
           poster={poster}
           width={1280}
           height={720}
+          autoPlay
           muted
           loop
           playsInline
-          preload="metadata"
+          preload="auto"
           aria-label={label}
+          tabIndex={-1}
         />
       </div>
       {label && <figcaption className="cv__caption">{label}</figcaption>}
