@@ -168,7 +168,161 @@
   box-shadow: 1px 1px 0 var(--ink);
 }
 
+/* ── Design challenges ────────────────────────────────── */
+
+.challenges {
+  border-top: var(--rule-thick) solid var(--ink);
+  padding-top: clamp(2.5rem, 7vh, 4.5rem);
+  margin-top: clamp(1rem, 3vh, 2rem);
+}
+
+.challenges__title {
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(2.1rem, 6.5vw, 4.4rem);
+  line-height: 0.88;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+  margin: 0;
+  color: var(--ink);
+}
+
+.challenges__lede {
+  max-width: 52ch;
+  margin: 1.2rem 0 0;
+  color: var(--ink-soft);
+  font-size: 1.02rem;
+}
+
+.challenge-grid {
+  display: grid;
+  gap: clamp(1.75rem, 3.5vw, 3rem);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+  padding-top: clamp(2rem, 5vh, 3rem);
+}
+
+.challenge {
+  --accent: var(--blue);
+}
+
+.challenge--red {
+  --accent: var(--red);
+}
+.challenge--blue {
+  --accent: var(--blue);
+}
+.challenge--yellow {
+  --accent: var(--yellow);
+}
+
+.challenge__link {
+  display: grid;
+  grid-template-columns: minmax(0, 200px) minmax(0, 1fr);
+  gap: clamp(1.2rem, 2.5vw, 2rem);
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  padding: clamp(1.3rem, 2.6vw, 2rem);
+  background: var(--paper-3);
+  border: var(--rule) solid var(--ink);
+  box-shadow: var(--shadow-hard);
+  transition: transform 0.24s var(--ease-out), box-shadow 0.24s var(--ease-out);
+}
+
+.challenge__link:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 9px 9px 0 var(--ink);
+}
+
+/* Phone screens carry their own dark ground, so the frame stays thin */
+.challenge__media {
+  position: relative;
+  border: var(--rule) solid var(--ink);
+  background: #1c1c1c;
+  transform: rotate(-1.8deg);
+  transition: transform 0.3s var(--ease-out);
+  overflow: hidden;
+}
+
+.challenge__link:hover .challenge__media {
+  transform: rotate(1.4deg);
+}
+
+.challenge__tape {
+  --tape-color: color-mix(in srgb, var(--accent) 55%, transparent);
+  top: -13px;
+  left: 50%;
+  margin-left: -46px;
+  transform: rotate(-4deg);
+  z-index: 2;
+}
+
+.challenge__img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.challenge__kicker {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.challenge__name {
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(1.7rem, 3.4vw, 2.6rem);
+  line-height: 0.9;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+  margin: 0.3rem 0 0;
+  color: var(--ink);
+}
+
+/* The brief, quoted — it's the constraint the whole thing answers to */
+.challenge__brief {
+  margin: 0.9rem 0 0;
+  padding: 0.55rem 0.85rem;
+  border-left: var(--rule-thick) solid var(--accent);
+  background: var(--paper-2);
+  font-size: 0.95rem;
+  font-style: italic;
+  color: var(--ink);
+}
+
+.challenge__summary {
+  margin: 0.9rem 0 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+.challenge__more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: 1.2rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 2px;
+}
+
 @media (max-width: 760px) {
+  .challenge__link {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  .challenge__media {
+    max-width: 200px;
+  }
+
   .card {
     grid-template-columns: 1fr;
   }

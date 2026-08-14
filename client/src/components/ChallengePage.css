@@ -1,0 +1,415 @@
+.challenge-page {
+  padding-bottom: clamp(2rem, 6vh, 4rem);
+}
+
+/* ── Header ───────────────────────────────────────────── */
+
+.cp-head {
+  padding: clamp(2rem, 6vh, 3.5rem) 0 clamp(2.5rem, 6vh, 4rem);
+  border-bottom: var(--rule-thick) solid var(--ink);
+}
+
+.cp-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  text-decoration: none;
+  margin-bottom: 1.75rem;
+  border-bottom: 2px solid transparent;
+  padding-bottom: 2px;
+  transition: color 0.2s var(--ease-out), border-color 0.2s var(--ease-out);
+}
+
+.cp-back:hover {
+  color: var(--ink);
+  border-bottom-color: var(--red);
+}
+
+.cp-title {
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(2.8rem, 11vw, 8rem);
+  line-height: 0.84;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  margin: 0;
+  color: var(--ink);
+}
+
+/* The brief, set as a slab — it's the constraint everything answers to */
+.cp-brief {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem 0.9rem;
+  margin: 1.75rem 0 0;
+  padding: 1rem 1.2rem;
+  background: var(--yellow);
+  border: var(--rule) solid var(--ink);
+  box-shadow: var(--shadow-hard-sm);
+  font-size: clamp(1.05rem, 2vw, 1.4rem);
+  font-weight: 700;
+  color: #14110f;
+  width: fit-content;
+  max-width: 100%;
+}
+
+.cp-brief__label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.65;
+}
+
+.cp-summary {
+  max-width: 58ch;
+  margin: 1.6rem 0 0;
+  font-size: clamp(1rem, 1.6vw, 1.15rem);
+  line-height: 1.65;
+  color: var(--ink-soft);
+}
+
+.cp-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  margin: 2rem 0 0;
+}
+
+.cp-meta dt {
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.cp-meta dd {
+  margin: 0.35rem 0 0;
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+/* ── Beauty shot ──────────────────────────────────────── */
+
+.cp-video {
+  padding-block: clamp(2rem, 6vh, 3.5rem);
+  border-bottom: var(--rule) solid var(--ink);
+}
+
+/* ── Step scaffold ────────────────────────────────────── */
+
+.step {
+  padding-block: clamp(2.75rem, 8vh, 5rem);
+  border-bottom: var(--rule) solid var(--ink);
+}
+
+.step:last-of-type {
+  border-bottom: 0;
+}
+
+.step__head {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: clamp(1rem, 2.5vw, 2rem);
+  align-items: start;
+  margin-bottom: clamp(1.75rem, 4vh, 2.75rem);
+}
+
+.step__num {
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(2.4rem, 6vw, 4.5rem);
+  line-height: 0.8;
+  letter-spacing: -0.04em;
+  color: var(--accent, var(--red));
+}
+
+.step__title {
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(1.7rem, 4vw, 3rem);
+  line-height: 0.9;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+  margin: 0;
+  color: var(--ink);
+}
+
+.step__lede {
+  max-width: 62ch;
+  margin: 0.9rem 0 0;
+  font-size: clamp(0.98rem, 1.4vw, 1.08rem);
+  line-height: 1.65;
+  color: var(--ink-soft);
+}
+
+/* ── 01 Breakdown ─────────────────────────────────────── */
+
+.breakdown {
+  display: grid;
+  gap: clamp(1rem, 2.2vw, 1.5rem);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: breakdown;
+}
+
+.breakdown__item {
+  position: relative;
+  padding: 1.5rem 1.25rem 1.25rem;
+  background: var(--paper-3);
+  border: var(--rule) solid var(--ink);
+  box-shadow: var(--shadow-hard-sm);
+}
+
+.breakdown__num {
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-display), sans-serif;
+  font-size: 0.95rem;
+}
+
+.breakdown__text {
+  margin: 0.75rem 0 0;
+  font-size: clamp(1rem, 1.7vw, 1.18rem);
+  line-height: 1.45;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+/* ── 02 Typography ────────────────────────────────────── */
+
+.type-block {
+  display: grid;
+  grid-template-columns: minmax(0, 420px) minmax(0, 1fr);
+  gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: start;
+}
+
+@media (max-width: 780px) {
+  .type-block {
+    grid-template-columns: 1fr;
+  }
+}
+
+.type-specimen {
+  border: var(--rule) solid var(--ink);
+  box-shadow: var(--shadow-hard);
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.type-specimen__img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.type-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1.25rem;
+}
+
+.type-face {
+  border-left: var(--rule-thick) solid var(--blue);
+  padding-left: 1.1rem;
+}
+
+.type-face:nth-child(2) {
+  border-left-color: var(--red);
+}
+
+.type-face__role {
+  margin: 0;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.type-face__name {
+  margin: 0.4rem 0 0;
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.type-face__note {
+  margin: 0.6rem 0 0;
+  font-size: 0.94rem;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+/* ── 03 Palette ───────────────────────────────────────── */
+
+.palette {
+  display: grid;
+  gap: clamp(1rem, 2.2vw, 1.5rem);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+}
+
+/* Tall cards, name at top, hex + role pinned to the bottom — same anatomy as
+   the original spec, but fluid instead of absolutely positioned at 1717px. */
+.swatch {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 3rem;
+  min-height: clamp(260px, 34vh, 400px);
+  padding: clamp(1.25rem, 2.4vw, 2rem);
+  background: var(--swatch);
+  border: var(--rule) solid var(--ink);
+  border-radius: 10px;
+  box-shadow: var(--shadow-hard-sm);
+  transition: transform 0.24s var(--ease-out), box-shadow 0.24s var(--ease-out);
+}
+
+.swatch:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-hard);
+}
+
+.swatch__name {
+  margin: 0;
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(1.2rem, 2.2vw, 1.65rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.swatch__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding-top: 0.75rem;
+  border-top: 2px solid currentColor;
+}
+
+.swatch__hex {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+}
+
+.swatch__role {
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+/* Text colour is declared per swatch so contrast never depends on the theme */
+.swatch--light {
+  color: #ffffff;
+}
+
+.swatch--dark {
+  color: #2b2b2b;
+}
+
+/* ── 04 Screens ───────────────────────────────────────── */
+
+.screens {
+  display: grid;
+  gap: clamp(1.75rem, 3.5vw, 2.75rem);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+}
+
+.screen {
+  margin: 0;
+}
+
+.screen__frame {
+  border: var(--rule) solid var(--ink);
+  box-shadow: var(--shadow-hard-sm);
+  background: #1c1c1c;
+  overflow: hidden;
+  border-radius: 10px;
+  transition: transform 0.28s var(--ease-out), box-shadow 0.28s var(--ease-out);
+}
+
+.screen:hover .screen__frame {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-hard);
+}
+
+.screen__img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.screen__caption {
+  margin-top: 0.9rem;
+}
+
+.screen__title {
+  margin: 0;
+  font-family: var(--font-display), sans-serif;
+  font-size: 1rem;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.screen__text {
+  margin: 0.45rem 0 0;
+  font-size: 0.89rem;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+/* ── 05 Outcome ───────────────────────────────────────── */
+
+.outcome {
+  max-width: 66ch;
+}
+
+.outcome__text {
+  margin: 0 0 1.1rem;
+  font-size: clamp(1rem, 1.6vw, 1.12rem);
+  line-height: 1.7;
+  color: var(--ink-soft);
+}
+
+.outcome__text:first-child {
+  font-size: clamp(1.1rem, 2vw, 1.35rem);
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+.cp-foot {
+  padding-top: clamp(2rem, 5vh, 3rem);
+  border-top: var(--rule) solid var(--ink);
+}
+
+@media (max-width: 620px) {
+  .step__head {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+}

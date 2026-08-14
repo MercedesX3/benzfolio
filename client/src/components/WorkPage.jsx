@@ -2,9 +2,11 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { ArrowUpRight, Github, Globe } from 'lucide-react';
+import Link from 'next/link';
+import { ArrowUpRight, ArrowRight, Github, Globe } from 'lucide-react';
 import MagazineViewer from './MagazineViewer';
 import { PROJECTS } from '../data/projects';
+import { CHALLENGES } from '../data/challenges';
 import './WorkPage.css';
 
 /**
@@ -118,6 +120,60 @@ export default function WorkPage() {
             </article>
           ))}
         </div>
+
+        {/* ── Design challenges ────────────────────────── */}
+        <section className="challenges" id="design-challenges">
+          <header className="challenges__head" data-reveal>
+            <p className="eyebrow" style={{ '--mark': 'var(--yellow)' }}>
+              Self-directed
+            </p>
+            <h2 className="challenges__title display">Design challenges</h2>
+            <p className="challenges__lede">
+              Briefs I set myself, worked end to end. Each one opens as the full
+              journey — how I framed the problem, the type and colour decisions,
+              and where it landed.
+            </p>
+          </header>
+
+          <div className="challenge-grid">
+            {CHALLENGES.map((challenge, i) => (
+              <article
+                key={challenge.slug}
+                className={`challenge challenge--${challenge.accent}`}
+                data-reveal
+                style={{ '--reveal-delay': `${i * 90}ms` }}
+              >
+                <Link
+                  href={`/work/${challenge.slug}`}
+                  className="challenge__link"
+                >
+                  <div className="challenge__media">
+                    <span className="tape challenge__tape" />
+                    <Image
+                      src={challenge.cover}
+                      alt={`${challenge.name} home screen`}
+                      width={402}
+                      height={846}
+                      sizes="(max-width: 760px) 60vw, 240px"
+                      className="challenge__img"
+                    />
+                  </div>
+
+                  <div className="challenge__body">
+                    <p className="challenge__kicker">{challenge.kicker}</p>
+                    <h3 className="challenge__name display">{challenge.name}</h3>
+                    <p className="challenge__brief">“{challenge.brief}”</p>
+                    <p className="challenge__summary">{challenge.summary}</p>
+
+                    <span className="challenge__more">
+                      See the journey <ArrowRight size={16} />
+                    </span>
+                  </div>
+                </Link>
+              </article>
+            ))}
+          </div>
+        </section>
       </div>
 
       {selected && (

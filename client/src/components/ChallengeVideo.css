@@ -1,0 +1,31 @@
+.cv {
+  margin: 0;
+}
+
+/* The video carries its own dark gradient, so the frame stays a thin Bauhaus
+   rule and the ground matches the footage — no white flash before it paints. */
+.cv__frame {
+  position: relative;
+  border: var(--rule) solid var(--ink);
+  border-radius: 10px;
+  box-shadow: var(--shadow-hard);
+  background: #0d1b3a;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+}
+
+.cv__video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cv__caption {
+  margin-top: 0.85rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
