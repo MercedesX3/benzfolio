@@ -22,6 +22,7 @@ import {
   STATS,
   STOPS,
 } from '../data/site';
+import './HomePage.css';
 
 const number = (i) => String(i + 1).padStart(2, '0');
 
