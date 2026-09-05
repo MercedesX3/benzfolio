@@ -342,7 +342,7 @@ export default function HomePage() {
           <div data-reveal>
             <div className="about__portrait">
               <Image
-                src="/about_pic.JPG"
+                src="/aboutme.jpeg"
                 alt="Mercedes Xiong"
                 width={800}
                 height={1000}
