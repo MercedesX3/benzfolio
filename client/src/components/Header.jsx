@@ -1,44 +1,25 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { Menu, X, Moon, Sun } from 'lucide-react';
-import { useDarkMode } from '../contexts/DarkModeContext';
+import { Menu, X } from 'lucide-react';
+import { lockScroll, scrollToHash } from '../lib/scroll';
+import { EMAIL, RESUME, SECTIONS } from '../data/site';
 import './Header.css';
-
-const LINKS = [
-  { href: '/work', label: 'Work' },
-  { href: '/playground', label: 'Playground' },
-  { href: '/about', label: 'About' },
-];
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { isDarkMode, toggleDarkMode } = useDarkMode();
-  const pathname = usePathname();
-  const closeMenu = () => setIsMenuOpen(false);
+  const closeMenu = useCallback(() => setIsMenuOpen(false), []);
 
   // Back/forward while the drawer is open should dismiss it too.
   useEffect(() => {
     window.addEventListener('popstate', closeMenu);
     return () => window.removeEventListener('popstate', closeMenu);
-  }, []);
+  }, [closeMenu]);
 
-  // Lock scroll (including Lenis) while the drawer is open.
   useEffect(() => {
-    const lenis = window.__lenis;
-    if (isMenuOpen) {
-      lenis?.stop();
-      document.body.style.overflow = 'hidden';
-    } else {
-      lenis?.start();
-      document.body.style.overflow = '';
-    }
-    return () => {
-      lenis?.start();
-      document.body.style.overflow = '';
-    };
+    lockScroll(isMenuOpen);
+    return () => lockScroll(false);
   }, [isMenuOpen]);
 
   useEffect(() => {
@@ -46,71 +27,67 @@ export default function Header() {
     const onKey = (e) => e.key === 'Escape' && closeMenu();
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
-  }, [isMenuOpen]);
+  }, [isMenuOpen, closeMenu]);
+
+  // On the home page these are anchors, so scroll through Lenis rather than
+  // letting the browser jump. Anywhere else, fall through to the router.
+  const onSectionClick = (e, hash) => {
+    closeMenu();
+    if (scrollToHash(hash)) e.preventDefault();
+  };
 
   return (
-    <header className="header">
-      {/* Bauhaus colour bar pinned to the top edge */}
-      <div className="header__bar" aria-hidden="true">
-        <i style={{ background: 'var(--red)' }} />
-        <i style={{ background: 'var(--yellow)' }} />
-        <i style={{ background: 'var(--blue)' }} />
-      </div>
+    <>
+      <header className="header">
+        <div className="header__inner page-shell">
+          <Link href="/" className="header__logo display" aria-label="Home">
+            MX
+          </Link>
 
-      <div className="header__inner">
-        <Link href="/" className="logo" aria-label="Home">
-          <span className="logo__mark" aria-hidden="true" />
-          <span className="logo__text display">MX</span>
-        </Link>
-
-        <nav className="nav" aria-label="Primary">
-          {LINKS.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={`nav__link ${pathname === link.href ? 'is-active' : ''}`}
+          <nav className="header__nav" aria-label="Primary">
+            {SECTIONS.map((section) => (
+              <Link
+                key={section.id}
+                href={`/#${section.id}`}
+                className="header__link"
+                onClick={(e) => onSectionClick(e, `#${section.id}`)}
+              >
+                {section.label}
+              </Link>
+            ))}
+            <a
+              href={RESUME}
+              className="header__link"
+              target="_blank"
+              rel="noopener noreferrer"
             >
-              {link.label}
-            </Link>
-          ))}
-          <a
-            href="/Mercedes_Xiong_Resume_Summer2026.pdf"
-            className="nav__link"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Resume
-          </a>
-        </nav>
+              Resume
+            </a>
+          </nav>
 
-        <div className="header__right">
-          <button
-            type="button"
-            className="icon-btn"
-            onClick={toggleDarkMode}
-            aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
-          >
-            {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
-          </button>
+          <div className="header__right">
+            <a href={`mailto:${EMAIL}`} className="header__cta">
+              Contact
+            </a>
 
-          <a href="mailto:mercedesx935@gmail.com" className="header__cta">
-            Contact
-          </a>
-
-          <button
-            type="button"
-            className="icon-btn menu-toggle"
-            onClick={() => setIsMenuOpen((v) => !v)}
-            aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
-            aria-expanded={isMenuOpen}
-          >
-            {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
+            <button
+              type="button"
+              className="header__toggle"
+              onClick={() => setIsMenuOpen((open) => !open)}
+              aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={isMenuOpen}
+            >
+              {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          </div>
         </div>
-      </div>
+      </header>
 
-      {/* Mobile drawer */}
-      {/* data-lenis-prevent: Lenis blocks wheel events while stopped, which
+      {/* Mobile drawer.
+          Rendered outside <header>: the header's backdrop-filter makes it a
+          containing block, which would pin this fixed layer to the header
+          instead of the viewport.
+          data-lenis-prevent: Lenis blocks wheel events while stopped, which
           would stop the drawer scrolling on short screens. */}
       <div
         className={`drawer ${isMenuOpen ? 'is-open' : ''}`}
@@ -118,40 +95,40 @@ export default function Header() {
         data-lenis-prevent
       >
         <nav className="drawer__nav" aria-label="Mobile">
-          {LINKS.map((link, i) => (
+          {SECTIONS.map((section, i) => (
             <Link
-              key={link.href}
-              href={link.href}
+              key={section.id}
+              href={`/#${section.id}`}
               className="drawer__link display"
               style={{ '--i': i }}
-              onClick={closeMenu}
+              onClick={(e) => onSectionClick(e, `#${section.id}`)}
             >
-              <span className="drawer__num">0{i + 1}</span>
-              {link.label}
+              <span className="drawer__num sign">0{i + 1}</span>
+              {section.label}
             </Link>
           ))}
           <a
-            href="/Mercedes_Xiong_Resume_Summer2026.pdf"
+            href={RESUME}
             className="drawer__link display"
             target="_blank"
             rel="noopener noreferrer"
-            style={{ '--i': 3 }}
+            style={{ '--i': SECTIONS.length }}
             onClick={closeMenu}
           >
-            <span className="drawer__num">04</span>
+            <span className="drawer__num sign">0{SECTIONS.length + 1}</span>
             Resume
           </a>
           <a
-            href="mailto:mercedesx935@gmail.com"
+            href={`mailto:${EMAIL}`}
             className="drawer__link display"
-            style={{ '--i': 4 }}
+            style={{ '--i': SECTIONS.length + 1 }}
             onClick={closeMenu}
           >
-            <span className="drawer__num">05</span>
+            <span className="drawer__num sign">0{SECTIONS.length + 2}</span>
             Contact
           </a>
         </nav>
       </div>
-    </header>
+    </>
   );
 }

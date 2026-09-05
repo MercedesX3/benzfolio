@@ -1,0 +1,103 @@
+/* ── STOP / GO intro ──────────────────────────────────────
+   Two full-screen panels that wipe upward in sequence. The
+   green one starts below the fold, slides in behind the red,
+   then leaves the same way. */
+
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  pointer-events: none;
+}
+
+.intro__panel {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  transform: translateY(0);
+}
+
+.intro__panel--stop {
+  background: radial-gradient(
+    circle at 50% 50%,
+    #f97070 0%,
+    var(--red) 55%,
+    #e01b1b 100%
+  );
+  transition: transform 0.75s cubic-bezier(0.7, 0, 0.2, 1);
+}
+
+.intro__panel--go {
+  background: radial-gradient(
+    circle at 50% 45%,
+    #5be07f 0%,
+    var(--green) 55%,
+    #0bb831 100%
+  );
+  transform: translateY(100%);
+  transition: transform 0.8s cubic-bezier(0.76, 0, 0.16, 1);
+}
+
+.intro__panel--go.is-in {
+  transform: translateY(0);
+}
+
+.intro__panel.is-up,
+.intro__panel--go.is-in.is-up {
+  transform: translateY(-100%);
+}
+
+.intro__logo {
+  position: absolute;
+  top: 2rem;
+  left: var(--gutter);
+  font-style: italic;
+  font-size: 1.4rem;
+  color: #fff;
+}
+
+.intro__word {
+  font-size: clamp(90px, 14vw, 200px);
+  color: #fff;
+  line-height: 0.8;
+  text-transform: uppercase;
+  transform: scaleY(1.35);
+}
+
+/* The duck crosses the red panel right to left, at the horizon line. */
+.intro__duck {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateX(104vw);
+  transition: transform 1.7s linear;
+}
+
+.intro__duck.is-walking {
+  transform: translateX(-12vw);
+}
+
+.intro__skip {
+  position: absolute;
+  bottom: 2rem;
+  right: 2rem;
+  pointer-events: auto;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  color: #fff;
+  padding: 0.65rem 1.15rem;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.2s var(--ease-out), color 0.2s var(--ease-out);
+}
+
+.intro__skip:hover {
+  background: #fff;
+  color: var(--ink);
+}

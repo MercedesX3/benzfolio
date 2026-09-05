@@ -64,17 +64,26 @@ export default function SmoothScroll() {
     const lenis = window.__lenis;
     lenis?.resize();
 
-    const hash = window.location.hash;
-    const target = hash ? document.querySelector(hash) : null;
+    // Deferred a frame: the router does its own scroll adjustment once the
+    // route commits, and landing on the anchor before that just gets undone.
+    const frame = requestAnimationFrame(() => {
+      const hash = window.location.hash;
+      const target = hash ? document.querySelector(hash) : null;
 
-    if (target) {
-      if (lenis) lenis.scrollTo(target, { immediate: true, offset: -80 });
-      else target.scrollIntoView();
-      return;
-    }
+      if (target) {
+        // force: Lenis refuses scrollTo while stopped, and it can still be
+        // stopped here — the overlay open on the previous route (a drawer,
+        // the sheet) has not necessarily run its cleanup yet.
+        if (lenis) lenis.scrollTo(target, { immediate: true, offset: -80, force: true });
+        else target.scrollIntoView();
+        return;
+      }
 
-    if (lenis) lenis.scrollTo(0, { immediate: true });
-    else window.scrollTo(0, 0);
+      if (lenis) lenis.scrollTo(0, { immediate: true, force: true });
+      else window.scrollTo(0, 0);
+    });
+
+    return () => cancelAnimationFrame(frame);
   }, [pathname]);
 
   return null;

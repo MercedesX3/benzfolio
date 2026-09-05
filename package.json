@@ -1,9 +1,9 @@
 {
   "scripts": {
     "dev": "npm run dev --prefix client",
-    "dev:next": "npm run dev --prefix client-next",
-    "build:next": "npm run build --prefix client-next",
-    "start:next": "npm run start --prefix client-next"
+    "build": "npm run build --prefix client",
+    "start": "npm run start --prefix client",
+    "lint": "npm run lint --prefix client"
   },
   "dependencies": {
     "@vercel/analytics": "^1.6.1"

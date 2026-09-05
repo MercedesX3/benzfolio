@@ -1,6 +1,6 @@
-/* ── App shell ─────────────────────────────────────────────
-   Document-level scrolling. No 100vh cages, no overflow:hidden
-   on the shell — the whole page is one continuous scroll. */
+/* ── App shell + primitives shared across the page ─────────
+   Document-level scrolling. No 100vh cages — the whole site is
+   one continuous scroll. */
 
 .app-container {
   display: flex;
@@ -14,177 +14,110 @@
 .main-content {
   flex: 1 0 auto;
   width: 100%;
-  padding-top: var(--header-h);
   position: relative;
 }
 
 /* Shared page container */
 .page-shell {
   width: 100%;
-  max-width: 1320px;
+  max-width: 1240px;
   margin: 0 auto;
   padding-inline: var(--gutter);
 }
 
-/* Page header block used by Work / Playground / About */
-.page-head {
-  padding: clamp(3rem, 8vh, 5.5rem) 0 clamp(2rem, 5vh, 3rem);
-  border-bottom: var(--rule) solid var(--ink);
-  position: relative;
-}
+/* ── Buttons ───────────────────────────────────────────────
+   Pills, sized off the label. Two weights: solid for the one
+   action a section wants, outline for everything else. */
 
-.page-head__title {
-  font-family: var(--font-display), sans-serif;
-  font-size: clamp(3rem, 11vw, 8.5rem);
-  line-height: 0.85;
-  letter-spacing: -0.035em;
-  text-transform: uppercase;
-  margin: 0;
-  color: var(--ink);
-}
-
-.page-head__lede {
-  max-width: 46ch;
-  margin: 1.5rem 0 0;
-  font-size: clamp(1rem, 1.6vw, 1.18rem);
-  color: var(--ink-soft);
-}
-
-/* Decorative Bauhaus marks that page heads can drop in */
-.page-head__marks {
-  position: absolute;
-  top: clamp(2rem, 6vh, 4rem);
-  right: 0;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  pointer-events: none;
-}
-
-.mark {
-  width: clamp(32px, 5vw, 58px);
-  height: clamp(32px, 5vw, 58px);
-  flex: none;
-}
-
-.mark--circle {
-  border-radius: 50%;
-  background: var(--red);
-}
-
-.mark--square {
-  background: var(--blue);
-}
-
-.mark--tri {
-  background: var(--yellow);
-  clip-path: polygon(50% 0, 100% 100%, 0 100%);
-}
-
-.mark--quarter {
-  background: var(--blue);
-  border-radius: 100% 0 0 0;
-}
-
-@media (max-width: 720px) {
-  .page-head__marks {
-    display: none;
-  }
-}
-
-/* ── Shared primitives ─────────────────────────────────── */
-
-/* Buttons: hard-edged slabs that press into their own shadow */
 .btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
-  padding: 0.85rem 1.4rem;
+  gap: 0.55rem;
+  padding: 0.85rem 1.5rem;
   border: var(--rule) solid var(--ink);
-  background: var(--paper-3);
+  border-radius: 999px;
+  background: var(--paper);
   color: var(--ink);
-  font-family: var(--font-body), sans-serif;
-  font-size: 0.95rem;
+  font-size: 0.75rem;
   font-weight: 700;
-  letter-spacing: 0.01em;
-  text-decoration: none;
-  box-shadow: var(--shadow-hard-sm);
-  transition: transform 0.16s var(--ease-out), box-shadow 0.16s var(--ease-out),
-    background-color 0.16s var(--ease-out);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.2s var(--ease-out),
+    color 0.2s var(--ease-out), border-color 0.2s var(--ease-out),
+    transform 0.2s var(--ease-out);
 }
 
 .btn:hover {
-  transform: translate(3px, 3px);
-  box-shadow: 1px 1px 0 var(--ink);
+  transform: translateY(-2px);
 }
 
 .btn--primary {
-  background: var(--red);
+  background: var(--ink);
+  border-color: var(--ink);
   color: #fff;
 }
 
-:root.dark-mode .btn--primary {
-  color: var(--paper);
-}
-
-.btn--ghost {
-  background: transparent;
+.btn--primary:hover {
+  background: var(--red);
+  border-color: var(--red);
 }
 
 .btn--ghost:hover {
   background: var(--yellow);
 }
 
-/* Tech chips */
+/* ── Chips ─────────────────────────────────────────────── */
+
 .chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.45rem;
+  gap: 0.5rem;
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
 .chip {
-  font-size: 0.74rem;
-  font-weight: 500;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  padding: 0.32rem 0.6rem;
-  border: 2px solid var(--ink);
-  background: var(--paper-2);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 0.38rem 0.8rem;
+  border: 1px solid rgba(11, 11, 11, 0.2);
+  border-radius: 999px;
   color: var(--ink);
 }
 
-/* Section scaffolding */
+/* ── Section scaffolding ───────────────────────────────── */
+
 .section {
   padding-block: var(--section-y);
   position: relative;
 }
 
 .section__head {
-  margin-bottom: clamp(2.5rem, 6vh, 4rem);
+  margin-bottom: clamp(2rem, 5vh, 2.75rem);
 }
 
 .section__title {
   font-family: var(--font-display), sans-serif;
-  font-size: clamp(2.4rem, 7vw, 5.2rem);
-  line-height: 0.88;
+  font-size: clamp(2.1rem, 5.4vw, 4.1rem);
   letter-spacing: -0.035em;
-  text-transform: uppercase;
-  margin: 0;
-  color: var(--ink);
+  margin: 0.6rem 0 0;
+  color: inherit;
 }
 
 .section__lede {
   max-width: 48ch;
-  margin: 1.1rem 0 0;
+  margin: 1rem 0 0;
   color: var(--ink-soft);
-  font-size: 1.02rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
 }
 
-.section__foot {
-  margin-top: clamp(2.5rem, 6vh, 3.5rem);
-  display: flex;
-  justify-content: center;
+/* Checkered wipe between sections — the flag, used as a rule. */
+.checker-wipe {
+  height: var(--h, 34px);
+  background-image: var(--checker);
+  background-size: var(--h, 34px) var(--h, 34px);
 }

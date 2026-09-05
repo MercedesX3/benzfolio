@@ -164,7 +164,7 @@
 .breakdown__item {
   position: relative;
   padding: 1.5rem 1.25rem 1.25rem;
-  background: var(--paper-3);
+  background: var(--paper);
   border: var(--rule) solid var(--ink);
   box-shadow: var(--shadow-hard-sm);
 }
@@ -228,7 +228,7 @@
 }
 
 .type-face {
-  border-left: var(--rule-thick) solid var(--blue);
+  border-left: var(--rule-thick) solid var(--green);
   padding-left: 1.1rem;
 }
 

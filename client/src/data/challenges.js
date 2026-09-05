@@ -2,7 +2,8 @@
  * Design challenges — self-directed product exercises, each written up as the
  * journey from brief to screens rather than just a final shot.
  *
- * Rendered by /work (the index cards) and /work/[slug] (the journey).
+ * The home page shows the short version in a sheet; /work/[slug] renders the
+ * full journey.
  */
 
 export const CHALLENGES = [
@@ -15,9 +16,32 @@ export const CHALLENGES = [
       'A translation companion for GoPro users — voice, text, and camera, built for the moments when you are somewhere unfamiliar and need to understand what is being said or written around you.',
     /* Device mockup with a transparent ground — framed light on the card. */
     cover: '/challenges/gopro-translation/card-cover.png',
-    accent: 'blue',
     year: '2026',
     role: 'Product design · UI',
+
+    /* The short version, shown in the home page's project sheet before the
+       reader commits to the full journey below. */
+    sheet: {
+      stack: ['Self-directed brief', 'Figma', 'Mobile', 'Type & colour'],
+      steps: [
+        {
+          title: 'Set my own brief',
+          body: 'No client, no prompt handed to me — I picked a company with a real constraint (action cameras, hands busy, unfamiliar places) and wrote the brief myself.',
+        },
+        {
+          title: 'Framed the problem',
+          body: "Travel translation breaks down exactly when you can't type: mid-hike, mid-dive, mid-conversation. So voice, text, and camera all had to be first-class inputs, not buried modes.",
+        },
+        {
+          title: 'Type and colour decisions',
+          body: "Borrowed GoPro's high-contrast, gear-first language and pushed it toward legibility outdoors — heavy weights, big hit targets, colour used only for state.",
+        },
+        {
+          title: 'Where it landed',
+          body: 'A home screen built around one action and three input paths, with the full journey — sketches through final frames — written up as a case study.',
+        },
+      ],
+    },
 
     /* Silent 4s loop — opens the journey before the written breakdown. */
     video: {

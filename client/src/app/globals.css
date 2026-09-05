@@ -1,43 +1,43 @@
 @import "tailwindcss";
 
 /* ============================================================
-   BAUHAUS SCRAPBOOK — design tokens
-   Bauhaus is the system (grid, primaries, hard geometry).
-   Scrapbook is the content layer (tape, rotation, handwriting).
+   PIT LANE — design tokens
+
+   One page, read top to bottom like a drive: a red STOP, a green
+   GO, and a yellow playground somewhere in the middle. Type is
+   heavy and squared off; colour is used for state and signage,
+   never for decoration.
    ============================================================ */
 
 :root {
   /* Surfaces */
-  --paper: #f3efe4;
-  --paper-2: #e9e3d2;
-  --paper-3: #ffffff;
-  --ink: #14110f;
-  --ink-soft: #4a423b;
+  --paper: #ffffff;
+  --paper-2: #f4f4f4;
+  --ink: #0b0b0b;
+  --ink-soft: #3c3c3c;
+  --ink-faint: #6a6a6a;
 
-  /* Bauhaus primaries */
-  --red: #e0331c;
-  --blue: #1d3fc4;
-  --yellow: #f5b800;
-
-  /* Tints used for taped cards */
-  --red-tint: #f9d7d1;
-  --blue-tint: #d3dbf7;
-  --yellow-tint: #fbeec2;
+  /* Signals */
+  --red: #ee2222;
+  --green: #17c93f;
+  --yellow: #fcd34d;
 
   /* Structure */
-  --rule: 3px;
-  --rule-thick: 6px;
-  --radius: 0px;
-  --shadow-hard: 6px 6px 0 var(--ink);
-  --shadow-hard-sm: 4px 4px 0 var(--ink);
-  --shadow-lift: 0 18px 40px -18px rgba(20, 17, 15, 0.45);
+  --rule: 2px;
+  --rule-thick: 3px;
+  --line: rgba(11, 11, 11, 0.14);
+  --shadow-hard: 0 26px 60px rgba(0, 0, 0, 0.18);
+  --shadow-hard-sm: 0 14px 34px rgba(0, 0, 0, 0.16);
+
+  /* Checker pattern, shared by every wipe on the page */
+  --checker: repeating-conic-gradient(var(--ink) 0% 25%, #fff 0% 50%);
 
   /* Rhythm */
-  --gutter: clamp(1.25rem, 4vw, 4rem);
-  --section-y: clamp(5rem, 12vh, 9rem);
-  --header-h: 76px;
+  --gutter: clamp(1.25rem, 4vw, 3rem);
+  --section-y: clamp(4.5rem, 10vh, 6.5rem);
+  --header-h: 64px;
 
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
 
   color-scheme: light;
   color: var(--ink);
@@ -49,33 +49,7 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-:root.dark-mode {
-  --paper: #16130f;
-  --paper-2: #211c17;
-  --paper-3: #2a241d;
-  --ink: #f5f0e4;
-  --ink-soft: #b3a99a;
-
-  --red: #ff5a3d;
-  --blue: #6d86ff;
-  --yellow: #ffc72e;
-
-  --red-tint: #48211a;
-  --blue-tint: #1e2650;
-  --yellow-tint: #453309;
-
-  --shadow-hard: 6px 6px 0 #000000;
-  --shadow-hard-sm: 4px 4px 0 #000000;
-  --shadow-lift: 0 18px 40px -18px rgba(0, 0, 0, 0.8);
-
-  color-scheme: dark;
-}
-
-/* ── Reset / scroll ─────────────────────────────────────────
-   The old build locked html+body to 100vh with overflow:hidden
-   and scrolled inner divs instead. That made page-level smooth
-   scroll impossible and broke scroll-triggered reveals. The page
-   scrolls the document now. */
+/* ── Reset / scroll ─────────────────────────────────────── */
 
 *,
 *::before,
@@ -83,38 +57,42 @@
   box-sizing: border-box;
 }
 
+/* Set while a full-screen layer is open — see lockScroll() in lib/scroll.js. */
+html.is-locked {
+  overflow: hidden;
+}
+
 html {
   height: auto;
-  overflow-x: hidden;
-  overflow-y: auto;
+  /* `clip`, not `hidden`: hidden turns these into scroll containers, which
+     silently breaks the sticky header. */
+  overflow-x: clip;
   scroll-behavior: auto; /* Lenis drives smooth scrolling */
   background-color: var(--paper);
 }
 
 body {
   margin: 0;
-  padding: 0;
   min-height: 100dvh;
-  overflow-x: hidden;
+  overflow-x: clip;
   background-color: var(--paper);
   color: var(--ink);
   font-family: var(--font-body), system-ui, sans-serif;
   font-weight: 400;
   line-height: 1.6;
-  transition: background-color 0.4s ease, color 0.4s ease;
+  text-wrap: pretty;
 }
 
-/* Custom cursor only where there is a real pointer */
-@media (pointer: fine) {
-  body,
-  body * {
-    cursor: none;
-  }
-}
+
 
 img {
   max-width: 100%;
   display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
 }
 
 ::selection {
@@ -127,93 +105,55 @@ img {
 .display {
   font-family: var(--font-display), system-ui, sans-serif;
   font-weight: 400;
-  line-height: 0.88;
+  line-height: 0.92;
   letter-spacing: -0.03em;
-  text-transform: uppercase;
 }
 
-.hand {
-  font-family: var(--font-hand), cursive;
-  font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: 0;
-  text-transform: none;
+/* Anton, stretched — used for numerals, signage and the ticker */
+.sign {
+  font-family: var(--font-sign), system-ui, sans-serif;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.04em;
 }
 
-/* ── Shared Bauhaus primitives ──────────────────────────── */
-
-.slab {
-  border: var(--rule) solid var(--ink);
-  background: var(--paper-3);
-  box-shadow: var(--shadow-hard);
-}
-
-.rule-h {
-  height: var(--rule);
-  background: var(--ink);
-  border: 0;
-  margin: 0;
-}
-
-/* Section eyebrow: a colored square + label, used to open sections */
+/* Section eyebrow: small, tracked-out label above every heading */
 .eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-  font-family: var(--font-body), sans-serif;
-  font-size: 0.78rem;
-  font-weight: 500;
+  font-size: 0.7rem;
+  font-weight: 700;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--ink-soft);
-  margin: 0 0 1.25rem;
-}
-
-.eyebrow::before {
-  content: "";
-  width: 14px;
-  height: 14px;
-  background: var(--mark, var(--red));
-  flex: none;
-}
-
-/* Tape strip for scrapbook elements */
-.tape {
-  position: absolute;
-  width: 92px;
-  height: 26px;
-  background: var(--tape-color, rgba(245, 184, 0, 0.72));
-  border-left: 1px dashed rgba(20, 17, 15, 0.18);
-  border-right: 1px dashed rgba(20, 17, 15, 0.18);
-  box-shadow: 0 1px 3px rgba(20, 17, 15, 0.18);
-  pointer-events: none;
-  z-index: 4;
+  color: var(--mark, var(--red));
+  margin: 0;
 }
 
 /* ── Scroll reveal ──────────────────────────────────────── */
 
+/* The offset uses `translate`, not `transform`, so it composes with whatever
+   transform a component already owns — a rotated polaroid or a card's hover
+   lift keeps working while it reveals. */
 [data-reveal] {
   opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
+  translate: 0 24px;
+  transition: opacity 0.7s var(--ease-out), translate 0.7s var(--ease-out);
   transition-delay: var(--reveal-delay, 0ms);
 }
 
 [data-reveal].is-revealed {
   opacity: 1;
-  transform: none;
+  translate: none;
 }
 
 /* Never let a reveal permanently hide content if JS/IO fails. */
 .no-js [data-reveal] {
   opacity: 1;
-  transform: none;
+  translate: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
   [data-reveal] {
     opacity: 1 !important;
-    transform: none !important;
+    translate: none !important;
     transition: none !important;
   }
 
@@ -227,8 +167,7 @@ img {
   }
 }
 
-/* Focus visibility survives the redesign */
 :focus-visible {
-  outline: var(--rule) solid var(--blue);
+  outline: var(--rule-thick) solid var(--red);
   outline-offset: 3px;
 }

@@ -12,7 +12,7 @@ import './ChallengePage.css';
  * of the page is the order things were decided in, not just the final shots.
  */
 
-const STEP_ACCENTS = ['red', 'blue', 'yellow', 'blue', 'red'];
+const STEP_ACCENTS = ['red', 'green', 'yellow', 'green', 'red'];
 
 function Step({ index, title, lede, children }) {
   return (
@@ -44,11 +44,11 @@ export default function ChallengePage({ challenge }) {
       <div className="page-shell">
         {/* ── Header ─────────────────────────────────── */}
         <header className="cp-head">
-          <Link href="/work#design-challenges" className="cp-back">
+          <Link href="/#work" className="cp-back">
             <ArrowLeft size={16} /> All work
           </Link>
 
-          <p className="eyebrow" style={{ '--mark': 'var(--yellow)' }}>
+          <p className="eyebrow" style={{ '--mark': 'var(--red)' }}>
             Design challenge
           </p>
 
@@ -184,7 +184,7 @@ export default function ChallengePage({ challenge }) {
         </Step>
 
         <div className="cp-foot">
-          <Link href="/work#design-challenges" className="btn btn--ghost">
+          <Link href="/#work" className="btn btn--ghost">
             <ArrowLeft size={18} /> Back to work
           </Link>
         </div>
