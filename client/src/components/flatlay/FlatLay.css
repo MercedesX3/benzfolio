@@ -165,6 +165,12 @@
   left: calc(var(--x) / 1440 * 100%);
   top: calc(var(--y) / 1024 * 100%);
   width: calc(var(--w) / 1440 * 100%);
+  /* globals.css sets `img { max-width: 100% }` as a general safety net. The
+     mat is the one image that must exceed its container — it is wider than the
+     stage on purpose so it runs off the corner. Without this the width above
+     is silently clamped to 100% and the mat sits exactly stage-width, which
+     looks like the value simply having no effect. */
+  max-width: none;
   height: auto;
   z-index: 1;
   pointer-events: none;

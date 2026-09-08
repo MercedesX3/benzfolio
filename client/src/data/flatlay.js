@@ -29,12 +29,13 @@ export const STAGE = { w: 1440, h: 1024 };
 /** The mat itself. Not interactive — it is the surface, not an object. */
 export const MAT = {
   src: '/flatlay/mat.png',
-  /* Sized and placed to run off the bottom and right edges of the canvas.
-     The mat should never show its own bottom corner — the composition reads
-     as a crop of a bigger desk, not as a photograph of a mat. */
-  x: 78,
-  y: 212,
-  w: 1560,
+  /* Anchored into the bottom-right corner and oversized so it runs off the
+     right and bottom edges of the canvas. Only its top-left corner should be
+     visible — the composition reads as a crop of a bigger desk, not as a
+     photograph of a mat sitting on a page. */
+  x: 24,
+  y: 252,
+  w: 1920,
 };
 
 export const ITEMS = [
@@ -43,7 +44,7 @@ export const ITEMS = [
     label: 'SAGE',
     src: '/flatlay/sage.png',
     x: 1168,
-    y: 268,
+    y: 312,
     w: 168,
     rotate: 0,
     hoverRotate: -3.5,
