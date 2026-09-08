@@ -1,5 +1,11 @@
-import HomePage from '@/components/HomePage';
+import FlatLay from '@/components/flatlay/FlatLay';
+import Welcome from '@/components/Welcome';
 
 export default function Home() {
-  return <HomePage />;
+  return (
+    <>
+      <Welcome />
+      <FlatLay />
+    </>
+  );
 }

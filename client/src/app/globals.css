@@ -1,47 +1,43 @@
 @import "tailwindcss";
 
 /* ============================================================
-   PIT LANE — design tokens
+   BENZFOLIO — design tokens
 
-   One page, read top to bottom like a drive: a red STOP, a green
-   GO, and a yellow playground somewhere in the middle. Type is
-   heavy and squared off; colour is used for state and signage,
-   never for decoration.
+   A flat-lay: everything the portfolio contains is an object
+   photographed on a cutting mat. Electric blue and light grey
+   carry the identity; the mat is the one dark surface.
+
+   Colours are sampled from the Figma mockup rather than
+   eyeballed, so the build and the design agree exactly.
    ============================================================ */
 
 :root {
   /* Surfaces */
-  --paper: #ffffff;
-  --paper-2: #f4f4f4;
-  --ink: #0b0b0b;
-  --ink-soft: #3c3c3c;
-  --ink-faint: #6a6a6a;
+  --bg: #eaeaea;
+  --bg-2: #e6e6e6;
+  --white: #ffffff;
 
-  /* Signals */
-  --red: #ee2222;
-  --green: #17c93f;
-  --yellow: #fcd34d;
+  /* Identity */
+  --blue: #4631ff;
+  --blue-deep: #2f1fd6;
+  --mat: #002a72;
 
-  /* Structure */
-  --rule: 2px;
-  --rule-thick: 3px;
-  --line: rgba(11, 11, 11, 0.14);
-  --shadow-hard: 0 26px 60px rgba(0, 0, 0, 0.18);
-  --shadow-hard-sm: 0 14px 34px rgba(0, 0, 0, 0.16);
+  /* Ink */
+  --ink: #181818;
+  --ink-soft: #4a4a4a;
+  --ink-faint: #9a9a9a;
 
-  /* Checker pattern, shared by every wipe on the page */
-  --checker: repeating-conic-gradient(var(--ink) 0% 25%, #fff 0% 50%);
-
-  /* Rhythm */
-  --gutter: clamp(1.25rem, 4vw, 3rem);
-  --section-y: clamp(4.5rem, 10vh, 6.5rem);
-  --header-h: 64px;
+  /* The design is authored at this size and scaled to fit. Every
+     coordinate in data/flatlay.js is in these units. */
+  --stage-w: 1440;
+  --stage-h: 1024;
 
   --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-snap: cubic-bezier(0.16, 1, 0.3, 1);
 
   color-scheme: light;
   color: var(--ink);
-  background-color: var(--paper);
+  background-color: var(--bg);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -49,7 +45,31 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ── Reset / scroll ─────────────────────────────────────── */
+/* ── Kelsi ──────────────────────────────────────────────────
+   The display face. Self-hosted rather than pulled from a CDN
+   because it is a licensed font, and converted to woff2 (26KB
+   of OTF becomes 13KB).
+
+   Kelsi has A-Z, a-z, space and full stop — no digits and no
+   other punctuation. Anything with a number in it must use the
+   body face, or it will silently fall back mid-word. */
+@font-face {
+  font-family: 'Kelsi';
+  src: url('/fonts/kelsi-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Kelsi Fill';
+  src: url('/fonts/kelsi-fill.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ── Reset ──────────────────────────────────────────────────── */
 
 *,
 *::before,
@@ -57,33 +77,24 @@
   box-sizing: border-box;
 }
 
-/* Set while a full-screen layer is open — see lockScroll() in lib/scroll.js. */
-html.is-locked {
-  overflow: hidden;
+html {
+  height: 100%;
+  background: var(--bg);
 }
 
-html {
-  height: auto;
-  /* `clip`, not `hidden`: hidden turns these into scroll containers, which
-     silently breaks the sticky header. */
-  overflow-x: clip;
-  scroll-behavior: auto; /* Lenis drives smooth scrolling */
-  background-color: var(--paper);
+html.is-locked {
+  overflow: hidden;
 }
 
 body {
   margin: 0;
   min-height: 100dvh;
-  overflow-x: clip;
-  background-color: var(--paper);
+  background: var(--bg);
   color: var(--ink);
   font-family: var(--font-body), system-ui, sans-serif;
-  font-weight: 400;
   line-height: 1.6;
   text-wrap: pretty;
 }
-
-
 
 img {
   max-width: 100%;
@@ -95,79 +106,67 @@ a {
   text-decoration: none;
 }
 
+button {
+  font: inherit;
+}
+
 ::selection {
-  background: var(--yellow);
-  color: var(--ink);
+  background: var(--blue);
+  color: #fff;
 }
 
-/* ── Type ───────────────────────────────────────────────── */
+/* ── Type roles ─────────────────────────────────────────────── */
 
-.display {
-  font-family: var(--font-display), system-ui, sans-serif;
+/* The big blue name.
+   Kelsi ships as two cuts: 'regular' is the outline only, 'fill' is the solid
+   shape. The mockup uses the solid one, so Kelsi Fill leads and the outline is
+   the fallback — if the fill ever fails to load the name still sets in Kelsi
+   rather than dropping to a sans. Bubble faces need air, not the negative
+   tracking a grotesk display face would want. */
+.kelsi {
+  font-family: 'Kelsi Fill', 'Kelsi', var(--font-body), system-ui, sans-serif;
   font-weight: 400;
-  line-height: 0.92;
-  letter-spacing: -0.03em;
+  line-height: 0.9;
+  letter-spacing: 0.01em;
 }
 
-/* Anton, stretched — used for numerals, signage and the ticker */
-.sign {
-  font-family: var(--font-sign), system-ui, sans-serif;
+/* Handwriting — polaroid captions, the Welcome mark, marginalia. */
+.hand {
+  font-family: var(--font-hand), 'Bradley Hand', cursive;
   font-weight: 400;
-  line-height: 1;
-  letter-spacing: 0.04em;
 }
 
-/* Section eyebrow: small, tracked-out label above every heading */
 .eyebrow {
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   font-weight: 700;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--mark, var(--red));
+  color: var(--ink-faint);
   margin: 0;
 }
 
-/* ── Scroll reveal ──────────────────────────────────────── */
-
-/* The offset uses `translate`, not `transform`, so it composes with whatever
-   transform a component already owns — a rotated polaroid or a card's hover
-   lift keeps working while it reveals. */
-[data-reveal] {
-  opacity: 0;
-  translate: 0 24px;
-  transition: opacity 0.7s var(--ease-out), translate 0.7s var(--ease-out);
-  transition-delay: var(--reveal-delay, 0ms);
+:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 3px;
 }
 
-[data-reveal].is-revealed {
-  opacity: 1;
-  translate: none;
-}
-
-/* Never let a reveal permanently hide content if JS/IO fails. */
-.no-js [data-reveal] {
-  opacity: 1;
-  translate: none;
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  [data-reveal] {
-    opacity: 1 !important;
-    translate: none !important;
-    transition: none !important;
-  }
-
   *,
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
   }
-}
-
-:focus-visible {
-  outline: var(--rule-thick) solid var(--red);
-  outline-offset: 3px;
 }

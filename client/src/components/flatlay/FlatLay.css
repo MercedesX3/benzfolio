@@ -1,0 +1,459 @@
+/* ============================================================
+   The flat-lay.
+
+   One fixed 1440x1024 stage, scaled to fit. Chrome (the name,
+   the menu) sits outside the stage so it never scales below
+   readable size on a laptop.
+   ============================================================ */
+
+.fl {
+  position: relative;
+  width: 100%;
+  min-height: 100dvh;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 90% at 20% 0%, #f0f0f0 0%, var(--bg) 55%, var(--bg-2) 100%);
+}
+
+/* ── Masthead ───────────────────────────────────────────── */
+
+.fl__head {
+  position: absolute;
+  top: clamp(1.5rem, 3.4vw, 2.4rem);
+  left: clamp(1.5rem, 4vw, 3.6rem);
+  z-index: 20;
+  pointer-events: none;
+}
+
+.fl__hi {
+  margin: 0;
+  font-size: clamp(1.1rem, 2.1vw, 1.75rem);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #8f8f8f;
+}
+
+.fl__name {
+  margin: 0.1em 0 0;
+  font-size: clamp(2.8rem, 8.2vw, 7rem);
+  color: var(--blue);
+  text-transform: uppercase;
+}
+
+.fl__role {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(0.75rem, 1.6vw, 1.5rem);
+  margin: 0.7em 0 0;
+  font-size: clamp(0.72rem, 1.15vw, 1rem);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+/* ── Menu button + drawer ───────────────────────────────── */
+
+.fl__menu {
+  position: absolute;
+  top: clamp(1.2rem, 2.6vw, 1.8rem);
+  right: clamp(1.2rem, 2.6vw, 2.2rem);
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  background: #fff;
+  color: var(--blue);
+  border: 0;
+  border-radius: 50%;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  transition: scale 0.2s var(--ease-out), box-shadow 0.2s var(--ease-out);
+}
+
+.fl__menu:hover {
+  scale: 1.06;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.18);
+}
+
+.fl__drawer {
+  position: absolute;
+  top: calc(clamp(1.2rem, 2.6vw, 1.8rem) + 66px);
+  right: clamp(1.2rem, 2.6vw, 2.2rem);
+  z-index: 40;
+  display: grid;
+  gap: 0.15rem;
+  min-width: 190px;
+  padding: 0.8rem;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.18);
+  animation: drawer-in 0.22s var(--ease-snap);
+}
+
+@keyframes drawer-in {
+  from {
+    opacity: 0;
+    translate: 0 -8px;
+  }
+}
+
+.fl__drawer a {
+  padding: 0.55rem 0.7rem;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: background 0.15s var(--ease-out), color 0.15s var(--ease-out);
+}
+
+.fl__drawer a:hover {
+  background: var(--blue);
+  color: #fff;
+}
+
+/* ── The scaled stage ───────────────────────────────────────
+   --stage-scale fits the design canvas into the viewport. `min`
+   means the whole composition is always visible (letterboxed
+   against the flat background, which is invisible because the
+   background is flat). The mat is authored to bleed past the
+   canvas edges, so the letterboxing never shows as a hard edge. */
+
+.fl__stage-wrap {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.fl__stage {
+  position: relative;
+  width: calc(var(--w) * 1px);
+  height: calc(var(--h) * 1px);
+  flex: none;
+  --stage-scale: min(100vw / var(--w), 100dvh / var(--h));
+  scale: var(--stage-scale);
+}
+
+.fl__mat {
+  position: absolute;
+  height: auto;
+  z-index: 1;
+  pointer-events: none;
+  user-select: none;
+  filter: drop-shadow(0 24px 40px rgba(0, 20, 60, 0.28));
+}
+
+/* ── Objects ────────────────────────────────────────────────
+   Hover does two things, both requested: a white glow around the
+   cut-out, and a small rotation.
+
+   The glow is stacked drop-shadows rather than a box-shadow or an
+   outline, because these are transparent PNGs — a box-shadow would
+   trace the rectangular bounding box, while drop-shadow follows the
+   actual alpha edge of the object. Four of them at increasing blur
+   build a halo that reads as a cut-out lifting off the mat. */
+
+.fl__item {
+  position: absolute;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  rotate: var(--rot);
+  transition: rotate 0.42s var(--ease-snap), scale 0.42s var(--ease-snap),
+    filter 0.32s var(--ease-out);
+  transform-origin: center;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.fl__img {
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+  filter: drop-shadow(0 10px 18px rgba(0, 16, 48, 0.34));
+  transition: filter 0.32s var(--ease-out);
+}
+
+.fl__item:hover,
+.fl__item:focus-visible,
+.fl__item.is-active {
+  rotate: var(--rot-hover);
+  scale: 1.045;
+  z-index: 15 !important;
+}
+
+.fl__item:hover .fl__img,
+.fl__item:focus-visible .fl__img,
+.fl__item.is-active .fl__img {
+  filter: drop-shadow(0 0 0 #fff) drop-shadow(0 0 2px #fff)
+    drop-shadow(0 0 6px rgba(255, 255, 255, 0.95))
+    drop-shadow(0 0 22px rgba(255, 255, 255, 0.75))
+    drop-shadow(0 16px 26px rgba(0, 16, 48, 0.4));
+}
+
+.fl__item:focus-visible {
+  outline: none;
+}
+
+/* The handwritten label that appears on hover. */
+.fl__tag {
+  position: absolute;
+  left: 50%;
+  bottom: -2.1rem;
+  translate: -50% 6px;
+  padding: 0.1rem 0.7rem;
+  background: #fff;
+  border-radius: 999px;
+  font-size: 1.35rem;
+  line-height: 1.5;
+  color: var(--ink);
+  white-space: nowrap;
+  opacity: 0;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.16);
+  transition: opacity 0.24s var(--ease-out), translate 0.24s var(--ease-out);
+  pointer-events: none;
+}
+
+.fl__item:hover .fl__tag,
+.fl__item:focus-visible .fl__tag {
+  opacity: 1;
+  translate: -50% 0;
+}
+
+/* ── Nav pill ───────────────────────────────────────────── */
+
+.fl__pill {
+  position: absolute;
+  left: 50%;
+  bottom: 34px;
+  translate: -50% 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 3vw, 2.6rem);
+  padding: 0.75rem 1.6rem;
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: blur(14px);
+  border-radius: 999px;
+  box-shadow: 0 10px 34px rgba(0, 20, 60, 0.24);
+}
+
+.fl__pill-link {
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--ink);
+  transition: color 0.18s var(--ease-out);
+}
+
+.fl__pill-link:hover {
+  color: var(--blue);
+}
+
+.fl__pill-icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  color: var(--ink);
+  transition: background 0.18s var(--ease-out), color 0.18s var(--ease-out);
+}
+
+.fl__pill-icon:hover {
+  background: var(--blue);
+  color: #fff;
+}
+
+/* ── Popup ──────────────────────────────────────────────── */
+
+.fl__scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  background: rgba(10, 12, 30, 0.42);
+  backdrop-filter: blur(3px);
+  animation: scrim-in 0.22s var(--ease-out);
+}
+
+@keyframes scrim-in {
+  from {
+    opacity: 0;
+  }
+}
+
+.card {
+  position: relative;
+  width: min(560px, 100%);
+  max-height: 86dvh;
+  overflow-y: auto;
+  padding: clamp(1.6rem, 3.5vw, 2.6rem);
+  background: #fff;
+  border-radius: 26px;
+  box-shadow: 0 30px 80px rgba(0, 10, 40, 0.35);
+  animation: card-in 0.34s var(--ease-snap);
+}
+
+@keyframes card-in {
+  from {
+    opacity: 0;
+    translate: 0 22px;
+    scale: 0.97;
+  }
+}
+
+.card__close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  background: var(--bg);
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.18s var(--ease-out), color 0.18s var(--ease-out);
+}
+
+.card__close:hover {
+  background: var(--blue);
+  color: #fff;
+}
+
+.card__kicker {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+
+.card__title {
+  margin: 0.3em 0 0;
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  color: var(--blue);
+  text-transform: uppercase;
+}
+
+.card__stat {
+  margin: 0.4rem 0 0;
+  font-size: 1.5rem;
+  color: var(--ink-soft);
+}
+
+.card__body {
+  margin: 1.1rem 0 0;
+  font-size: 1.03rem;
+  color: var(--ink-soft);
+}
+
+.card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 1.4rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card__meta li {
+  padding: 0.3rem 0.75rem;
+  background: var(--bg);
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.card__link {
+  display: inline-block;
+  margin-top: 1.4rem;
+  padding: 0.7rem 1.4rem;
+  background: var(--blue);
+  color: #fff;
+  border-radius: 999px;
+  font-weight: 700;
+  transition: background 0.18s var(--ease-out);
+}
+
+.card__link:hover {
+  background: var(--blue-deep);
+}
+
+/* ── Small screens ──────────────────────────────────────────
+   Below the point where the scaled stage becomes unreadable, the
+   composition stops being the interface and the objects become a
+   plain grid. Same data, same popups — only the arrangement is
+   different, because a 1440-wide flat-lay on a phone is a picture
+   of a portfolio rather than a portfolio. */
+
+@media (max-width: 860px) {
+  .fl {
+    overflow: visible;
+    min-height: auto;
+    padding-bottom: 6rem;
+  }
+
+  .fl__head {
+    position: static;
+    padding: 5rem 1.4rem 0;
+  }
+
+  .fl__stage-wrap {
+    position: static;
+    display: block;
+    padding: 2rem 1.2rem 0;
+  }
+
+  .fl__stage {
+    width: 100%;
+    height: auto;
+    scale: none;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.2rem;
+  }
+
+  .fl__mat {
+    display: none;
+  }
+
+  .fl__item {
+    position: static;
+    width: 100% !important;
+    rotate: none;
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+    background: var(--mat);
+    border-radius: 16px;
+  }
+
+  .fl__tag {
+    position: static;
+    translate: none;
+    opacity: 1;
+    margin-top: 0.6rem;
+  }
+
+  .fl__pill {
+    position: fixed;
+    bottom: 1rem;
+    gap: 0.9rem;
+    padding: 0.6rem 1rem;
+  }
+
+  .fl__pill-link {
+    font-size: 0.95rem;
+  }
+}
