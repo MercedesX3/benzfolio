@@ -15,20 +15,25 @@
 import { ITEMS as HOME_ITEMS } from './flatlay';
 
 /**
- * The violet mat the project work sits on. Built in CSS rather than shipped as
- * an image: it is a rounded rectangle in one flat colour, so a PNG would be
- * hundreds of kilobytes to say something two CSS properties already say — and
- * it stays crisp at any scale this way. Colour sampled from the mockup.
+ * The violet mat the project work sits on.
+ *
+ * A supplied asset rather than a CSS rectangle: it carries a felt texture, a
+ * thin dark edge and a slight tilt that flat CSS cannot reproduce. Shipped as
+ * WebP because the texture is fine-grained noise — as PNG the same image is
+ * 2.2MB, as WebP 378KB, with no visible difference at the size it renders.
+ *
+ * The asset's left side is deliberately cut off and its right end carries the
+ * rounded corners, so it is sized wide enough that BOTH ends sit off-screen —
+ * showing the right-hand corner but not the left would look lopsided, and the
+ * cut edge must never be visible.
  */
 export const PROJECT_MAT = {
-  /* Wider than the 1440 canvas so it runs off both edges. The stage is
-     anchored left and is narrower than a wide window, so a mat that stops at
-     the canvas edge leaves a grey strip down the right — the same constraint
-     the home mat has. */
-  x: -40,
-  y: 338,
-  w: 1960,
-  h: 940,
+  src: '/flatlay/projects-mat.webp',
+  iw: 1700,
+  ih: 1250,
+  x: -160,
+  y: 290,
+  w: 2300,
 };
 
 export const PROJECT_ITEMS = [
@@ -38,7 +43,7 @@ export const PROJECT_ITEMS = [
     src: '/flatlay/sage-poster.png',
     iw: 629,
     ih: 838,
-    x: 14,
+    x: 62,
     y: 430,
     w: 398,
     rotate: -2,
@@ -59,7 +64,7 @@ export const PROJECT_ITEMS = [
     src: '/flatlay/semantica-ipad.png',
     iw: 1114,
     ih: 827,
-    x: 448,
+    x: 502,
     y: 230,
     w: 524,
     rotate: 0,
@@ -79,7 +84,7 @@ export const PROJECT_ITEMS = [
     src: '/flatlay/archer-ipad.png',
     iw: 1149,
     ih: 1039,
-    x: 426,
+    x: 484,
     y: 662,
     w: 556,
     rotate: 0,
@@ -99,7 +104,7 @@ export const PROJECT_ITEMS = [
     src: '/flatlay/lumina-poster.png',
     iw: 629,
     ih: 838,
-    x: 984,
+    x: 1032,
     y: 346,
     w: 438,
     rotate: 2,

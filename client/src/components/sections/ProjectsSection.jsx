@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { motion } from 'motion/react';
 import LayItem from '../lay/LayItem';
 import { PROJECT_ITEMS, PROJECT_MAT } from '../../data/sections';
@@ -45,19 +46,26 @@ export default function ProjectsSection({ active, selected, onSelect }) {
             </motion.p>
           </header>
 
-          {/* The mat slides up from under the objects. */}
+          {/* The mat slides up from under the objects. Wrapped, and the
+              wrapper is stage-sized and absolutely positioned — a transform on
+              a bare static wrapper would become the containing block for the
+              absolutely positioned mat and collapse its percentage geometry. */}
           <motion.div
-            className="pj__mat"
-            style={{
-              '--x': PROJECT_MAT.x,
-              '--y': PROJECT_MAT.y,
-              '--w': PROJECT_MAT.w,
-              '--h': PROJECT_MAT.h,
-            }}
+            className="fl__mat-wrap"
             initial={{ opacity: 0, y: 60 }}
             animate={active ? { opacity: 1, y: 0 } : { opacity: 0, y: 60 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          />
+          >
+            <Image
+              src={PROJECT_MAT.src}
+              alt=""
+              width={PROJECT_MAT.iw}
+              height={PROJECT_MAT.ih}
+              loading="eager"
+              className="pj__mat"
+              style={{ '--x': PROJECT_MAT.x, '--y': PROJECT_MAT.y, '--w': PROJECT_MAT.w }}
+            />
+          </motion.div>
 
           {PROJECT_ITEMS.map((item, i) => (
             <LayItem

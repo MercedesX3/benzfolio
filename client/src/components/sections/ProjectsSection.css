@@ -14,19 +14,20 @@
     radial-gradient(120% 90% at 20% 0%, #f0f0f0 0%, var(--bg) 55%, var(--bg-2) 100%);
 }
 
-/* The violet mat. Positioned in the same design-space units as the objects,
-   with an explicit height because — unlike the image-based mat on the home
-   section — there is no intrinsic aspect ratio to derive it from. */
+/* The violet mat. Same design-space geometry as the objects; height comes
+   from the image's own aspect ratio, and max-width opts out of the global
+   `img { max-width: 100% }` safety net because the mat is deliberately wider
+   than the stage so it runs off both edges. */
 .pj__mat {
   position: absolute;
   left: calc(var(--x) / 1440 * 100%);
   top: calc(var(--y) / 1024 * 100%);
   width: calc(var(--w) / 1440 * 100%);
-  height: calc(var(--h) / 1024 * 100%);
-  background: var(--mat-violet);
-  border-radius: calc(30 * var(--u));
-  box-shadow: 0 26px 60px rgba(20, 10, 80, 0.28);
+  max-width: none;
+  height: auto;
   z-index: 1;
+  pointer-events: none;
+  user-select: none;
 }
 
 .pj__head {
