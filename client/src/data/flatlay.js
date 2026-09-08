@@ -19,6 +19,13 @@
  * most cut-outs already have a tilt baked into the PNG, so these are small
  * adjustments, not the whole angle.
  *
+ * `anchor` opts an object OUT of the stage and pins it to a corner of the
+ * viewport instead. The stage is anchored left and is narrower than a wide
+ * window, so its right edge stops short of the screen — anything that has to
+ * touch the actual corner (as opposed to sitting at a spot in the
+ * composition) cannot live inside it. Such an object gives up its x/y and is
+ * positioned by the CSS offsets in `anchor` instead.
+ *
  * `hoverRotate` is what the object rotates TO on hover. It is deliberately a
  * target rather than a delta so the motion reads the same regardless of resting
  * angle, and so nothing ever spins far enough to look broken.
@@ -50,7 +57,7 @@ export const ITEMS = [
     id: 'sage',
     label: 'SAGE',
     src: '/flatlay/sage.png',
-    x: 1215,
+    x: 1258,
     y: 285,
     w: 250,
     rotate: 0,
@@ -69,9 +76,9 @@ export const ITEMS = [
     id: 'semantica',
     label: 'Semantica',
     src: '/flatlay/semantica.png',
-    x: 540,
-    y: 720,
-    w: 700,
+    x: 512,
+    y: 712,
+    w: 760,
     rotate: 0,
     hoverRotate: 2.5,
     z: 5,
@@ -88,7 +95,7 @@ export const ITEMS = [
     label: 'Lumina',
     src: '/flatlay/lumina.png',
     x: 20,
-    y: 585,
+    y: 540,
     w: 520,
     rotate: 0,
     hoverRotate: -3,
@@ -105,12 +112,13 @@ export const ITEMS = [
     id: 'sketchbook',
     label: 'Sketchbook',
     src: '/flatlay/sketchbook.png',
-    x: 1240,
-    y: 660,
-    w: 380,
+    /* Pinned to the bottom-right of the window, not to a point on the mat, so
+       it always tucks into the corner however wide the screen is. The negative
+       offsets let it run off both edges the way it does in the mockup. */
+    anchor: { right: '-4vw', bottom: '-9vh', width: 'clamp(210px, 23vw, 450px)' },
     rotate: 0,
     hoverRotate: 3,
-    z: 3,
+    z: 12,
     content: {
       kicker: 'Off the clock',
       title: 'The sketchbook',

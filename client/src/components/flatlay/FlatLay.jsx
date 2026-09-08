@@ -27,7 +27,55 @@ export default function FlatLay() {
 
   const item = ITEMS.find((i) => i.id === active) ?? null;
 
+  /* Objects that sit at a point in the composition vs. ones pinned to a corner
+     of the window. The second group renders outside the stage. */
+  const staged = ITEMS.filter((i) => !i.anchor);
+  const anchored = ITEMS.filter((i) => i.anchor);
+
   const close = useCallback(() => setActive(null), []);
+
+  /**
+   * One object. Identical markup either way — only the geometry differs:
+   * staged objects get design-space numbers that FlatLay.css turns into
+   * percentages of the stage; anchored ones get raw CSS offsets and hang off a
+   * corner of the window.
+   */
+  const renderItem = (it) => (
+    <button
+      type="button"
+      key={it.id}
+      className={`fl__item ${it.anchor ? 'fl__item--anchored' : ''} ${
+        active === it.id ? 'is-active' : ''
+      }`}
+      style={{
+        ...(it.anchor
+          ? {
+              right: it.anchor.right,
+              bottom: it.anchor.bottom,
+              width: it.anchor.width,
+            }
+          : { '--x': it.x, '--y': it.y, '--w': it.w }),
+        zIndex: it.z,
+        '--rot': `${it.rotate}deg`,
+        '--rot-hover': `${it.hoverRotate}deg`,
+      }}
+      onClick={() => setActive(it.id)}
+      aria-label={`${it.label} — open details`}
+    >
+      <Image
+        src={it.src}
+        alt=""
+        width={640}
+        height={640}
+        sizes="(max-width: 900px) 60vw, 520px"
+        className="fl__img"
+      />
+      <span className="fl__tag hand" aria-hidden="true">
+        {it.label}
+      </span>
+    </button>
+  );
+
 
   /* Escape closes whatever is open, innermost first. */
   useEffect(() => {
@@ -99,41 +147,12 @@ export default function FlatLay() {
             style={{ '--x': MAT.x, '--y': MAT.y, '--w': MAT.w }}
           />
 
-          {ITEMS.map((it) => (
-            <button
-              type="button"
-              key={it.id}
-              className={`fl__item ${active === it.id ? 'is-active' : ''}`}
-              style={{
-                /* Unitless design-space numbers; FlatLay.css turns them into
-                   percentages of the stage. Passing px here would pin objects
-                   to absolute sizes and break the composition on resize. */
-                '--x': it.x,
-                '--y': it.y,
-                '--w': it.w,
-                zIndex: it.z,
-                '--rot': `${it.rotate}deg`,
-                '--rot-hover': `${it.hoverRotate}deg`,
-              }}
-              onClick={() => setActive(it.id)}
-              aria-label={`${it.label} — open details`}
-            >
-              <Image
-                src={it.src}
-                alt=""
-                width={it.w * 2}
-                height={it.w * 2}
-                sizes="(max-width: 900px) 60vw, 520px"
-                className="fl__img"
-              />
-              <span className="fl__tag hand" aria-hidden="true">
-                {it.label}
-              </span>
-            </button>
-          ))}
+          {staged.map(renderItem)}
 
         </div>
       </div>
+
+      {anchored.map(renderItem)}
 
       {/* Floating nav pill */}
       <nav className="fl__pill" aria-label="Primary">

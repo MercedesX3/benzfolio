@@ -242,6 +242,15 @@
   outline: none;
 }
 
+/* Pinned to a window corner rather than to a point on the mat. Offsets come
+   from the manifest, so the geometry rules above (which read --x/--y/--w) must
+   not apply — hence the explicit `left/top: auto`. */
+.fl__item--anchored {
+  position: absolute;
+  left: auto;
+  top: auto;
+}
+
 /* The handwritten label that appears on hover. */
 .fl__tag {
   position: absolute;
@@ -486,6 +495,14 @@
 
   .fl__mat {
     display: none;
+  }
+
+  /* On small screens anchored objects rejoin the flow as ordinary cards. */
+  .fl__item--anchored {
+    right: auto;
+    bottom: auto;
+    width: 100% !important;
+    margin-top: 1.2rem;
   }
 
   .fl__item {
