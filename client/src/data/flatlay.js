@@ -57,12 +57,12 @@ export const ITEMS = [
     id: 'sage',
     label: 'SAGE',
     src: '/flatlay/sage.png',
-    x: 1345,
-    y: 285,
-    w: 250,
+    x: 1330,
+    y: 275,
+    w: 300,
     rotate: 0,
     hoverRotate: -3.5,
-    z: 4,
+    z: 14,
     content: {
       kicker: 'AI advising platform',
       title: 'SAGE',
@@ -165,5 +165,9 @@ export const ITEMS = [
 export const NAV = [
   { id: 'projects', label: 'Projects' },
   { id: 'about', label: 'About' },
+  { id: 'playground', label: 'Playground' },
   { id: 'contact', label: 'Contact' },
 ];
+
+/* The pill has room for three; the side panel carries the full set. */
+export const PILL_NAV = NAV.filter((n) => n.id !== 'playground');

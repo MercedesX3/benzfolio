@@ -18,17 +18,25 @@
   opacity: 0.9;
 }
 
+/* Full-bleed. The drawn path is meant to run off the left edge of the screen
+   rather than sit inside a centred box — it should read as a line already in
+   motion when the page opens, not as an illustration with margins. So the
+   wrapper spans the viewport and the artwork is pushed past the left edge. */
 .welcome__inner {
-  position: relative;
-  width: min(1100px, 88vw);
-  aspect-ratio: 1335 / 514;
+  position: absolute;
+  inset: 0;
 }
 
 /* The path is revealed left to right. `clip-path` is animated rather than
    width, so the image itself never scales — the line is drawn, not stretched. */
 .welcome__path {
   position: absolute;
-  inset: 0;
+  /* Runs off the left edge; stops just short of the right so the plane at the
+     end of the path isn't clipped by the viewport. */
+  left: -12vw;
+  right: 8vw;
+  top: 50%;
+  translate: 0 -46%;
   clip-path: inset(0 100% 0 0);
   transition: clip-path 1.5s cubic-bezier(0.45, 0.05, 0.25, 1);
 }
@@ -42,14 +50,17 @@
   height: auto;
 }
 
+/* Sits above and left of centre, in the open space inside the path's arc —
+   dead-centre puts it straight on the line. */
 .welcome__word {
   position: absolute;
-  left: 40%;
-  top: -6%;
-  translate: -50% 0;
+  left: 41%;
+  top: 39%;
+  translate: -50% -50%;
   z-index: 2;
   margin: 0;
-  font-size: clamp(3rem, 8vw, 6rem);
+  font-size: clamp(3.5rem, 11vw, 9rem);
+  line-height: 1;
   color: #fff;
   opacity: 0;
   transition: opacity 0.6s var(--ease-out), translate 0.6s var(--ease-snap);
@@ -57,7 +68,7 @@
 
 .welcome__word.is-in {
   opacity: 1;
-  translate: -50% -10%;
+  translate: -50% -50%;
 }
 
 .welcome__skip {

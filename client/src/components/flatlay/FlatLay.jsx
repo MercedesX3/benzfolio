@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Github, Linkedin, Menu, X } from 'lucide-react';
-import { ITEMS, MAT, NAV, STAGE } from '../../data/flatlay';
+import { ITEMS, MAT, NAV, PILL_NAV, STAGE } from '../../data/flatlay';
 import { EMAIL, RESUME, SOCIALS } from '../../data/site';
 import './FlatLay.css';
 
@@ -102,23 +102,51 @@ export default function FlatLay() {
         <span className="sr-only">{menuOpen ? 'Close menu' : 'Open menu'}</span>
       </button>
 
+      {/* Dims the composition behind the panel, and gives click-outside-to-
+          close for free. Rendered only while open so it never intercepts
+          pointer events on the objects underneath. */}
       {menuOpen && (
-        <nav className="fl__drawer" aria-label="Menu">
-          {NAV.map((n) => (
-            <a key={n.id} href={`#${n.id}`} onClick={() => setMenuOpen(false)}>
-              {n.label}
-            </a>
-          ))}
-          <a href={RESUME} target="_blank" rel="noreferrer">
-            Résumé
-          </a>
-          {SOCIALS.map((s) => (
-            <a key={s.label} href={s.href} target="_blank" rel="noreferrer">
-              {s.label}
-            </a>
-          ))}
-        </nav>
+        <div
+          className="fl__panel-scrim"
+          onClick={() => setMenuOpen(false)}
+          role="presentation"
+        />
       )}
+
+      {/* Full-height panel, right-aligned. Rendered always and toggled with
+          `hidden` + a transform so it can slide rather than pop, and so the
+          links keep a stable place in the tab order. */}
+      <nav
+        className={`fl__panel ${menuOpen ? 'is-open' : ''}`}
+        aria-label="Menu"
+        aria-hidden={!menuOpen}
+        inert={!menuOpen}
+      >
+        <ul className="fl__panel-list">
+          {NAV.map((n) => (
+            <li key={n.id}>
+              <a href={`#${n.id}`} onClick={() => setMenuOpen(false)}>
+                {n.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+
+        <ul className="fl__panel-socials">
+          <li>
+            <a href={RESUME} target="_blank" rel="noreferrer">
+              Résumé
+            </a>
+          </li>
+          {SOCIALS.map((soc) => (
+            <li key={soc.label}>
+              <a href={soc.href} target="_blank" rel="noreferrer">
+                {soc.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
 
       {/* ── The scaled stage ─────────────────────────────────────────────── */}
       <div className="fl__stage-wrap">
@@ -165,7 +193,7 @@ export default function FlatLay() {
         >
           <Github size={22} />
         </a>
-        {NAV.map((n) => (
+        {PILL_NAV.map((n) => (
           <a key={n.id} href={`#${n.id}`} className="fl__pill-link">
             {n.label}
           </a>
