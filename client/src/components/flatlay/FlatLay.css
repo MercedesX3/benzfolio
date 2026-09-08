@@ -17,17 +17,18 @@
 
 /* ── Masthead ───────────────────────────────────────────── */
 
+/* Inside the stage, so it scales with the mat instead of drifting against it. */
 .fl__head {
   position: absolute;
-  top: clamp(1.5rem, 3.4vw, 2.4rem);
-  left: clamp(1.5rem, 4vw, 3.6rem);
+  top: calc(30 * var(--u));
+  left: calc(52 * var(--u));
   z-index: 20;
   pointer-events: none;
 }
 
 .fl__hi {
   margin: 0;
-  font-size: clamp(1.1rem, 2.1vw, 1.75rem);
+  font-size: calc(26 * var(--u));
   font-weight: 700;
   letter-spacing: 0.02em;
   text-transform: uppercase;
@@ -36,7 +37,7 @@
 
 .fl__name {
   margin: 0.1em 0 0;
-  font-size: clamp(2.8rem, 8.2vw, 7rem);
+  font-size: calc(112 * var(--u));
   color: var(--blue);
   text-transform: uppercase;
 }
@@ -44,9 +45,9 @@
 .fl__role {
   display: flex;
   flex-wrap: wrap;
-  gap: clamp(0.75rem, 1.6vw, 1.5rem);
+  gap: calc(26 * var(--u));
   margin: 0.7em 0 0;
-  font-size: clamp(0.72rem, 1.15vw, 1rem);
+  font-size: calc(16 * var(--u));
   font-weight: 700;
   letter-spacing: 0.02em;
   text-transform: uppercase;
@@ -127,17 +128,43 @@
   overflow: hidden;
 }
 
+/* The stage keeps the mockup's exact 1440 x 1024 proportions and grows to
+   whichever dimension runs out first, so the whole composition is always
+   visible.
+
+   Everything inside is positioned as a PERCENTAGE of the stage, derived from
+   its design-space pixel value. That is the part doing the real work: because
+   the stage's aspect ratio is fixed, a percentage of its width and a
+   percentage of its height scale by the same factor, so every object holds its
+   exact position and size relative to every other one.
+
+   An earlier version tried `scale: min(100vw / 1440, 100dvh / 1024)`. That is
+   invalid — dividing a length by a number gives a length, and `scale` needs a
+   bare number, so the declaration was dropped and the stage rendered at its
+   raw 1440 x 1024. On any window shorter than 1024px the bottom third was
+   silently clipped. Percentages cannot fail that way, and they need no
+   resize listener. */
 .fl__stage {
   position: relative;
-  width: calc(var(--w) * 1px);
-  height: calc(var(--h) * 1px);
+  width: min(100vw, calc(100dvh * 1440 / 1024));
+  aspect-ratio: 1440 / 1024;
   flex: none;
-  --stage-scale: min(100vw / var(--w), 100dvh / var(--h));
-  scale: var(--stage-scale);
+  /* Enables cqw below, so type inside the stage scales with it too. */
+  container-type: inline-size;
+}
+
+/* One design pixel, as a length that tracks the stage. Everything inside sizes
+   itself in multiples of this, so the numbers here stay legible against the
+   Figma file: `calc(112 * var(--u))` is a 112px value in the mockup. */
+.fl__stage > * {
+  --u: calc(100cqw / 1440);
 }
 
 .fl__mat {
   position: absolute;
+  left: calc(var(--x) / 1440 * 100%);
+  top: calc(var(--y) / 1024 * 100%);
+  width: calc(var(--w) / 1440 * 100%);
   height: auto;
   z-index: 1;
   pointer-events: none;
@@ -157,6 +184,9 @@
 
 .fl__item {
   position: absolute;
+  left: calc(var(--x) / 1440 * 100%);
+  top: calc(var(--y) / 1024 * 100%);
+  width: calc(var(--w) / 1440 * 100%);
   padding: 0;
   border: 0;
   background: none;
@@ -202,12 +232,12 @@
 .fl__tag {
   position: absolute;
   left: 50%;
-  bottom: -2.1rem;
+  bottom: calc(-34 * var(--u));
   translate: -50% 6px;
-  padding: 0.1rem 0.7rem;
+  padding: calc(2 * var(--u)) calc(12 * var(--u));
   background: #fff;
   border-radius: 999px;
-  font-size: 1.35rem;
+  font-size: calc(22 * var(--u));
   line-height: 1.5;
   color: var(--ink);
   white-space: nowrap;
@@ -228,13 +258,13 @@
 .fl__pill {
   position: absolute;
   left: 50%;
-  bottom: 34px;
+  bottom: calc(34 * var(--u));
   translate: -50% 0;
   z-index: 20;
   display: flex;
   align-items: center;
-  gap: clamp(1rem, 3vw, 2.6rem);
-  padding: 0.75rem 1.6rem;
+  gap: calc(38 * var(--u));
+  padding: calc(12 * var(--u)) calc(24 * var(--u));
   background: rgba(255, 255, 255, 0.86);
   backdrop-filter: blur(14px);
   border-radius: 999px;
@@ -242,7 +272,7 @@
 }
 
 .fl__pill-link {
-  font-size: 1.35rem;
+  font-size: calc(22 * var(--u));
   font-weight: 700;
   letter-spacing: 0.03em;
   text-transform: uppercase;
@@ -257,8 +287,8 @@
 .fl__pill-icon {
   display: grid;
   place-items: center;
-  width: 42px;
-  height: 42px;
+  width: calc(42 * var(--u));
+  height: calc(42 * var(--u));
   border-radius: 50%;
   color: var(--ink);
   transition: background 0.18s var(--ease-out), color 0.18s var(--ease-out);
@@ -401,7 +431,9 @@
   .fl {
     overflow: visible;
     min-height: auto;
-    padding-bottom: 6rem;
+    /* Clears the fixed nav pill, which would otherwise sit on top of the
+       last row of cards. */
+    padding-bottom: 8.5rem;
   }
 
   .fl__head {
@@ -417,12 +449,23 @@
 
   .fl__stage {
     width: 100%;
-    height: auto;
-    scale: none;
+    aspect-ratio: auto;
+    container-type: normal;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 1.2rem;
   }
+
+  /* The masthead leaves the grid and goes back to being a normal heading. */
+  .fl__head {
+    position: static;
+    grid-column: 1 / -1;
+    margin-bottom: 1rem;
+  }
+
+  .fl__hi { font-size: 1.1rem; }
+  .fl__name { font-size: 3rem; }
+  .fl__role { gap: 0.75rem; font-size: 0.72rem; }
 
   .fl__mat {
     display: none;
@@ -430,7 +473,7 @@
 
   .fl__item {
     position: static;
-    width: 100% !important;
+    width: 100%;
     rotate: none;
     display: grid;
     place-items: center;
@@ -444,6 +487,8 @@
     translate: none;
     opacity: 1;
     margin-top: 0.6rem;
+    font-size: 1.1rem;
+    padding: 0.1rem 0.7rem;
   }
 
   .fl__pill {
@@ -455,5 +500,10 @@
 
   .fl__pill-link {
     font-size: 0.95rem;
+  }
+
+  .fl__pill-icon {
+    width: 38px;
+    height: 38px;
   }
 }

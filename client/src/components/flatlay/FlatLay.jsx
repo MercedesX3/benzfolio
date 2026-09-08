@@ -44,16 +44,6 @@ export default function FlatLay() {
     <div className="fl">
       {/* ── Fixed chrome: sits outside the scaled stage so it stays legible
              at any window size ──────────────────────────────────────────── */}
-      <header className="fl__head">
-        <p className="fl__hi">Hi I&apos;m</p>
-        <h1 className="fl__name kelsi">Mercedes Xiong</h1>
-        <p className="fl__role">
-          <span>Full-stack developer</span>
-          <span>CS @ UTDallas</span>
-          <span>VP @ ACMUTD</span>
-        </p>
-      </header>
-
       <button
         type="button"
         className="fl__menu"
@@ -88,6 +78,16 @@ export default function FlatLay() {
           className="fl__stage"
           style={{ '--w': STAGE.w, '--h': STAGE.h }}
         >
+          <header className="fl__head">
+            <p className="fl__hi">Hi I&apos;m</p>
+            <h1 className="fl__name kelsi">Mercedes Xiong</h1>
+            <p className="fl__role">
+              <span>Full-stack developer</span>
+              <span>CS @ UTDallas</span>
+              <span>VP @ ACMUTD</span>
+            </p>
+          </header>
+
           {/* The mat. Not a button — it is the surface everything rests on. */}
           <Image
             src={MAT.src}
@@ -96,7 +96,7 @@ export default function FlatLay() {
             height={1201}
             priority
             className="fl__mat"
-            style={{ left: MAT.x, top: MAT.y, width: MAT.w }}
+            style={{ '--x': MAT.x, '--y': MAT.y, '--w': MAT.w }}
           />
 
           {ITEMS.map((it) => (
@@ -105,9 +105,12 @@ export default function FlatLay() {
               key={it.id}
               className={`fl__item ${active === it.id ? 'is-active' : ''}`}
               style={{
-                left: it.x,
-                top: it.y,
-                width: it.w,
+                /* Unitless design-space numbers; FlatLay.css turns them into
+                   percentages of the stage. Passing px here would pin objects
+                   to absolute sizes and break the composition on resize. */
+                '--x': it.x,
+                '--y': it.y,
+                '--w': it.w,
                 zIndex: it.z,
                 '--rot': `${it.rotate}deg`,
                 '--rot-hover': `${it.hoverRotate}deg`,
