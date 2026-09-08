@@ -47,7 +47,7 @@ export const MAT = {
      and the mat's sloping right edge still clears the viewport at the bottom of
      a 16:9 window, which is the case that leaves a grey wedge if the mat is any
      smaller. */
-  x: 110,
+  x: 180,
   y: 250,
   w: 1900,
 };
@@ -57,7 +57,7 @@ export const ITEMS = [
     id: 'sage',
     label: 'SAGE',
     src: '/flatlay/sage.png',
-    x: 1258,
+    x: 1305,
     y: 285,
     w: 250,
     rotate: 0,
@@ -76,9 +76,9 @@ export const ITEMS = [
     id: 'semantica',
     label: 'Semantica',
     src: '/flatlay/semantica.png',
-    x: 512,
-    y: 712,
-    w: 760,
+    x: 482,
+    y: 655,
+    w: 820,
     rotate: 0,
     hoverRotate: 2.5,
     z: 5,
