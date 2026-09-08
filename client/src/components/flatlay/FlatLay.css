@@ -120,11 +120,19 @@
    background is flat). The mat is authored to bleed past the
    canvas edges, so the letterboxing never shows as a hard edge. */
 
+/* The stage is anchored to the LEFT edge, not centred.
+   On any window wider than the design's 1.406 ratio there is spare horizontal
+   room. Centring splits it into two grey margins, which pushes the masthead
+   inward — the name ends up ~13% from the edge where the mockup has it at 3% —
+   and opens a grey strip down the left. Anchoring left puts the composition
+   exactly where it was drawn and sends all the spare width to the right, which
+   is where the mat is already designed to bleed off. */
 .fl__stage-wrap {
   position: absolute;
   inset: 0;
   display: grid;
-  place-items: center;
+  align-items: center;
+  justify-items: start;
   overflow: hidden;
 }
 
@@ -261,16 +269,19 @@
 
 /* ── Nav pill ───────────────────────────────────────────── */
 
+/* Viewport-centred, not stage-centred. The stage is anchored left, so a pill
+   centred inside it drifts left of the window on any wide screen. It is chrome
+   like the menu button, so it belongs to the viewport. */
 .fl__pill {
   position: absolute;
   left: 50%;
-  bottom: calc(34 * var(--u));
+  bottom: clamp(1.4rem, 3.4vh, 2.6rem);
   translate: -50% 0;
   z-index: 20;
   display: flex;
   align-items: center;
-  gap: calc(38 * var(--u));
-  padding: calc(12 * var(--u)) calc(24 * var(--u));
+  gap: clamp(1rem, 2.6vw, 2.4rem);
+  padding: 0.7rem 1.5rem;
   background: rgba(255, 255, 255, 0.86);
   backdrop-filter: blur(14px);
   border-radius: 999px;
@@ -278,7 +289,7 @@
 }
 
 .fl__pill-link {
-  font-size: calc(22 * var(--u));
+  font-size: clamp(0.95rem, 1.5vw, 1.35rem);
   font-weight: 700;
   letter-spacing: 0.03em;
   text-transform: uppercase;
@@ -293,8 +304,8 @@
 .fl__pill-icon {
   display: grid;
   place-items: center;
-  width: calc(42 * var(--u));
-  height: calc(42 * var(--u));
+  width: clamp(34px, 2.8vw, 42px);
+  height: clamp(34px, 2.8vw, 42px);
   border-radius: 50%;
   color: var(--ink);
   transition: background 0.18s var(--ease-out), color 0.18s var(--ease-out);

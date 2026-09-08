@@ -29,13 +29,20 @@ export const STAGE = { w: 1440, h: 1024 };
 /** The mat itself. Not interactive — it is the surface, not an object. */
 export const MAT = {
   src: '/flatlay/mat.png',
-  /* Anchored into the bottom-right corner and oversized so it runs off the
-     right and bottom edges of the canvas. Only its top-left corner should be
-     visible — the composition reads as a crop of a bigger desk, not as a
-     photograph of a mat sitting on a page. */
-  x: 24,
-  y: 252,
-  w: 1920,
+  /* The mat sits in the bottom-right corner with its top-left corner visible —
+     it should read as a mat on a desk, not as a full-bleed background.
+     
+     Placing it precisely needs the geometry of the PNG, because the mat is
+     rotated inside its own bounding box: the visible corner is at (1.4%, 19.8%)
+     of the box, and the box is 0.756 as tall as it is wide. So the corner lands
+     at (x + 0.014w, y + 0.150w) — which is how these numbers were chosen rather
+     than nudged. At this size the corner sits around 10% in and halfway down,
+     and the mat's sloping right edge still clears the viewport at the bottom of
+     a 16:9 window, which is the case that leaves a grey wedge if the mat is any
+     smaller. */
+  x: 110,
+  y: 250,
+  w: 1900,
 };
 
 export const ITEMS = [
@@ -43,9 +50,9 @@ export const ITEMS = [
     id: 'sage',
     label: 'SAGE',
     src: '/flatlay/sage.png',
-    x: 1168,
-    y: 312,
-    w: 168,
+    x: 1215,
+    y: 285,
+    w: 250,
     rotate: 0,
     hoverRotate: -3.5,
     z: 4,
@@ -62,9 +69,9 @@ export const ITEMS = [
     id: 'semantica',
     label: 'Semantica',
     src: '/flatlay/semantica.png',
-    x: 548,
-    y: 712,
-    w: 520,
+    x: 540,
+    y: 720,
+    w: 700,
     rotate: 0,
     hoverRotate: 2.5,
     z: 5,
@@ -80,9 +87,9 @@ export const ITEMS = [
     id: 'lumina',
     label: 'Lumina',
     src: '/flatlay/lumina.png',
-    x: 72,
-    y: 636,
-    w: 350,
+    x: 20,
+    y: 585,
+    w: 520,
     rotate: 0,
     hoverRotate: -3,
     z: 4,
@@ -98,9 +105,9 @@ export const ITEMS = [
     id: 'sketchbook',
     label: 'Sketchbook',
     src: '/flatlay/sketchbook.png',
-    x: 1176,
-    y: 688,
-    w: 264,
+    x: 1240,
+    y: 660,
+    w: 380,
     rotate: 0,
     hoverRotate: 3,
     z: 3,
@@ -115,9 +122,9 @@ export const ITEMS = [
     id: 'acm',
     label: 'ACM @ UTD',
     src: '/flatlay/polaroid-acm.png',
-    x: 388,
-    y: 392,
-    w: 278,
+    x: 300,
+    y: 340,
+    w: 420,
     rotate: 0,
     hoverRotate: -4,
     z: 6,
@@ -132,9 +139,9 @@ export const ITEMS = [
     id: 'jpmc',
     label: 'JPMorgan Chase',
     src: '/flatlay/polaroid-jpmc.png',
-    x: 722,
-    y: 378,
-    w: 306,
+    x: 745,
+    y: 300,
+    w: 460,
     rotate: 0,
     hoverRotate: 4,
     z: 6,

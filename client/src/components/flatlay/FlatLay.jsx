@@ -132,34 +132,35 @@ export default function FlatLay() {
             </button>
           ))}
 
-          {/* Floating nav pill */}
-          <nav className="fl__pill" aria-label="Primary">
-            <a
-              href={SOCIALS.find((s) => s.label === 'GitHub')?.href}
-              target="_blank"
-              rel="noreferrer"
-              className="fl__pill-icon"
-              aria-label="GitHub"
-            >
-              <Github size={22} />
-            </a>
-            {NAV.map((n) => (
-              <a key={n.id} href={`#${n.id}`} className="fl__pill-link">
-                {n.label}
-              </a>
-            ))}
-            <a
-              href={SOCIALS.find((s) => s.label === 'LinkedIn')?.href}
-              target="_blank"
-              rel="noreferrer"
-              className="fl__pill-icon"
-              aria-label="LinkedIn"
-            >
-              <Linkedin size={22} />
-            </a>
-          </nav>
         </div>
       </div>
+
+      {/* Floating nav pill */}
+      <nav className="fl__pill" aria-label="Primary">
+        <a
+          href={SOCIALS.find((s) => s.label === 'GitHub')?.href}
+          target="_blank"
+          rel="noreferrer"
+          className="fl__pill-icon"
+          aria-label="GitHub"
+        >
+          <Github size={22} />
+        </a>
+        {NAV.map((n) => (
+          <a key={n.id} href={`#${n.id}`} className="fl__pill-link">
+            {n.label}
+          </a>
+        ))}
+        <a
+          href={SOCIALS.find((s) => s.label === 'LinkedIn')?.href}
+          target="_blank"
+          rel="noreferrer"
+          className="fl__pill-icon"
+          aria-label="LinkedIn"
+        >
+          <Linkedin size={22} />
+        </a>
+      </nav>
 
       {/* ── The popup ────────────────────────────────────────────────────── */}
       {item && (
