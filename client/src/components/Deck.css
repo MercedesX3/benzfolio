@@ -1,0 +1,55 @@
+/* ============================================================
+   The deck — full-viewport sections on a translated rail.
+   ============================================================ */
+
+/* Scroll lock. On <html> rather than <body>: giving <body>
+   overflow:hidden turns it into a scroll container, which breaks
+   position:fixed descendants in some engines. Only applied in
+   deck mode, so the mobile layout still scrolls. */
+html.is-deck,
+html.is-deck body {
+  overflow: hidden;
+  height: 100%;
+  overscroll-behavior: none;
+}
+
+.deck {
+  position: relative;
+  width: 100%;
+}
+
+.deck.is-deck {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+}
+
+.deck__rail {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.deck.is-deck .deck__rail {
+  height: 100%;
+}
+
+.deck__section {
+  position: relative;
+  width: 100%;
+}
+
+.deck.is-deck .deck__section {
+  height: 100%;
+  flex: none;
+}
+
+/* Mobile / reduced layout: sections are just blocks in the flow. */
+.deck:not(.is-deck) .deck__section {
+  min-height: auto;
+}
+
+/* Current-section marker in the pill. */
+.fl__pill-link.is-current {
+  color: var(--blue);
+}

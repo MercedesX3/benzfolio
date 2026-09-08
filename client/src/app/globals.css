@@ -21,6 +21,10 @@
   --blue: #4631ff;
   --blue-deep: #2f1fd6;
   --mat: #002a72;
+  /* The projects section's violet mat. Sampled from the mockup — close to
+     --blue but a little darker and less saturated, which is what stops the
+     Kelsi heading above it from disappearing into it. */
+  --mat-violet: #4d3aeb;
 
   /* Ink */
   --ink: #181818;

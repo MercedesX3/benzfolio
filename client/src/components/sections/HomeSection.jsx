@@ -1,0 +1,85 @@
+'use client';
+
+import Image from 'next/image';
+import { motion } from 'motion/react';
+import LayItem from '../lay/LayItem';
+import { ITEMS, MAT, STAGE } from '../../data/flatlay';
+
+/**
+ * Section 01 — the cutting mat.
+ *
+ * The chrome (menu, panel, nav pill) and the detail popup belong to the deck,
+ * not here: they persist across every section, so a section owns only its own
+ * surface and the objects on it.
+ */
+export default function HomeSection({ active, selected, onSelect }) {
+  const staged = ITEMS.filter((i) => !i.anchor);
+  const anchored = ITEMS.filter((i) => i.anchor);
+
+  const rise = (delay) => ({
+    initial: { opacity: 0, y: 22 },
+    animate: active ? { opacity: 1, y: 0 } : { opacity: 0, y: 22 },
+    transition: { duration: 0.6, delay: active ? delay : 0, ease: [0.16, 1, 0.3, 1] },
+  });
+
+  return (
+    <div className="fl">
+      <div className="fl__stage-wrap">
+        <div className="fl__stage" style={{ '--w': STAGE.w, '--h': STAGE.h }}>
+          <header className="fl__head">
+            <motion.p className="fl__hi" {...rise(0)}>
+              Hi I&apos;m
+            </motion.p>
+            <motion.h1 className="fl__name kelsi" {...rise(0.07)}>
+              Mercedes Xiong
+            </motion.h1>
+            <motion.p className="fl__role" {...rise(0.14)}>
+              <span>Full-stack developer</span>
+              <span>CS @ UTDallas</span>
+              <span>VP @ ACMUTD</span>
+            </motion.p>
+          </header>
+
+          <motion.div
+            className="fl__mat-wrap"
+            initial={{ opacity: 0, y: 34 }}
+            animate={active ? { opacity: 1, y: 0 } : { opacity: 0, y: 34 }}
+            transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <Image
+              src={MAT.src}
+              alt=""
+              width={MAT.iw}
+              height={MAT.ih}
+              priority
+              className="fl__mat"
+              style={{ '--x': MAT.x, '--y': MAT.y, '--w': MAT.w }}
+            />
+          </motion.div>
+
+          {staged.map((item, i) => (
+            <LayItem
+              key={item.id}
+              item={item}
+              index={i}
+              active={active}
+              selected={selected === item.id}
+              onSelect={onSelect}
+            />
+          ))}
+        </div>
+      </div>
+
+      {anchored.map((item, i) => (
+        <LayItem
+          key={item.id}
+          item={item}
+          index={staged.length + i}
+          active={active}
+          selected={selected === item.id}
+          onSelect={onSelect}
+        />
+      ))}
+    </div>
+  );
+}

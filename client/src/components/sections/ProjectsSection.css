@@ -1,0 +1,86 @@
+/* ============================================================
+   Section 02 — Projects.
+
+   Reuses .fl__stage / .fl__item geometry from FlatLay.css, so
+   only this section's own surface and heading live here.
+   ============================================================ */
+
+.pj {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 90% at 20% 0%, #f0f0f0 0%, var(--bg) 55%, var(--bg-2) 100%);
+}
+
+/* The violet mat. Positioned in the same design-space units as the objects,
+   with an explicit height because — unlike the image-based mat on the home
+   section — there is no intrinsic aspect ratio to derive it from. */
+.pj__mat {
+  position: absolute;
+  left: calc(var(--x) / 1440 * 100%);
+  top: calc(var(--y) / 1024 * 100%);
+  width: calc(var(--w) / 1440 * 100%);
+  height: calc(var(--h) / 1024 * 100%);
+  background: var(--mat-violet);
+  border-radius: calc(30 * var(--u));
+  box-shadow: 0 26px 60px rgba(20, 10, 80, 0.28);
+  z-index: 1;
+}
+
+.pj__head {
+  position: absolute;
+  top: calc(30 * var(--u));
+  left: calc(52 * var(--u));
+  z-index: 20;
+  pointer-events: none;
+}
+
+.pj__kicker {
+  margin: 0;
+  font-size: calc(26 * var(--u));
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #4b4b4b;
+}
+
+.pj__title {
+  margin: 0.1em 0 0;
+  font-size: calc(128 * var(--u));
+  color: var(--blue);
+  text-transform: uppercase;
+}
+
+.pj__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(26 * var(--u));
+  margin: 0.7em 0 0;
+  font-size: calc(18 * var(--u));
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+@media (max-width: 860px) {
+  .pj {
+    height: auto;
+    overflow: visible;
+    padding: 4.5rem 1.2rem 8.5rem;
+  }
+
+  .pj__head {
+    position: static;
+  }
+
+  .pj__kicker { font-size: 1rem; }
+  .pj__title { font-size: 3rem; }
+  .pj__list { gap: 0.8rem; font-size: 0.75rem; }
+
+  .pj__mat {
+    display: none;
+  }
+}

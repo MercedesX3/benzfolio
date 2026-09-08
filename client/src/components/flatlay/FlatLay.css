@@ -229,6 +229,17 @@
   --u: calc(100cqw / 1440);
 }
 
+/* Wrapper around the mat image so the mat's entrance can be animated.
+   It must be absolutely positioned and stage-sized, NOT a bare static div: a
+   transform (which motion applies) makes an element the containing block for
+   its absolutely positioned descendants, so a zero-height static wrapper would
+   collapse the mat's percentage geometry to nothing the moment it animated. */
+.fl__mat-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
 .fl__mat {
   position: absolute;
   left: calc(var(--x) / 1440 * 100%);

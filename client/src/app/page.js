@@ -1,11 +1,11 @@
-import FlatLay from '@/components/flatlay/FlatLay';
+import Deck from '@/components/Deck';
 import Welcome from '@/components/Welcome';
 
 export default function Home() {
   return (
     <>
       <Welcome />
-      <FlatLay />
+      <Deck />
     </>
   );
 }
