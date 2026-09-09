@@ -35,9 +35,9 @@ export const STAGE = { w: 1440, h: 1024 };
 
 /** The mat itself. Not interactive — it is the surface, not an object. */
 export const MAT = {
-  src: '/flatlay/mat.png',
-  iw: 1588,
-  ih: 1201,
+  src: '/flatlay/mat.webp',
+  iw: 3811,
+  ih: 2882,
   /* The mat sits in the bottom-right corner with its top-left corner visible —
      it should read as a mat on a desk, not as a full-bleed background.
      
@@ -79,9 +79,9 @@ export const ITEMS = [
   {
     id: 'semantica',
     label: 'Semantica',
-    src: '/flatlay/semantica.png',
-    iw: 585,
-    ih: 437,
+    src: '/flatlay/semantica.webp',
+    iw: 1755,
+    ih: 1311,
     x: 602,
     y: 610,
     w: 820,
@@ -99,9 +99,9 @@ export const ITEMS = [
   {
     id: 'lumina',
     label: 'Lumina',
-    src: '/flatlay/lumina.png',
-    iw: 537,
-    ih: 512,
+    src: '/flatlay/lumina.webp',
+    iw: 1611,
+    ih: 1536,
     x: 20,
     y: 540,
     w: 520,
@@ -119,9 +119,9 @@ export const ITEMS = [
   {
     id: 'sketchbook',
     label: 'Sketchbook',
-    src: '/flatlay/sketchbook.png',
-    iw: 353,
-    ih: 502,
+    src: '/flatlay/sketchbook.webp',
+    iw: 1059,
+    ih: 1506,
     /* Pinned to the bottom-right of the window, not to a point on the mat, so
        it always tucks into the corner however wide the screen is. The negative
        offsets let it run off both edges the way it does in the mockup. */
@@ -139,9 +139,9 @@ export const ITEMS = [
   {
     id: 'acm',
     label: 'ACM @ UTD',
-    src: '/flatlay/polaroid-acm.png',
-    iw: 365,
-    ih: 331,
+    src: '/flatlay/polaroid-acm.webp',
+    iw: 1095,
+    ih: 993,
     x: 360,
     y: 262,
     w: 420,
@@ -158,9 +158,9 @@ export const ITEMS = [
   {
     id: 'jpmc',
     label: 'JPMorgan Chase',
-    src: '/flatlay/polaroid-jpmc.png',
-    iw: 421,
-    ih: 396,
+    src: '/flatlay/polaroid-jpmc.webp',
+    iw: 1263,
+    ih: 1188,
     x: 805,
     y: 218,
     w: 460,

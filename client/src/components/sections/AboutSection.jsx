@@ -74,7 +74,12 @@ export default function AboutSection() {
               height={ABOUT_MAT.ih}
               loading="eager"
               className="ab__board"
-              style={{ '--x': ABOUT_MAT.x, '--y': ABOUT_MAT.y, '--w': ABOUT_MAT.w }}
+              style={{
+                '--x': ABOUT_MAT.x,
+                '--y': ABOUT_MAT.y,
+                '--w': ABOUT_MAT.w,
+                '--h': ABOUT_MAT.h,
+              }}
             />
           </motion.div>
 

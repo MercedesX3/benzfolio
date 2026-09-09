@@ -179,6 +179,18 @@ export const ABOUT_MAT = {
   x: 430,
   y: 256,
   w: 1660,
+
+  /* Height in design space, NOT left to the bitmap.
+     Everything else on the site takes its height from the image's own aspect
+     ratio, which is fine for an object lying on a mat — if it renders a few
+     pixels taller nothing else moves. This board is different: it has to end
+     just above the fold, so its height is a layout constraint, and leaving it
+     to the file means the layout changes whenever the file does. That is
+     exactly what happened once already — a stale optimiser cache served the
+     pre-crop cork and the board ran 400px past the section, cut off by it.
+     With this set, a wrong asset can only look wrong; it cannot re-lay-out
+     the page. Keep it equal to w * ih / iw (1660 * 953 / 2110 = 750). */
+  h: 750,
 };
 
 /**

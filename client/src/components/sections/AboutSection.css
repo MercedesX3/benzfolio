@@ -24,7 +24,13 @@
   top: calc(var(--y) / 1024 * 100%);
   width: calc(var(--w) / 1440 * 100%);
   max-width: none;
-  height: auto;
+  /* Both dimensions come from the manifest — see the note on ABOUT_MAT.h.
+     `fill` rather than `cover` because the asset is cropped to this exact
+     ratio (2110x953 against 1660x750, a 0.05% difference): there is nothing
+     to crop, and if the asset is ever replaced with a different shape the
+     stretch is a visible signal to re-crop it rather than a silent reflow. */
+  height: calc(var(--h) / 1024 * 100%);
+  object-fit: fill;
   z-index: 1;
   pointer-events: none;
   user-select: none;
