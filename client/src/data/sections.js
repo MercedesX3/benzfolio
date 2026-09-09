@@ -176,7 +176,7 @@ export const ABOUT_MAT = {
   src: '/flatlay/cork.webp',
   iw: 2110,
   ih: 953,
-  x: 380,
+  x: 430,
   y: 256,
   w: 1660,
 };
