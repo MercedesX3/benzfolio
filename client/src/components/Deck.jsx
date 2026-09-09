@@ -49,6 +49,30 @@ import './Deck.css';
 
 const DESKTOP = '(min-width: 861px)';
 
+/**
+ * Section URLs are real paths, not hashes: /about, never /#about.
+ *
+ * Each section has its own route (app/[section]/page.js) rendering this same
+ * page, so a deep link works on a cold load and the nav can pushState between
+ * them without the address bar growing a '#'.
+ *
+ * A nav entry with no section of its own is a different thing entirely.
+ * Contact has no section yet, so there is no path to push and /contact would
+ * be a 404 — it gets a mailto, which is a link that actually works rather
+ * than one that looks broken. Give Contact a section and it becomes a path
+ * with no change here.
+ */
+const sectionPath = (id) => (id === 'home' ? '/' : `/${id}`);
+const hasSection = (id) => SECTIONS.some((sec) => sec.id === id);
+const navHref = (id) => (hasSection(id) ? sectionPath(id) : `mailto:${EMAIL}`);
+
+/* '/'-> home, '/about' -> about. Trailing slashes are stripped because Next
+   can serve either form. */
+const idFromPath = () => {
+  const seg = window.location.pathname.replace(/^\/+|\/+$/g, '');
+  return seg === '' ? 'home' : seg;
+};
+
 export default function Deck() {
   const [index, setIndex] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -157,7 +181,7 @@ export default function Deck() {
         /* pushState, not replaceState: this adds a history entry, so the
            browser's back button walks back through the sections. The popstate
            listener below is what actually moves the rail when it does. */
-        window.history.pushState(null, '', `#${id}`);
+        window.history.pushState(null, '', sectionPath(id));
       } else {
         document.getElementById(`section-${id}`)?.scrollIntoView({ behavior: 'smooth' });
       }
@@ -167,10 +191,9 @@ export default function Deck() {
     [isDeck, index, startSlide]
   );
 
-  /* Deep links: /#projects should open on that section. */
+  /* Deep links: /projects should open on that section. */
   useEffect(() => {
-    const id = window.location.hash.replace('#', '');
-    const at = SECTIONS.findIndex((s) => s.id === id);
+    const at = SECTIONS.findIndex((s) => s.id === idFromPath());
     if (at > 0) setIndex(at);
   }, []);
 
@@ -178,8 +201,7 @@ export default function Deck() {
      URL while leaving the deck where it was. */
   useEffect(() => {
     const onPop = () => {
-      const id = window.location.hash.replace('#', '');
-      const at = SECTIONS.findIndex((sec) => sec.id === id);
+      const at = SECTIONS.findIndex((sec) => sec.id === idFromPath());
       const next = at < 0 ? 0 : at;
       setIndex((cur) => {
         if (cur !== next) startSlide(cur, next);
@@ -287,7 +309,7 @@ export default function Deck() {
           {NAV.map((n) => (
             <li key={n.id}>
               <a
-                href={`#${n.id}`}
+                href={navHref(n.id)}
                 aria-current={n.id === activeId ? 'page' : undefined}
                 onClick={(e) => onNavClick(e, n.id)}
               >
@@ -352,7 +374,7 @@ export default function Deck() {
         {PILL_NAV.map((n) => (
           <a
             key={n.id}
-            href={`#${n.id}`}
+            href={navHref(n.id)}
             className={`fl__pill-link ${n.id === activeId ? 'is-current' : ''}`}
             aria-current={n.id === activeId ? 'page' : undefined}
             onClick={(e) => onNavClick(e, n.id)}

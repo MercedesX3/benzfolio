@@ -180,12 +180,14 @@ export const NAV = [
   { id: 'home', label: 'Home' },
   { id: 'projects', label: 'Projects' },
   { id: 'about', label: 'About' },
-  { id: 'playground', label: 'Playground' },
   { id: 'contact', label: 'Contact' },
 ];
 
-/* The pill carries everything but Playground, whose long label overflows it.
-   Home has to be in BOTH: with scrolling disabled and the deck sliding only
+/* The pill and the side panel now show the same links — Playground is gone
+   from both. Kept as its own export so one can gain an entry the other does
+   not without touching every call site.
+
+   Home has to be in both: with scrolling disabled and the deck sliding only
    on nav clicks, a reader on Projects otherwise has no way back short of the
    browser's back button. */
-export const PILL_NAV = NAV.filter((n) => n.id !== 'playground');
+export const PILL_NAV = NAV;

@@ -52,7 +52,7 @@ const markSeen = () => {
  * Whether the intro should play, as an external store.
  *
  * The answer depends on things the server cannot know (session storage, the
- * URL hash, a motion preference), so the server and the first client render
+ * URL path, a motion preference), so the server and the first client render
  * both answer "no" and React swaps in the real value — no hydration mismatch,
  * and no state assignment inside an effect.
  */
@@ -62,7 +62,11 @@ const subscribe = () => () => {};
 const getSnapshot = () => {
   if (shouldPlay === null) {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    shouldPlay = !reduced && !window.location.hash && !readSeen();
+    /* Only on the root. A deep link to /about should land on that section,
+       not play the opening splash first — this was `!location.hash` when the
+       sections were hashes, and a path-based deep link would have sailed
+       straight past it. */
+    shouldPlay = !reduced && window.location.pathname === '/' && !readSeen();
   }
   return shouldPlay;
 };
