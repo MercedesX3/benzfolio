@@ -121,7 +121,7 @@ export const PROJECT_ITEMS = [
     src: '/flatlay/lumina-poster.png',
     iw: 629,
     ih: 838,
-    x: 1001,
+    x: 1042,
     y: 346,
     w: 438,
     rotate: 2,
