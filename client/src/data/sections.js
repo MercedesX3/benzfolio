@@ -213,7 +213,7 @@ export const ABOUT_ITEMS = [
     src: '/flatlay/piplup.webp',
     iw: 304,
     ih: 294,
-    x: 680,
+    x: 620,
     y: 400,
     w: 167,
     rotate: 0,
