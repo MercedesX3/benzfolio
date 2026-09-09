@@ -101,7 +101,7 @@ export const PROJECT_ITEMS = [
     src: '/flatlay/archer-ipad.png',
     iw: 1149,
     ih: 1039,
-    x: 553,
+    x: 601,
     y: 614,
     w: 486,
     rotate: 0,
