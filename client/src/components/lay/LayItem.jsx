@@ -28,9 +28,69 @@ import { motion } from 'motion/react';
  * all together.
  */
 export default function LayItem({ item, selected, onSelect, index = 0, animate = true }) {
+  /* An object is interactive if it has a card to open. That's the whole test.
+     The cork board's stickers and books carry no `content`, so they render as
+     plain images that only tilt on hover — no button, no white halo, nothing
+     in the tab order. The halo is this site's signal for "click me and a card
+     opens", and putting it on something inert is a promise the object can't
+     keep. */
+  const interactive = Boolean(item.content) && typeof onSelect === 'function';
+
   const geometry = item.anchor
     ? { right: item.anchor.right, bottom: item.anchor.bottom, width: item.anchor.width }
     : { '--x': item.x, '--y': item.y, '--w': item.w };
+
+  const style = {
+    ...geometry,
+    zIndex: item.z,
+    '--rot': `${item.rotate}deg`,
+    '--rot-hover': `${item.hoverRotate}deg`,
+  };
+
+  const motionProps = {
+    initial: animate ? { opacity: 0, y: 26, scale: 0.97 } : false,
+    animate: animate ? { opacity: 1, y: 0, scale: 1 } : false,
+    transition: { duration: 0.62, delay: 0.16 + index * 0.075, ease: [0.16, 1, 0.3, 1] },
+  };
+
+  /* The image's REAL intrinsic size, not a square placeholder.
+      Browsers derive `aspect-ratio` from the width/height attributes, so a
+      wrong pair reserves a wrong-shaped box: with `width: 640 height: 640`
+      every object laid out square until its bitmap arrived and then snapped
+      to its true shape.
+
+      `loading="eager"` because these images ARE the site, not decoration
+      further down a long page. The sections live inside a clipped,
+      transform-translated rail, and Chrome's lazy-load heuristics decided
+      most of them were not in the viewport and never fetched them at all —
+      objects rendered as empty buttons. There are a few dozen images total
+      and the reader reaches any section in one click, so there is nothing for
+      deferring to save. */
+  const picture = (
+    <Image
+      src={item.src}
+      alt={interactive ? '' : item.label}
+      width={item.iw}
+      height={item.ih}
+      sizes="(max-width: 900px) 60vw, 620px"
+      loading="eager"
+      className="fl__img"
+    />
+  );
+
+  if (!interactive) {
+    return (
+      <motion.div
+        className={`fl__item fl__item--still ${item.spin ? 'fl__item--spin' : ''} ${
+          item.anchor ? 'fl__item--anchored' : ''
+        }`}
+        style={style}
+        {...motionProps}
+      >
+        {picture}
+      </motion.div>
+    );
+  }
 
   return (
     <motion.button
@@ -38,35 +98,12 @@ export default function LayItem({ item, selected, onSelect, index = 0, animate =
       className={`fl__item ${item.anchor ? 'fl__item--anchored' : ''} ${
         selected ? 'is-active' : ''
       }`}
-      style={{ ...geometry, zIndex: item.z, '--rot': `${item.rotate}deg`, '--rot-hover': `${item.hoverRotate}deg` }}
+      style={style}
       onClick={() => onSelect(item.id)}
       aria-label={`${item.label} — open details`}
-      initial={animate ? { opacity: 0, y: 26, scale: 0.97 } : false}
-      animate={animate ? { opacity: 1, y: 0, scale: 1 } : false}
-      transition={{ duration: 0.62, delay: 0.16 + index * 0.075, ease: [0.16, 1, 0.3, 1] }}
+      {...motionProps}
     >
-      {/* The image's REAL intrinsic size, not a square placeholder.
-          Browsers derive `aspect-ratio` from the width/height attributes, so a
-          wrong pair reserves a wrong-shaped box: with `width: 640 height: 640`
-          every object laid out square until its bitmap arrived and then
-          snapped to its true shape.
-
-          `loading="eager"` because these images ARE the site, not decoration
-          further down a long page. The sections live inside a clipped,
-          transform-translated rail, and Chrome's lazy-load heuristics decided
-          most of them were not in the viewport and never fetched them at all —
-          objects rendered as empty buttons. There are about ten images total
-          and the reader reaches any section in one click, so there is nothing
-          for deferring to save. */}
-      <Image
-        src={item.src}
-        alt=""
-        width={item.iw}
-        height={item.ih}
-        sizes="(max-width: 900px) 60vw, 620px"
-        loading="eager"
-        className="fl__img"
-      />
+      {picture}
       <span className="fl__tag hand" aria-hidden="true">
         {item.label}
       </span>

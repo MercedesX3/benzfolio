@@ -18,6 +18,23 @@ export const SOCIALS = [
   },
 ];
 
+/**
+ * The three links under the name on the About section.
+ *
+ * Spotify has no URL yet, and an anchor with an empty href would navigate to
+ * the current page — worse than not being a link at all — so AboutSection
+ * renders an entry with no href as plain text. Fill the href in and it becomes
+ * a link with no other change.
+ */
+export const ABOUT_LINKS = [
+  { label: 'Spotify', href: '' },
+  {
+    label: 'Goodreads',
+    href: 'https://www.goodreads.com/user/show/124363498-mjx-xjm',
+  },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/mercedes-xiong' },
+];
+
 /* Drives both the header nav and the mobile drawer. */
 export const SECTIONS = [
   { id: 'work', label: 'Work' },

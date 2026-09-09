@@ -138,6 +138,189 @@ export const PROJECT_ITEMS = [
 ];
 
 /**
+ * The cork board the About section is pinned to.
+ *
+ * Unlike PROJECT_MAT this needs no inset conversion: the cork asset's frame IS
+ * its bounding box — the wooden edge runs to the pixel, with no transparent
+ * shadow margin around it — so x/y/w describe the image directly.
+ *
+ * ── Why it bleeds off two edges, not four ──────────────────────────────────
+ * The mockup shows the board's top-left corner and frame sitting inside the
+ * canvas with grey margin above and to the left, and the board running off the
+ * right edge and the bottom. That asymmetry is what makes it read as a board
+ * on a wall rather than a background texture: you can see where it starts.
+ *
+ * ── Why it is wider than the mockup drew it ────────────────────────────────
+ * The mockup is 1440 x 1024, the design ratio exactly, and at that ratio a
+ * board 1150 wide clears the right edge. Real windows are wider than they are
+ * tall: the stage scales to the window's HEIGHT, so on a 1512 x 850 laptop the
+ * stage is only 1195px wide and everything past it is grey — a 1150-wide board
+ * stopped short and showed its right-hand frame, with a grey strip beside it.
+ * 1700 puts the right edge at design x 2080, the same reach as the home mat,
+ * which covers every window up to about 2:1. The cost is a chunkier frame
+ * (~44 design px rather than the mockup's 29); the board is meant to run off
+ * the edge, so that is the cheaper of the two errors.
+ */
+export const ABOUT_MAT = {
+  src: '/flatlay/cork.webp',
+  iw: 2110,
+  ih: 1488,
+  x: 380,
+  y: 342,
+  w: 1700,
+};
+
+/**
+ * What's pinned to the board.
+ *
+ * These carry no `content`, and that is the discriminator LayItem uses: an
+ * object with a card behind it renders as a button with the white halo on
+ * hover, and an object without one renders as a plain image that only tilts.
+ * A halo on something that cannot be clicked is a false affordance — it is
+ * the site's own signal for "this opens a card".
+ *
+ * Several assets already have their tilt baked into the bitmap (the books, the
+ * photo strip), so their `rotate` is 0 and only `hoverRotate` moves them.
+ */
+export const ABOUT_ITEMS = [
+  {
+    id: 'a-swim',
+    label: 'I love swimming',
+    src: '/flatlay/sticky-swim.webp',
+    iw: 360,
+    ih: 361,
+    x: 454,
+    y: 476,
+    w: 162,
+    rotate: -3,
+    hoverRotate: 1,
+    z: 5,
+  },
+  {
+    id: 'a-piplup',
+    label: 'Piplup sticker',
+    src: '/flatlay/piplup.webp',
+    iw: 304,
+    ih: 294,
+    x: 612,
+    y: 492,
+    w: 152,
+    rotate: 0,
+    hoverRotate: -4,
+    z: 6,
+  },
+  {
+    id: 'a-evelyn',
+    label: 'The Seven Husbands of Evelyn Hugo',
+    src: '/flatlay/book-evelyn.webp',
+    iw: 397,
+    ih: 540,
+    x: 743,
+    y: 427,
+    w: 190,
+    rotate: 0,
+    hoverRotate: -2.5,
+    z: 7,
+  },
+  {
+    id: 'a-hamnet',
+    label: 'Hamnet',
+    src: '/flatlay/book-hamnet.webp',
+    iw: 364,
+    ih: 520,
+    x: 928,
+    y: 415,
+    w: 180,
+    rotate: 0,
+    hoverRotate: 2,
+    z: 8,
+  },
+  {
+    id: 'a-atmosphere',
+    label: 'Atmosphere',
+    src: '/flatlay/book-atmosphere.webp',
+    iw: 346,
+    ih: 509,
+    x: 1100,
+    y: 415,
+    w: 175,
+    rotate: 0,
+    hoverRotate: -2,
+    z: 9,
+  },
+  {
+    id: 'a-books-note',
+    label: 'Books I loved',
+    src: '/flatlay/sticky-books.webp',
+    iw: 377,
+    ih: 378,
+    x: 1252,
+    y: 459,
+    w: 168,
+    rotate: 0,
+    hoverRotate: 3,
+    z: 10,
+  },
+  {
+    id: 'a-penguins',
+    label: 'Me and the penguins',
+    src: '/flatlay/photo-penguin.webp',
+    iw: 199,
+    ih: 278,
+    x: 1056,
+    y: 575,
+    w: 88,
+    rotate: 0,
+    hoverRotate: -3,
+    z: 11,
+  },
+  {
+    id: 'a-strip',
+    label: 'Sunsets, Catan and ACM',
+    src: '/flatlay/photo-strip.webp',
+    iw: 1682,
+    ih: 562,
+    x: 520,
+    y: 674,
+    w: 875,
+    rotate: 0,
+    hoverRotate: 0.8,
+    z: 12,
+  },
+];
+
+/** The two objects that sit on the grey, to the left of the board. */
+export const ABOUT_SHELF = [
+  {
+    id: 'a-vinyl',
+    label: 'On repeat',
+    src: '/flatlay/vinyl.webp',
+    iw: 448,
+    ih: 448,
+    x: 88,
+    y: 368,
+    w: 224,
+    rotate: 0,
+    hoverRotate: 0,
+    spin: true,
+    z: 4,
+  },
+  {
+    id: 'a-acm',
+    label: 'ACM recruitment poster',
+    src: '/flatlay/acm-poster.webp',
+    iw: 546,
+    ih: 686,
+    x: 59,
+    y: 621,
+    w: 290,
+    rotate: -1,
+    hoverRotate: 1.5,
+    z: 4,
+  },
+];
+
+/**
  * Section order is nav order is slide order. `id` doubles as the URL hash, so
  * /#projects deep-links straight to a section.
  *
@@ -154,6 +337,7 @@ export const PROJECT_ITEMS = [
 export const SECTIONS = [
   { id: 'home', label: 'Home', span: 1.8 },
   { id: 'projects', label: 'Projects', span: 1 },
+  { id: 'about', label: 'About', span: 1 },
 ];
 
 /**
@@ -165,6 +349,11 @@ export const SECTIONS = [
  * two objects sharing an id would make the lookup ambiguous and open the wrong
  * card.
  */
-export const ALL_ITEMS = [...HOME_ITEMS, ...PROJECT_ITEMS];
+export const ALL_ITEMS = [
+  ...HOME_ITEMS,
+  ...PROJECT_ITEMS,
+  ...ABOUT_ITEMS,
+  ...ABOUT_SHELF,
+];
 
 export const getItem = (id) => ALL_ITEMS.find((i) => i.id === id) ?? null;

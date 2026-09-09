@@ -1,0 +1,103 @@
+/* ============================================================
+   Section 03 — About.
+
+   Reuses .fl__stage / .fl__item geometry from FlatLay.css, so
+   only this section's own surface and heading live here.
+   ============================================================ */
+
+.ab {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  /* Transparent: the deck paints the ground for all sections at once. */
+  background: transparent;
+}
+
+/* The cork board. Same design-space geometry as the objects; height comes
+   from the image's own aspect ratio, and max-width opts out of the global
+   `img { max-width: 100% }` safety net, which would otherwise clamp the board
+   to exactly stage width and stop it bleeding off the right edge. */
+.ab__board {
+  position: absolute;
+  left: calc(var(--x) / 1440 * 100%);
+  top: calc(var(--y) / 1024 * 100%);
+  width: calc(var(--w) / 1440 * 100%);
+  max-width: none;
+  height: auto;
+  z-index: 1;
+  pointer-events: none;
+  user-select: none;
+}
+
+.ab__head {
+  position: absolute;
+  top: calc(30 * var(--u));
+  left: calc(52 * var(--u));
+  z-index: 20;
+}
+
+.ab__kicker {
+  margin: 0;
+  font-size: calc(30 * var(--u));
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #4b4b4b;
+}
+
+.ab__name {
+  margin: 0.1em 0 0;
+  font-size: calc(112 * var(--u));
+  color: var(--blue);
+  text-transform: uppercase;
+}
+
+.ab__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(26 * var(--u));
+  margin: 0.7em 0 0;
+  font-size: calc(16 * var(--u));
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.ab__links a {
+  color: inherit;
+  transition: color 0.18s var(--ease-out);
+}
+
+.ab__links a:hover {
+  color: var(--blue);
+}
+
+/* A link with no URL yet renders as plain text rather than a dead anchor. */
+.ab__links span {
+  color: var(--ink-faint);
+}
+
+@media (max-width: 860px) {
+  .ab {
+    height: auto;
+    overflow: visible;
+    padding: 4.5rem 1.2rem 8.5rem;
+  }
+
+  .ab__head {
+    position: static;
+  }
+
+  .ab__kicker { font-size: 1.05rem; }
+  .ab__name { font-size: 3rem; }
+  .ab__links { gap: 0.8rem; font-size: 0.72rem; }
+
+  /* The board is the composition's backdrop, and the composition does not
+     survive being reflowed into a single column — so on a phone the objects
+     become an ordinary stack of cards and the board goes away, exactly as the
+     mats do on the other two sections. */
+  .ab__board {
+    display: none;
+  }
+}

@@ -2,10 +2,12 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
+import Image from 'next/image';
 import { Github, Linkedin, Menu, X } from 'lucide-react';
 
 import HomeSection from './sections/HomeSection';
 import ProjectsSection from './sections/ProjectsSection';
+import AboutSection from './sections/AboutSection';
 import ItemCard from './lay/ItemCard';
 import { SECTIONS, getItem } from '../data/sections';
 import { NAV, PILL_NAV } from '../data/flatlay';
@@ -230,6 +232,7 @@ export default function Deck() {
   const sections = [
     { id: 'home', Component: HomeSection },
     { id: 'projects', Component: ProjectsSection },
+    { id: 'about', Component: AboutSection },
   ];
 
   return (
@@ -293,6 +296,27 @@ export default function Deck() {
             </li>
           ))}
         </ul>
+
+        {/* The paper plane, again.
+            It is the motif the opening splash draws in white on blue; here it
+            is the same drawing in blue on the panel's grey, filling the empty
+            column beside the right-aligned links. It is decoration, so it is
+            aria-hidden and takes no pointer events — the links have to stay
+            clickable across the whole panel.
+
+            `priority` is wrong for it (it is behind a closed panel on first
+            paint) but lazy is wrong too: the panel opens in one click and a
+            plane that fades in three frames late would read as a glitch. It
+            is 16KB, so eager costs nothing worth measuring. */}
+        <Image
+          src="/flatlay/panel-plane.png"
+          alt=""
+          width={434}
+          height={583}
+          loading="eager"
+          aria-hidden="true"
+          className="fl__panel-plane"
+        />
 
         <ul className="fl__panel-socials">
           <li>
