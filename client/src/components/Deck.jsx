@@ -8,6 +8,7 @@ import { Github, Linkedin, Menu, X } from 'lucide-react';
 import HomeSection from './sections/HomeSection';
 import ProjectsSection from './sections/ProjectsSection';
 import AboutSection from './sections/AboutSection';
+import ContactSection from './sections/ContactSection';
 import ItemCard from './lay/ItemCard';
 import { SECTIONS, getItem } from '../data/sections';
 import { NAV, PILL_NAV } from '../data/flatlay';
@@ -214,9 +215,125 @@ export default function Deck() {
     return () => window.removeEventListener('popstate', onPop);
   }, [startSlide]);
 
-  /* With scrolling disabled, the arrow keys are the only keyboard way through
-     the deck — without them a keyboard user could reach a section's links but
-     never move the view to them. */
+  /* Move one section, clamped at both ends. Everything that navigates goes
+     through goTo, so the URL, the panel and the open card all stay in step —
+     the arrow keys used to setIndex directly and left the address bar behind. */
+  const step = useCallback(
+    (dir) => {
+      const next = Math.min(SECTIONS.length - 1, Math.max(0, index + dir));
+      if (next === index) return false;
+      return goTo(SECTIONS[next].id);
+    },
+    [index, goTo]
+  );
+
+  /**
+   * The wheel moves the deck one section at a time.
+   *
+   * ── Why not scroll-snap ───────────────────────────────────────────────
+   * CSS snapping relaxes itself for any snap area taller than the viewport,
+   * and home is 1.8 screens and Projects 1.25 — exactly so their mats can run
+   * past the fold. Under `mandatory` those two would become freely scrollable
+   * and the composition would come to rest halfway through a mat. Driving the
+   * existing rail from the wheel keeps one gesture equal to one section, and
+   * keeps the long sections as something you travel through rather than stop
+   * inside.
+   *
+   * ── One gesture, one section ──────────────────────────────────────────
+   * A trackpad flick is dozens of events over half a second, so a naive
+   * handler would fly to the end of the deck. The handler arms once and
+   * disarms on firing; it re-arms only when BOTH the wheel has been quiet for
+   * a moment and the slide has finished. Keep flicking and nothing more
+   * happens — which is the "sticky" part.
+   */
+  /* Gesture bookkeeping, and a mirror of the values the handler needs.
+     The handler reads from `latest` rather than closing over state, so the
+     listener attaches once and survives every navigation.
+
+     That indirection is not tidiness — it was the bug. With `step` and
+     `slide.duration` in the dependency array the effect re-ran on every
+     navigation, and its cleanup cleared the pending re-arm timer, so the deck
+     stayed disarmed until the next wheel event happened to schedule a new
+     one. Every other scroll did nothing, and a flick did nothing at all. */
+  const gesture = useRef({ accum: 0, lastAt: 0, fired: false, busyUntil: 0 });
+  const latest = useRef(null);
+  latest.current = {
+    selected,
+    menuOpen,
+    step,
+    duration: reduced ? 0 : slide.duration,
+  };
+
+  useEffect(() => {
+    if (!isDeck) return undefined;
+
+    const g = gesture.current;
+    /* Long enough to outlast the inertial tail macOS keeps sending after the
+       fingers lift — those arrive continuously, so a gap this size reliably
+       means a NEW gesture rather than a pause inside one. */
+    const QUIET = 400;
+
+    const blocked = () => latest.current.selected || latest.current.menuOpen;
+
+    const advance = (dir) => {
+      g.fired = true;
+      /* Floor of 750ms because `slide.duration` is the duration of the slide
+         that just ENDED — the next one is not set until step() runs. */
+      g.busyUntil = Date.now() + Math.max(750, latest.current.duration * 1000) + 150;
+      latest.current.step(dir);
+    };
+
+    /* No timers. "Has the gesture ended?" is answered by the gap since the
+       last event, measured when the next one arrives — a timer scheduled to
+       answer it can fire during a stall in the middle of a flick, which is
+       what made a 25-event flick jump two sections instead of one. */
+    const onWheel = (e) => {
+      if (blocked()) return;
+
+      const now = Date.now();
+      const gap = now - g.lastAt;
+      g.lastAt = now;
+
+      if (gap > QUIET) {
+        g.fired = false;
+        g.accum = 0;
+      }
+
+      if (g.fired) return; // one section per gesture — this is the sticky part
+      if (now < g.busyUntil) return; // the rail is still moving
+
+      g.accum += e.deltaY;
+      if (Math.abs(g.accum) < 40) return;
+      advance(g.accum > 0 ? 1 : -1);
+    };
+
+    /* Tablets in landscape are wide enough for the deck, and a swipe there
+       should do what the wheel does. touchend is an unambiguous end of
+       gesture, so this needs none of the above. */
+    let startY = null;
+    const onTouchStart = (e) => {
+      startY = blocked() ? null : e.touches[0].clientY;
+    };
+    const onTouchEnd = (e) => {
+      if (startY === null) return;
+      const dy = startY - (e.changedTouches[0]?.clientY ?? startY);
+      startY = null;
+      if (Math.abs(dy) > 48 && Date.now() >= g.busyUntil) {
+        advance(dy > 0 ? 1 : -1);
+      }
+    };
+
+    window.addEventListener('wheel', onWheel, { passive: true });
+    window.addEventListener('touchstart', onTouchStart, { passive: true });
+    window.addEventListener('touchend', onTouchEnd, { passive: true });
+    return () => {
+      window.removeEventListener('wheel', onWheel);
+      window.removeEventListener('touchstart', onTouchStart);
+      window.removeEventListener('touchend', onTouchEnd);
+    };
+  }, [isDeck]);
+
+  /* The arrow keys do the same thing, for anyone not using a pointer. */
   useEffect(() => {
     if (!isDeck) return undefined;
 
@@ -233,15 +350,12 @@ export default function Deck() {
       if (!forward && !back) return;
 
       e.preventDefault();
-      const next = Math.min(SECTIONS.length - 1, Math.max(0, index + (forward ? 1 : -1)));
-      if (next === index) return;
-      startSlide(index, next);
-      setIndex(next);
+      step(forward ? 1 : -1);
     };
 
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
-  }, [isDeck, selected, menuOpen, index, startSlide]);
+  }, [isDeck, selected, menuOpen, step]);
 
   const onNavClick = (e, id) => {
     if (e.metaKey || e.ctrlKey || e.shiftKey) return;
@@ -255,6 +369,7 @@ export default function Deck() {
     { id: 'home', Component: HomeSection },
     { id: 'projects', Component: ProjectsSection },
     { id: 'about', Component: AboutSection },
+    { id: 'contact', Component: ContactSection },
   ];
 
   return (
@@ -277,7 +392,11 @@ export default function Deck() {
               aria-hidden={isDeck && !isActive}
               inert={isDeck && !isActive}
             >
-              <Component selected={selected} onSelect={setSelected} />
+              <Component
+                selected={selected}
+                onSelect={setSelected}
+                onNavigate={goTo}
+              />
             </section>
           );
         })}

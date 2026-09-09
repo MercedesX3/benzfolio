@@ -362,6 +362,7 @@ export const SECTIONS = [
   { id: 'home', label: 'Home', span: 1.8 },
   { id: 'projects', label: 'Projects', span: 1.25 },
   { id: 'about', label: 'About', span: 1 },
+  { id: 'contact', label: 'Contact', span: 1 },
 ];
 
 /**

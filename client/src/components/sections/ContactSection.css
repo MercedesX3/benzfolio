@@ -1,0 +1,162 @@
+/* ============================================================
+   Section 04 — Contact.
+
+   Type on the bare ground: no mat, no objects. Geometry is the
+   same design-space stage as every other section, so the type
+   scales with the composition rather than with the window.
+   ============================================================ */
+
+.ct {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  /* Transparent: the deck paints the ground for all sections at once. */
+  background: transparent;
+}
+
+.ct__mark {
+  position: absolute;
+  top: calc(96 * var(--u));
+  left: calc(52 * var(--u));
+  margin: 0;
+  font-size: calc(190 * var(--u));
+  line-height: 0.8;
+  color: var(--blue);
+  text-transform: uppercase;
+}
+
+.ct__lead {
+  position: absolute;
+  top: calc(392 * var(--u));
+  left: calc(56 * var(--u));
+  max-width: calc(820 * var(--u));
+}
+
+.ct__kicker {
+  margin: 0;
+  font-size: calc(20 * var(--u));
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+/* The largest thing on the screen after the mark, because it is the only
+   thing on this section anyone actually came for.
+
+   NOT in Kelsi, unlike every other piece of display type on the site. Kelsi
+   is an all-caps bubble display face: it has no real lowercase and no digits
+   worth the name, so 'mercedesx935@gmail.com' set in it came out as an
+   illegible smear that wrapped onto two lines. An address has to be readable
+   before it has to be styled. */
+.ct__email {
+  display: inline-block;
+  margin: 0.18em 0 0;
+  font-size: calc(46 * var(--u));
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-thickness: 0.055em;
+  text-underline-offset: 0.22em;
+  overflow-wrap: anywhere;
+  transition: color 0.2s var(--ease-out);
+}
+
+.ct__email:hover {
+  color: var(--blue);
+}
+
+.ct__note {
+  margin: calc(22 * var(--u)) 0 0;
+  font-size: calc(19 * var(--u));
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+.ct__cols {
+  position: absolute;
+  top: calc(110 * var(--u));
+  right: calc(60 * var(--u));
+  display: flex;
+  gap: calc(90 * var(--u));
+}
+
+.ct__col {
+  display: grid;
+  align-content: start;
+  gap: calc(14 * var(--u));
+  min-width: calc(150 * var(--u));
+}
+
+.ct__col-head {
+  margin: 0 0 calc(6 * var(--u));
+  font-size: calc(14 * var(--u));
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.ct__link {
+  font-size: calc(17 * var(--u));
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink);
+  transition: color 0.18s var(--ease-out);
+}
+
+.ct__link:hover {
+  color: var(--blue);
+}
+
+.ct__foot {
+  position: absolute;
+  left: calc(56 * var(--u));
+  bottom: calc(150 * var(--u));
+  margin: 0;
+  font-size: calc(14 * var(--u));
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+@media (max-width: 860px) {
+  .ct {
+    height: auto;
+    overflow: visible;
+    padding: 4.5rem 1.2rem 9rem;
+  }
+
+  /* Everything leaves the stage and stacks. The absolute geometry above is
+     design-space, which has no meaning once the stage stops being a fixed
+     canvas. */
+  .ct__mark,
+  .ct__lead,
+  .ct__cols,
+  .ct__foot {
+    position: static;
+    max-width: none;
+  }
+
+  .ct__mark { font-size: 4.5rem; }
+  .ct__kicker { font-size: 0.8rem; }
+  .ct__email { font-size: 1.35rem; margin-top: 0.4rem; }
+  .ct__note { font-size: 0.95rem; }
+
+  .ct__lead { margin-top: 1.6rem; }
+
+  .ct__cols {
+    gap: 2.4rem;
+    margin-top: 2.6rem;
+  }
+
+  .ct__col { gap: 0.6rem; min-width: 0; }
+  .ct__col-head { font-size: 0.68rem; }
+  .ct__link { font-size: 0.82rem; }
+
+  .ct__foot { margin-top: 2.4rem; font-size: 0.7rem; }
+}
