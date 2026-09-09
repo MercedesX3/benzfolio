@@ -13,9 +13,18 @@ html.is-deck body {
   overscroll-behavior: none;
 }
 
+/* The ground for every section.
+   The gradient lives HERE, not on each section, because a radial gradient is
+   sized to its own element: home's box is 1.8 screens tall and Projects' is
+   one, so the same declaration on both put the colour stops at different
+   screen positions and left a visible seam where they met. One background on
+   the deck makes it a single continuous surface — which is also the point of
+   the sections feeding into one another. */
 .deck {
   position: relative;
   width: 100%;
+  background:
+    radial-gradient(120% 60% at 20% 0%, #f0f0f0 0%, var(--bg) 55%, var(--bg-2) 100%);
 }
 
 .deck.is-deck {
@@ -39,9 +48,42 @@ html.is-deck body {
   width: 100%;
 }
 
+/* The stage's own height: it is sized to fit the 1440x1024 canvas into the
+   viewport, so on a wide window it is viewport-height and on a narrow one it
+   is narrower-driven. Sections are measured in multiples of THIS rather than
+   of the viewport, so a tall section always contains a whole number of
+   canvases regardless of window shape. */
+.deck.is-deck {
+  --stage-h: min(100dvh, calc(100vw * 1024 / 1440));
+}
+
 .deck.is-deck .deck__section {
-  height: 100%;
+  height: calc(var(--span) * var(--stage-h));
+  /* Never shorter than the window, or a span-1 section would leave a gap
+     under it on a window narrower than the canvas ratio. */
+  min-height: 100dvh;
   flex: none;
+}
+
+/* A section taller than one screen shows its TOP at rest — the slide travels
+   through the remainder. Centring would park the viewport in the middle of
+   the section and cut off the masthead. */
+.deck.is-deck .fl__stage-wrap {
+  align-items: start;
+  height: var(--stage-h);
+  bottom: auto;
+  /* Must not clip: the home mat is taller than one stage and is meant to
+     continue down into the rest of the section, which is the whole point of
+     giving home a span > 1. The deck is the clipping boundary instead. */
+  overflow: visible;
+}
+
+/* The home mat deliberately extends below its stage into the rest of the
+   section, so nothing here may clip it. The deck itself is the clipping
+   boundary. */
+.deck.is-deck .fl {
+  overflow: visible;
+  height: 100%;
 }
 
 /* Mobile / reduced layout: sections are just blocks in the flow. */

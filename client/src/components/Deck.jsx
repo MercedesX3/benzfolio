@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
 import { Github, Linkedin, Menu, X } from 'lucide-react';
 
@@ -22,6 +22,13 @@ import './Deck.css';
  * sections is translated behind it. That also makes the transition something
  * we control: one animation with a known duration, rather than whatever the
  * browser's smooth-scroll happens to do.
+ *
+ * ── Sections can be taller than the window ─────────────────────────────────
+ * Each section declares a `span` in stage-heights, so home is 1.8 screens
+ * tall and the slide down to Projects travels through the bottom of its mat on
+ * the way. Because sections differ in height, the rail cannot move in 100%
+ * steps — it animates to each section's measured `offsetTop`, re-measured on
+ * resize.
  *
  * ── One continuous slide ───────────────────────────────────────────────────
  * Section content animates in once, on mount, and never again. The rail's
@@ -45,6 +52,43 @@ export default function Deck() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [selected, setSelected] = useState(null);
   const [isDeck, setIsDeck] = useState(false);
+  const [offsets, setOffsets] = useState([]);
+  /* Measured on the client; the server has no viewport. */
+  const [vh, setVh] = useState(0);
+  const railRef = useRef(null);
+
+  /**
+   * The slide's duration and curve, fixed at the moment the index changes.
+   *
+   * This is state, not a value derived during render, and that matters: any
+   * re-render while the rail is moving (the ResizeObserver firing, an image
+   * settling) produced a fresh transition object, and motion treated that as a
+   * new instruction and restarted the animation from wherever it had got to.
+   * The rail visibly jumped — measured going from -244px to -1433px in a
+   * single frame instead of easing through.
+   *
+   * Duration scales with the distance actually travelled, because sections are
+   * not all one screen tall: home is 1.8 screens, and at a fixed 0.9s the
+   * bottom of its mat went past too fast to register.
+   *
+   * The curve is ease-in-out, not the strong ease-out used elsewhere. An
+   * ease-out spends ~85% of its distance in the first 30% of its time, which
+   * is right for a control snapping into place and wrong for a journey meant
+   * to be watched — everything between the sections would blur past.
+   */
+  const [slide, setSlide] = useState({ duration: 0.9, ease: [0.65, 0, 0.35, 1] });
+
+  const startSlide = useCallback(
+    (from, to) => {
+      const dist = Math.abs((offsets[to] ?? 0) - (offsets[from] ?? 0));
+      const screens = dist / (vh || 800);
+      setSlide({
+        duration: Math.min(1.7, Math.max(0.75, 0.62 + screens * 0.5)),
+        ease: [0.65, 0, 0.35, 1],
+      });
+    },
+    [offsets, vh]
+  );
   const reduced = useReducedMotion();
 
   /* Deck mode is desktop-only, and is decided on the client — the server has
@@ -65,6 +109,38 @@ export default function Deck() {
     return () => document.documentElement.classList.remove('is-deck');
   }, [isDeck]);
 
+  /* Section tops, in pixels, measured from the DOM. Sections have different
+     heights, so their offsets cannot be derived from the index. */
+  useEffect(() => {
+    if (!isDeck) return undefined;
+
+    const measure = () => {
+      const rail = railRef.current;
+      if (!rail) return;
+      const next = Array.from(rail.querySelectorAll('.deck__section')).map(
+        (el) => el.offsetTop
+      );
+      /* Bail out unless something really moved — a fresh array every time
+         would re-render the deck for no reason. */
+      setOffsets((cur) =>
+        cur.length === next.length && cur.every((v, i) => v === next[i]) ? cur : next
+      );
+      setVh((cur) => (cur === window.innerHeight ? cur : window.innerHeight));
+    };
+
+    measure();
+    window.addEventListener('resize', measure);
+    /* Fonts and images landing can change layout height; observing the rail
+       catches that without polling. */
+    const ro = new ResizeObserver(measure);
+    if (railRef.current) ro.observe(railRef.current);
+
+    return () => {
+      window.removeEventListener('resize', measure);
+      ro.disconnect();
+    };
+  }, [isDeck]);
+
   const goTo = useCallback(
     (id) => {
       const next = SECTIONS.findIndex((s) => s.id === id);
@@ -74,17 +150,19 @@ export default function Deck() {
       setSelected(null);
 
       if (isDeck) {
+        startSlide(index, next);
         setIndex(next);
-        /* Keep the hash in step so a section is linkable and the back button
-           works, without triggering the browser's own jump. */
-        window.history.replaceState(null, '', next === 0 ? '#' : `#${id}`);
+        /* pushState, not replaceState: this adds a history entry, so the
+           browser's back button walks back through the sections. The popstate
+           listener below is what actually moves the rail when it does. */
+        window.history.pushState(null, '', `#${id}`);
       } else {
         document.getElementById(`section-${id}`)?.scrollIntoView({ behavior: 'smooth' });
       }
 
       return true;
     },
-    [isDeck]
+    [isDeck, index, startSlide]
   );
 
   /* Deep links: /#projects should open on that section. */
@@ -93,6 +171,24 @@ export default function Deck() {
     const at = SECTIONS.findIndex((s) => s.id === id);
     if (at > 0) setIndex(at);
   }, []);
+
+  /* Back and forward move the rail. Without this, pushState would change the
+     URL while leaving the deck where it was. */
+  useEffect(() => {
+    const onPop = () => {
+      const id = window.location.hash.replace('#', '');
+      const at = SECTIONS.findIndex((sec) => sec.id === id);
+      const next = at < 0 ? 0 : at;
+      setIndex((cur) => {
+        if (cur !== next) startSlide(cur, next);
+        return next;
+      });
+      setSelected(null);
+      setMenuOpen(false);
+    };
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
+  }, [startSlide]);
 
   /* With scrolling disabled, the arrow keys are the only keyboard way through
      the deck — without them a keyboard user could reach a section's links but
@@ -113,12 +209,15 @@ export default function Deck() {
       if (!forward && !back) return;
 
       e.preventDefault();
-      setIndex((i) => Math.min(SECTIONS.length - 1, Math.max(0, i + (forward ? 1 : -1))));
+      const next = Math.min(SECTIONS.length - 1, Math.max(0, index + (forward ? 1 : -1)));
+      if (next === index) return;
+      startSlide(index, next);
+      setIndex(next);
     };
 
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
-  }, [isDeck, selected, menuOpen]);
+  }, [isDeck, selected, menuOpen, index, startSlide]);
 
   const onNavClick = (e, id) => {
     if (e.metaKey || e.ctrlKey || e.shiftKey) return;
@@ -136,13 +235,10 @@ export default function Deck() {
   return (
     <div className={`deck ${isDeck ? 'is-deck' : ''}`}>
       <motion.div
+        ref={railRef}
         className="deck__rail"
-        animate={isDeck ? { y: `-${index * 100}%` } : { y: 0 }}
-        transition={
-          reduced
-            ? { duration: 0 }
-            : { duration: 0.92, ease: [0.16, 1, 0.3, 1] }
-        }
+        animate={isDeck ? { y: -(offsets[index] ?? 0) } : { y: 0 }}
+        transition={reduced ? { duration: 0 } : slide}
       >
         {sections.map(({ id, Component }) => {
           /* In mobile mode nothing slides, so every section is live. */
@@ -151,7 +247,8 @@ export default function Deck() {
             <section
               key={id}
               id={`section-${id}`}
-              className="deck__section"
+              className={`deck__section deck__section--${id}`}
+              style={{ '--span': SECTIONS.find((sec) => sec.id === id)?.span ?? 1 }}
               aria-hidden={isDeck && !isActive}
               inert={isDeck && !isActive}
             >

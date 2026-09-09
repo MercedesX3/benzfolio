@@ -69,17 +69,23 @@ export default function HomeSection({ selected, onSelect }) {
             />
           ))}
         </div>
-      </div>
 
-      {anchored.map((item, i) => (
-        <LayItem
-          key={item.id}
-          item={item}
-          index={staged.length + i}
-          selected={selected === item.id}
-          onSelect={onSelect}
-        />
-      ))}
+        {/* Anchored objects live INSIDE the stage wrapper, not beside it.
+            The wrapper is one stage tall and pinned to the top of the section,
+            so a corner-anchored object lands in the first screenful. As a
+            sibling of the wrapper it would resolve against the whole section —
+            which for home is 1.8 screens, putting the sketchbook below the
+            fold at rest. */}
+        {anchored.map((item, i) => (
+          <LayItem
+            key={item.id}
+            item={item}
+            index={staged.length + i}
+            selected={selected === item.id}
+            onSelect={onSelect}
+          />
+        ))}
+      </div>
     </div>
   );
 }

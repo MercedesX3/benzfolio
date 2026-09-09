@@ -140,10 +140,20 @@ export const PROJECT_ITEMS = [
 /**
  * Section order is nav order is slide order. `id` doubles as the URL hash, so
  * /#projects deep-links straight to a section.
+ *
+ * `span` is the section's height in multiples of the stage height. A section
+ * taller than one screen is the point, not an accident: the home mat is 0.76x
+ * as tall as it is wide, so a mat wide enough to reach the screen edges runs
+ * well below the fold. Giving home a span of 1.8 means the slide down to
+ * Projects travels through the rest of the mat — its bottom edge and corners
+ * pass by on the way — instead of the mat simply being cut off forever.
+ *
+ * At rest the viewport sits at the TOP of each section, so home still opens on
+ * the masthead and the mat's top edge exactly as before.
  */
 export const SECTIONS = [
-  { id: 'home', label: 'Home' },
-  { id: 'projects', label: 'Projects' },
+  { id: 'home', label: 'Home', span: 1.8 },
+  { id: 'projects', label: 'Projects', span: 1 },
 ];
 
 /**
