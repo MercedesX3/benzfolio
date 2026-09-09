@@ -18,22 +18,39 @@ import { ITEMS as HOME_ITEMS } from './flatlay';
  * The violet mat the project work sits on.
  *
  * A supplied asset rather than a CSS rectangle: it carries a felt texture, a
- * thin dark edge and a slight tilt that flat CSS cannot reproduce. Shipped as
- * WebP because the texture is fine-grained noise — as PNG the same image is
- * 2.2MB, as WebP 378KB, with no visible difference at the size it renders.
+ * thin dark edge and a soft shadow that flat CSS cannot reproduce. Shipped as
+ * WebP because the texture is fine-grained noise — the same image is 2.2MB as
+ * PNG and 401KB as WebP, indistinguishable at the size it renders.
  *
- * The asset's left side is deliberately cut off and its right end carries the
- * rounded corners, so it is sized wide enough that BOTH ends sit off-screen —
- * showing the right-hand corner but not the left would look lopsided, and the
- * cut edge must never be visible.
+ * ── Placing it by its visible edge, not its bounding box ───────────────────
+ * The PNG frame is mostly shadow: the violet body sits 7.3% in from the left,
+ * 12.6% down from the top, 7.4% from the right and 13.5% up from the bottom.
+ * So `x`/`y`/`w` below describe the BODY — where the mat visibly starts and
+ * how wide the violet is — and the component converts that to the image's own
+ * box using those insets. Positioning the raw image instead would put the mat
+ * roughly a hundred pixels off in both axes, and the error would change with
+ * every resize.
  */
 export const PROJECT_MAT = {
   src: '/flatlay/projects-mat.webp',
-  iw: 1700,
-  ih: 1250,
-  x: -160,
-  y: 290,
-  w: 2300,
+  iw: 1800,
+  ih: 1088,
+
+  /* Where the violet body sits, in design-space units.
+     The whole mat is inside the canvas so all four corners show — it reads as
+     a mat lying on a surface rather than as a full-bleed background. The
+     trade-off is a grey margin on the right: the stage is left-anchored and
+     narrower than a wide window, so anything that ends inside the canvas
+     cannot reach the screen edge. That margin is the point here, not a bug. */
+  x: 95,
+  y: 300,
+  w: 1360,
+
+  /* Measured from the file: where the violet body sits inside the frame, as
+     fractions of the frame. `bodyW` is how much of the frame's width the body
+     spans (1 - left - right inset). */
+  inset: { left: 0.0728, top: 0.1259 },
+  bodyW: 0.8533,
 };
 
 export const PROJECT_ITEMS = [
@@ -43,7 +60,7 @@ export const PROJECT_ITEMS = [
     src: '/flatlay/sage-poster.png',
     iw: 629,
     ih: 838,
-    x: 62,
+    x: 117,
     y: 430,
     w: 398,
     rotate: -2,
@@ -64,7 +81,7 @@ export const PROJECT_ITEMS = [
     src: '/flatlay/semantica-ipad.png',
     iw: 1114,
     ih: 827,
-    x: 502,
+    x: 557,
     y: 230,
     w: 524,
     rotate: 0,
@@ -84,9 +101,9 @@ export const PROJECT_ITEMS = [
     src: '/flatlay/archer-ipad.png',
     iw: 1149,
     ih: 1039,
-    x: 484,
-    y: 662,
-    w: 556,
+    x: 553,
+    y: 566,
+    w: 486,
     rotate: 0,
     hoverRotate: -2,
     z: 6,
@@ -104,7 +121,7 @@ export const PROJECT_ITEMS = [
     src: '/flatlay/lumina-poster.png',
     iw: 629,
     ih: 838,
-    x: 1032,
+    x: 1001,
     y: 346,
     w: 438,
     rotate: 2,

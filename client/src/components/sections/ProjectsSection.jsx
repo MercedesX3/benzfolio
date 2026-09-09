@@ -20,6 +20,21 @@ import './ProjectsSection.css';
  * page load, long before the reader arrives, and the section would be sitting
  * still by the time they got here.
  */
+/**
+ * The mat's manifest entry describes the VIOLET BODY. The image frame is
+ * bigger than that — the surrounding shadow is part of the PNG — so convert
+ * body geometry into frame geometry before positioning it.
+ */
+function matFrame(mat) {
+  const w = mat.w / mat.bodyW;
+  const h = w * (mat.ih / mat.iw);
+  return {
+    '--x': Math.round(mat.x - mat.inset.left * w),
+    '--y': Math.round(mat.y - mat.inset.top * h),
+    '--w': Math.round(w),
+  };
+}
+
 export default function ProjectsSection({ active, selected, onSelect }) {
   const rise = (delay) => ({
     initial: { opacity: 0, y: 24 },
@@ -63,7 +78,7 @@ export default function ProjectsSection({ active, selected, onSelect }) {
               height={PROJECT_MAT.ih}
               loading="eager"
               className="pj__mat"
-              style={{ '--x': PROJECT_MAT.x, '--y': PROJECT_MAT.y, '--w': PROJECT_MAT.w }}
+              style={matFrame(PROJECT_MAT)}
             />
           </motion.div>
 
