@@ -40,9 +40,9 @@
 
    So the shift is computed instead: it centres the group in the
    cork that is actually on screen. Derivation — the group spans
-   design x 450..1520 (centre 985), the board's inner edge is at
+   design x 450..1505 (centre 977.5), the board's inner edge is at
    423, and the visible design width is 1440 * winW/stageW, so
-   centring works out to 0.5*winW - 0.5372*stageW, and stageW is
+   centring works out to 0.5*winW - 0.5319*stageW, and stageW is
    --stage-h * 1440/1024.
 
    Re-derive the constant whenever the group's span changes: it is
@@ -55,12 +55,12 @@
    was authored and nothing can ever be pushed off the right
    edge. */
 .deck.is-deck .ab__pins {
-  translate: max(0px, calc(50vw - 0.7557 * var(--stage-h))) 0;
+  translate: max(0px, calc(50vw - 0.748 * var(--stage-h))) 0;
 }
 
 /* At 3:2 and narrower there is no spare cork to slide into at all: the
    visible board is design x 423..1440, which is 1017 wide, and the group is
-   1075. Shifting cannot fit something wider than the space, so the group
+   1055. Shifting cannot fit something wider than the space, so the group
    scales down instead — about design x 423 (29.4% of the stage), the board's
    inner left edge, so the left margin survives the scale and the group
    shrinks toward the frame it is already sitting against rather than off it.
