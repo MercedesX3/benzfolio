@@ -62,7 +62,7 @@ export const ITEMS = [
     iw: 274,
     ih: 429,
     x: 1330,
-    y: 275,
+    y: 146,
     w: 300,
     rotate: 0,
     hoverRotate: -3.5,

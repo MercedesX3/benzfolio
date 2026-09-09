@@ -54,6 +54,23 @@
   color: var(--ink);
 }
 
+/* The masthead's one link. .fl__head opts out of pointer events so the
+   objects underneath stay hoverable through the empty space around the type;
+   this hands them back for the link alone, which would otherwise render as
+   text that ignores the cursor. */
+.fl__role a.fl__resume {
+  pointer-events: auto;
+  color: var(--blue);
+  text-decoration: underline;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.28em;
+  transition: color 0.18s var(--ease-out);
+}
+
+.fl__role a.fl__resume:hover {
+  color: var(--blue-deep);
+}
+
 /* ── Menu button + drawer ───────────────────────────────── */
 
 .fl__menu {

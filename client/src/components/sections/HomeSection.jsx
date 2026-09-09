@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { motion } from 'motion/react';
 import LayItem from '../lay/LayItem';
 import { ITEMS, MAT, STAGE } from '../../data/flatlay';
+import { RESUME } from '../../data/site';
 
 /**
  * Section 01 — the cutting mat.
@@ -39,6 +40,13 @@ export default function HomeSection({ selected, onSelect }) {
               <span>Full-stack developer</span>
               <span>CS @ UTDallas</span>
               <span>VP @ ACMUTD</span>
+              {/* The only clickable thing in the masthead. .fl__head is
+                  pointer-events: none so the composition underneath stays
+                  hoverable through it, which means this link needs the
+                  pointer events handed back explicitly — see .fl__role a. */}
+              <a className="fl__resume" href={RESUME} target="_blank" rel="noreferrer">
+                Résumé
+              </a>
             </motion.p>
           </header>
 
