@@ -82,9 +82,17 @@ export default function AboutSection() {
             <LayItem key={item.id} item={item} index={i} />
           ))}
 
-          {ABOUT_ITEMS.map((item, i) => (
-            <LayItem key={item.id} item={item} index={ABOUT_SHELF.length + i} />
-          ))}
+          {/* Everything pinned to the board moves as one group, so the CSS
+              can slide it right into whatever cork is actually visible —
+              see .ab__pins. Absolutely positioned and stage-sized, because
+              a transform on a static wrapper would become the containing
+              block for its absolute children and collapse the percentage
+              geometry they are placed with. */}
+          <div className="ab__pins">
+            {ABOUT_ITEMS.map((item, i) => (
+              <LayItem key={item.id} item={item} index={ABOUT_SHELF.length + i} />
+            ))}
+          </div>
         </div>
       </div>
     </div>

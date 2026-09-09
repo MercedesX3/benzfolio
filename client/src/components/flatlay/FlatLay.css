@@ -194,19 +194,37 @@
    with it. */
 .fl__panel-plane {
   position: absolute;
-  left: clamp(0.4rem, 1vw, 1rem);
+  right: 0;
   bottom: clamp(3.6rem, 9vh, 6rem);
   /* Not a negative z-index: the panel is its own stacking context, so a
      child behind it would be painted behind the panel's background and
      never seen at all. The lists are lifted above the plane instead. */
   z-index: 0;
-  width: clamp(140px, 15vw, 235px);
+  width: clamp(130px, 13.5vw, 205px);
   height: auto;
+  /* Unmirrored: the nose points up and to the LEFT, with the trail's tail
+     running down to the bottom-right and off the screen edge. So the plane
+     enters at the right of the panel and flies left, into the menu rather
+     than away from it.
+
+     The entrance offset matches that heading — it starts down and to the
+     right and moves up-left, which is the direction the plane is pointing.
+     (`translate` is applied before `transform` in the individual-transform
+     order, so it stays in the element's own axes either way.) */
   opacity: 0;
-  translate: -18px 26px;
+  translate: 18px 26px;
   pointer-events: none;
   user-select: none;
   transition: opacity 0.4s var(--ease-out), translate 0.62s var(--ease-snap);
+}
+
+/* The trail's tail crosses the screen edge, so the plane reads as having
+   flown in from off-screen rather than starting at a hard stop — but only in
+   deck mode, where <html> is overflow:hidden and there is nothing for the
+   overhang to make scrollable. In the mobile layout the page scrolls, so the
+   plane stays inside the panel. */
+.deck.is-deck .fl__panel-plane {
+  right: clamp(-1.6rem, -1.5vw, -0.8rem);
 }
 
 .fl__panel.is-open .fl__panel-plane {
@@ -222,10 +240,11 @@
   }
 }
 
-/* Short windows: the nav list grows with the viewport and will
-   eventually reach the plane. Below this height there is no room
-   for both, and the links win. */
-@media (max-height: 620px) {
+/* Short windows: the nav list is sized from the viewport's WIDTH, so on a
+   wide-but-short window it grows while the panel does not, and it reaches
+   down into the plane. Below this height there is no room for both, and the
+   links win. */
+@media (max-height: 700px) {
   .fl__panel-plane {
     display: none;
   }

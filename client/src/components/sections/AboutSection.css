@@ -30,6 +30,41 @@
   user-select: none;
 }
 
+/* ── Sliding the pinned group into the visible cork ─────────
+   The composition is authored in a 1440-wide design space, but
+   the stage scales to the window's HEIGHT — so on any window
+   wider than 1.41:1 (which is nearly every laptop) the board
+   runs on past design x 1440 and that extra cork sat empty. A
+   fixed nudge right would fill it on a 16:9 screen and push the
+   group off the edge on a narrow one.
+
+   So the shift is computed instead: it centres the group in the
+   cork that is actually on screen. Derivation — the group spans
+   design x 454..1420 (centre 937), the board's inner edge is at
+   424, and the visible design width is 1440 * winW/stageW, so
+   centring works out to 0.5*winW - 0.5035*stageW, and stageW is
+   --stage-h * 1440/1024.
+
+   The max() is the safety net that makes this better than a
+   constant: at the design ratio and on anything taller the term
+   goes to zero or negative, so the group sits exactly where it
+   was authored and nothing can ever be pushed off the right
+   edge. */
+.deck.is-deck .ab__pins {
+  translate: max(0px, calc(50vw - 0.708 * var(--stage-h))) 0;
+}
+
+.ab__pins {
+  position: absolute;
+  inset: 0;
+  /* Above the board, and this is NOT optional. A non-none `translate` makes
+     this element a stacking context, so the z-index its children carry stops
+     competing with the board's and only orders them among themselves — and
+     with z-index auto here, the board's z-index: 1 painted over the whole
+     group. Everything pinned to the board disappeared behind the cork. */
+  z-index: 2;
+}
+
 .ab__head {
   position: absolute;
   top: calc(30 * var(--u));

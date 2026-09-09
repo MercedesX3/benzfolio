@@ -307,9 +307,14 @@ export default function Deck() {
             `priority` is wrong for it (it is behind a closed panel on first
             paint) but lazy is wrong too: the panel opens in one click and a
             plane that fades in three frames late would read as a glitch. It
-            is 16KB, so eager costs nothing worth measuring. */}
+            is 4KB, so eager costs nothing worth measuring.
+
+            Lossless WebP, not PNG. Saving this line drawing as an optimised
+            PNG quantised it to an indexed palette, and the image optimiser
+            then stalled converting that to AVIF for the browser — the plane
+            simply never loaded, with no error anywhere. */}
         <Image
-          src="/flatlay/panel-plane.png"
+          src="/flatlay/panel-plane.webp"
           alt=""
           width={434}
           height={583}
