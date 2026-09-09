@@ -17,13 +17,17 @@ import { motion } from 'motion/react';
  *   • anchored — raw CSS offsets pinning it to a corner of the viewport, for
  *                objects that must touch the real screen edge
  *
- * `index` staggers the entrance so a section's objects land one after another
- * rather than all at once. The animation runs on `whileInView` for the home
- * section (visible on load) but is driven by `active` for later sections,
- * because a section sitting off-screen in a translated rail still counts as
- * "in view" to IntersectionObserver — the rail moves, the viewport doesn't.
+ * The entrance runs ONCE, on mount, and is never re-triggered when a section
+ * becomes current. That is deliberate: the deck's whole motion is the rail
+ * sliding, and if each section's objects also faded and rose on arrival, the
+ * two sections would read as separate screens being swapped. Animating only on
+ * mount leaves the slide as a single continuous movement — the sections feed
+ * into one another, which is the intended feel.
+ *
+ * `index` staggers that one entrance so objects land in sequence rather than
+ * all together.
  */
-export default function LayItem({ item, active, selected, onSelect, index = 0, animate = true }) {
+export default function LayItem({ item, selected, onSelect, index = 0, animate = true }) {
   const geometry = item.anchor
     ? { right: item.anchor.right, bottom: item.anchor.bottom, width: item.anchor.width }
     : { '--x': item.x, '--y': item.y, '--w': item.w };
@@ -38,12 +42,8 @@ export default function LayItem({ item, active, selected, onSelect, index = 0, a
       onClick={() => onSelect(item.id)}
       aria-label={`${item.label} — open details`}
       initial={animate ? { opacity: 0, y: 26, scale: 0.97 } : false}
-      animate={animate ? (active ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 26, scale: 0.97 }) : false}
-      transition={{
-        duration: 0.62,
-        delay: active ? 0.16 + index * 0.075 : 0,
-        ease: [0.16, 1, 0.3, 1],
-      }}
+      animate={animate ? { opacity: 1, y: 0, scale: 1 } : false}
+      transition={{ duration: 0.62, delay: 0.16 + index * 0.075, ease: [0.16, 1, 0.3, 1] }}
     >
       {/* The image's REAL intrinsic size, not a square placeholder.
           Browsers derive `aspect-ratio` from the width/height attributes, so a

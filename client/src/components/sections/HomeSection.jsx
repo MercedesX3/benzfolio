@@ -12,14 +12,16 @@ import { ITEMS, MAT, STAGE } from '../../data/flatlay';
  * not here: they persist across every section, so a section owns only its own
  * surface and the objects on it.
  */
-export default function HomeSection({ active, selected, onSelect }) {
+export default function HomeSection({ selected, onSelect }) {
   const staged = ITEMS.filter((i) => !i.anchor);
   const anchored = ITEMS.filter((i) => i.anchor);
 
+  /* Entrance on mount only — see the note in LayItem. Re-animating on section
+     change would make the slide read as two screens swapping. */
   const rise = (delay) => ({
     initial: { opacity: 0, y: 22 },
-    animate: active ? { opacity: 1, y: 0 } : { opacity: 0, y: 22 },
-    transition: { duration: 0.6, delay: active ? delay : 0, ease: [0.16, 1, 0.3, 1] },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.6, delay, ease: [0.16, 1, 0.3, 1] },
   });
 
   return (
@@ -43,7 +45,7 @@ export default function HomeSection({ active, selected, onSelect }) {
           <motion.div
             className="fl__mat-wrap"
             initial={{ opacity: 0, y: 34 }}
-            animate={active ? { opacity: 1, y: 0 } : { opacity: 0, y: 34 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
           >
             <Image
@@ -62,7 +64,6 @@ export default function HomeSection({ active, selected, onSelect }) {
               key={item.id}
               item={item}
               index={i}
-              active={active}
               selected={selected === item.id}
               onSelect={onSelect}
             />
@@ -75,7 +76,6 @@ export default function HomeSection({ active, selected, onSelect }) {
           key={item.id}
           item={item}
           index={staged.length + i}
-          active={active}
           selected={selected === item.id}
           onSelect={onSelect}
         />

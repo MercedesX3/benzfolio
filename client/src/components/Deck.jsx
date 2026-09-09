@@ -23,12 +23,12 @@ import './Deck.css';
  * we control: one animation with a known duration, rather than whatever the
  * browser's smooth-scroll happens to do.
  *
- * ── Why `active` and not `whileInView` ─────────────────────────────────────
- * Every section is technically on screen the whole time — the rail moves, the
- * viewport doesn't — so IntersectionObserver reports all of them as visible
- * from the first paint. Scroll-triggered entrances would all fire on load and
- * be long finished by the time the reader arrived. Sections therefore take an
- * `active` prop and animate off that.
+ * ── One continuous slide ───────────────────────────────────────────────────
+ * Section content animates in once, on mount, and never again. The rail's
+ * translation is the entire transition, so the sections read as one surface
+ * moving past the viewport rather than two screens being swapped. `isActive`
+ * is still computed, but only to drive `inert`/`aria-hidden` — it no longer
+ * gates animation.
  *
  * ── Mobile ─────────────────────────────────────────────────────────────────
  * Below the layout breakpoint the deck turns itself off entirely: sections
@@ -155,7 +155,7 @@ export default function Deck() {
               aria-hidden={isDeck && !isActive}
               inert={isDeck && !isActive}
             >
-              <Component active={isActive} selected={selected} onSelect={setSelected} />
+              <Component selected={selected} onSelect={setSelected} />
             </section>
           );
         })}

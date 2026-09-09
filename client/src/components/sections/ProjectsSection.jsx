@@ -13,12 +13,12 @@ import './ProjectsSection.css';
  * Each project is a magazine cover or a device on a violet mat. The mat is a
  * CSS rectangle rather than an image (see PROJECT_MAT in data/sections.js).
  *
- * Everything keys its entrance off `active` rather than `whileInView`: this
- * section lives inside a rail that is translated up into place, and to an
- * IntersectionObserver a translated element is still "in view" — the rail
- * moves, the viewport never does. So scroll-triggered animation would fire on
- * page load, long before the reader arrives, and the section would be sitting
- * still by the time they got here.
+ * Entrances run once on mount, not on arrival. The rail's slide is the whole
+ * transition, and re-animating content as a section arrives would make the two
+ * sections read as separate screens swapping rather than one continuous move.
+ * (Scroll-triggered `whileInView` would not work here either: every section is
+ * technically on screen the whole time, because the rail moves and the viewport
+ * does not.)
  */
 /**
  * The mat's manifest entry describes the VIOLET BODY. The image frame is
@@ -35,11 +35,12 @@ function matFrame(mat) {
   };
 }
 
-export default function ProjectsSection({ active, selected, onSelect }) {
+export default function ProjectsSection({ selected, onSelect }) {
+  /* Entrance on mount only — see the note in LayItem. */
   const rise = (delay) => ({
     initial: { opacity: 0, y: 24 },
-    animate: active ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 },
-    transition: { duration: 0.6, delay: active ? delay : 0, ease: [0.16, 1, 0.3, 1] },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.6, delay, ease: [0.16, 1, 0.3, 1] },
   });
 
   return (
@@ -68,7 +69,7 @@ export default function ProjectsSection({ active, selected, onSelect }) {
           <motion.div
             className="fl__mat-wrap"
             initial={{ opacity: 0, y: 60 }}
-            animate={active ? { opacity: 1, y: 0 } : { opacity: 0, y: 60 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
             <Image
@@ -87,7 +88,6 @@ export default function ProjectsSection({ active, selected, onSelect }) {
               key={item.id}
               item={item}
               index={i}
-              active={active}
               selected={selected === item.id}
               onSelect={onSelect}
             />
