@@ -331,12 +331,25 @@ export const ABOUT_SHELF = [
  * Projects travels through the rest of the mat — its bottom edge and corners
  * pass by on the way — instead of the mat simply being cut off forever.
  *
+ * Projects needs the same treatment for the same reason, just less of it. Its
+ * deepest content is the violet mat's frame at design y 1142 (the body's edge
+ * ends at 1012, the soft shadow runs 130px further) and Archer's iPad at 1053
+ * — both past the 1024 fold, so at a span of 1 the iPad was sliced off
+ * mid-screen and the mat had no bottom. 1.25 clears both with 138px of ground
+ * below the mat before About begins, which is the same proportion of slack
+ * home carries.
+ *
+ * Set a span from the DEEPEST OBJECT, not from the mat: an object's height
+ * comes from its bitmap's aspect ratio, so it is never visible in this file
+ * and is easy to forget. Archer is 486 wide and 1149x1039 in the file, which
+ * is 439 tall, which is what pushed it past the fold.
+ *
  * At rest the viewport sits at the TOP of each section, so home still opens on
  * the masthead and the mat's top edge exactly as before.
  */
 export const SECTIONS = [
   { id: 'home', label: 'Home', span: 1.8 },
-  { id: 'projects', label: 'Projects', span: 1 },
+  { id: 'projects', label: 'Projects', span: 1.25 },
   { id: 'about', label: 'About', span: 1 },
 ];
 
