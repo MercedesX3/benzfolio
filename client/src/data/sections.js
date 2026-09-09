@@ -144,30 +144,41 @@ export const PROJECT_ITEMS = [
  * its bounding box — the wooden edge runs to the pixel, with no transparent
  * shadow margin around it — so x/y/w describe the image directly.
  *
- * ── Why it bleeds off two edges, not four ──────────────────────────────────
- * The mockup shows the board's top-left corner and frame sitting inside the
- * canvas with grey margin above and to the left, and the board running off the
- * right edge and the bottom. That asymmetry is what makes it read as a board
- * on a wall rather than a background texture: you can see where it starts.
+ * ── It bleeds off the right, but NOT off the bottom ────────────────────────
+ * The mockup runs the board off both edges, and that is right for the right
+ * edge: the board should reach past the window so you never see it end
+ * sideways. The bottom is different, because About is the LAST section. On
+ * home and Projects a mat that runs past the fold is a promise — slide down
+ * and you see the rest of it. About has nothing below it, so a board with no
+ * bottom edge is just a page that stops mid-object.
  *
- * ── Why it is wider than the mockup drew it ────────────────────────────────
- * The mockup is 1440 x 1024, the design ratio exactly, and at that ratio a
- * board 1150 wide clears the right edge. Real windows are wider than they are
- * tall: the stage scales to the window's HEIGHT, so on a 1512 x 850 laptop the
- * stage is only 1195px wide and everything past it is grey — a 1150-wide board
- * stopped short and showed its right-hand frame, with a grey strip beside it.
- * 1700 puts the right edge at design x 2080, the same reach as the home mat,
- * which covers every window up to about 2:1. The cost is a chunkier frame
- * (~44 design px rather than the mockup's 29); the board is meant to run off
- * the edge, so that is the cheaper of the two errors.
+ * So the board's bottom frame lands ~35px above the fold and the objects on it
+ * were lifted 58px to clear it, while the right edge still runs 600px past the
+ * canvas.
+ *
+ * ── Why the asset is 2110 x 893 and not 2110 x 1488 ────────────────────────
+ * Those two rules fight each other. The board has to be ~1660 wide to clear
+ * the window's right edge (the stage scales to the window's HEIGHT, so on a
+ * 1512 x 850 laptop the stage is only 1195px wide and everything past it is
+ * grey — the right edge has to reach design x ~2040 to cover windows up to
+ * about 2:1, the same reach as the home mat). At the source file's own 1.42
+ * aspect, 1660 wide is 1170 tall, which is 428px past the fold.
+ *
+ * The cork is uniform noise, so the fix is in the asset, not the layout: the
+ * file is 9-sliced — the top and bottom 150px hold the wooden frame and are
+ * untouched, and only the cork between them is squeezed (2x) — giving a
+ * 2.36 aspect where 1660 wide is 702 tall. The frame keeps its proportions,
+ * there is no seam to hide, and nothing is stretched. She scaled these assets
+ * non-uniformly in the mockup herself; this is the same move done in a way
+ * that survives being re-rendered at any size.
  */
 export const ABOUT_MAT = {
   src: '/flatlay/cork.webp',
   iw: 2110,
-  ih: 1488,
+  ih: 893,
   x: 380,
-  y: 342,
-  w: 1700,
+  y: 282,
+  w: 1660,
 };
 
 /**
@@ -190,7 +201,7 @@ export const ABOUT_ITEMS = [
     iw: 360,
     ih: 361,
     x: 454,
-    y: 476,
+    y: 418,
     w: 162,
     rotate: -3,
     hoverRotate: 1,
@@ -203,7 +214,7 @@ export const ABOUT_ITEMS = [
     iw: 304,
     ih: 294,
     x: 612,
-    y: 492,
+    y: 434,
     w: 152,
     rotate: 0,
     hoverRotate: -4,
@@ -216,7 +227,7 @@ export const ABOUT_ITEMS = [
     iw: 397,
     ih: 540,
     x: 743,
-    y: 427,
+    y: 369,
     w: 190,
     rotate: 0,
     hoverRotate: -2.5,
@@ -229,7 +240,7 @@ export const ABOUT_ITEMS = [
     iw: 364,
     ih: 520,
     x: 928,
-    y: 415,
+    y: 357,
     w: 180,
     rotate: 0,
     hoverRotate: 2,
@@ -242,7 +253,7 @@ export const ABOUT_ITEMS = [
     iw: 346,
     ih: 509,
     x: 1100,
-    y: 415,
+    y: 357,
     w: 175,
     rotate: 0,
     hoverRotate: -2,
@@ -255,7 +266,7 @@ export const ABOUT_ITEMS = [
     iw: 377,
     ih: 378,
     x: 1252,
-    y: 459,
+    y: 401,
     w: 168,
     rotate: 0,
     hoverRotate: 3,
@@ -268,7 +279,7 @@ export const ABOUT_ITEMS = [
     iw: 199,
     ih: 278,
     x: 1056,
-    y: 575,
+    y: 517,
     w: 88,
     rotate: 0,
     hoverRotate: -3,
@@ -281,7 +292,7 @@ export const ABOUT_ITEMS = [
     iw: 1682,
     ih: 562,
     x: 520,
-    y: 674,
+    y: 616,
     w: 875,
     rotate: 0,
     hoverRotate: 0.8,
@@ -298,7 +309,7 @@ export const ABOUT_SHELF = [
     iw: 448,
     ih: 448,
     x: 88,
-    y: 368,
+    y: 310,
     w: 224,
     rotate: 0,
     hoverRotate: 0,
@@ -312,7 +323,7 @@ export const ABOUT_SHELF = [
     iw: 546,
     ih: 686,
     x: 59,
-    y: 621,
+    y: 563,
     w: 290,
     rotate: -1,
     hoverRotate: 1.5,
