@@ -62,7 +62,7 @@ export default function ContactSection({ onNavigate }) {
               {EMAIL}
             </a>
             <p className="ct__note">
-              Looking for a summer 2026 software engineering internship.
+              Looking for a software engineering or design roles. I’m currently open to new opportunities and would love to hear from you.
             </p>
           </motion.div>
 
