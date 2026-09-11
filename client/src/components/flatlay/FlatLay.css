@@ -697,17 +697,31 @@
     height: auto;
   }
 
-  /* Each section is its own screen here, so it clips its own objects. Without
-     this the home sketchbook and mat hang past the fold and appear at the top
-     of the Projects screen. */
+  /* Each section clips its own objects — without this the home sketchbook and
+     mat hang past the fold and appear at the top of the Projects screen.
+
+     The padding is what stops them being SLICED by that clip. The mat runs
+     256px past the bottom of the stage and the sketchbook 157px (both
+     measured), and at one screen tall the scroll cut straight through the mat
+     mid-air. The stage stays 804 x 1748 so every coordinate still means what
+     it says; the section is simply taller than the stage, and scrolling down
+     from home reveals the rest of the mat and then its bottom edge before
+     Projects begins. Re-measure this if the mat's portrait placement
+     changes. */
   .fl {
     overflow: hidden;
     min-height: auto;
-    padding-bottom: 0;
+    padding-bottom: calc(285 * var(--u));
   }
 
+  /* `relative`, not `static`. Anchored objects (the sketchbook) render inside
+     this wrapper rather than inside the stage, so this is what their
+     percentage geometry resolves against. Left static it fell through to
+     `.fl`, and the moment `.fl` grew a padding-bottom the sketchbook dropped
+     285px with it — straight out of the section. Its height is the stage's
+     height, so as a containing block the two boxes are identical. */
   .fl__stage-wrap {
-    position: static;
+    position: relative;
     display: block;
     padding: 0;
     height: auto;
@@ -828,6 +842,12 @@
   .fl__panel {
     width: 84vw;
     padding: calc(280 * var(--u)) calc(24 * var(--u)) calc(60 * var(--u));
+    /* The plane is rotated, and a rotation grows the bounding box in every
+       direction — it was reaching 62px past the panel's left edge and drawing
+       on the page behind it. Clipping here keeps it inside the panel whatever
+       its angle, and the panel's right edge is the screen's, so the trail
+       still runs off-screen the way it should. */
+    overflow: hidden;
   }
 
   .fl__panel-list a {
@@ -835,20 +855,24 @@
     line-height: 1.9;
   }
 
+  /* Four of them have to sit on one line — wrapped, the fourth sat alone
+     under the row and read like a mistake. */
   .fl__panel-socials {
     justify-content: center;
-    gap: calc(40 * var(--u));
+    flex-wrap: nowrap;
+    gap: calc(26 * var(--u));
   }
 
   .fl__panel-socials a {
-    font-size: calc(24 * var(--u));
+    font-size: calc(21 * var(--u));
+    white-space: nowrap;
   }
 
   .fl__panel-plane {
     right: auto;
-    left: calc(40 * var(--u));
+    left: calc(150 * var(--u));
     bottom: calc(180 * var(--u));
-    width: calc(560 * var(--u));
+    width: calc(480 * var(--u));
     rotate: -18deg;
   }
 }
