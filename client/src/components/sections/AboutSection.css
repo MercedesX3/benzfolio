@@ -139,26 +139,50 @@
   color: var(--ink-faint);
 }
 
+/* Portrait — see the note in FlatLay.css. */
 @media (max-width: 860px) {
   .ab {
     height: auto;
-    overflow: visible;
-    padding: 4.5rem 1.2rem 8.5rem;
+    overflow: hidden;
+    padding: 0;
   }
 
   .ab__head {
-    position: static;
+    top: calc(195 * var(--u));
+    left: calc(75 * var(--u));
   }
 
-  .ab__kicker { font-size: 1.05rem; }
-  .ab__name { font-size: 3rem; }
-  .ab__links { gap: 0.8rem; font-size: 0.72rem; }
+  .ab__kicker { font-size: calc(42 * var(--u)); }
+  .ab__name { font-size: calc(100 * var(--u)); }
 
-  /* The board is the composition's backdrop, and the composition does not
-     survive being reflowed into a single column — so on a phone the objects
-     become an ordinary stack of cards and the board goes away, exactly as the
-     mats do on the other two sections. */
+  .ab__links {
+    display: block;
+    margin-top: calc(40 * var(--u));
+    font-size: calc(30 * var(--u));
+    letter-spacing: 0;
+  }
+
+  .ab__links a,
+  .ab__links span {
+    display: block;
+    margin-top: calc(30 * var(--u));
+  }
+
+  .ab__links > :first-child { margin-top: 0; }
+
   .ab__board {
-    display: none;
+    display: block;
+    left: calc(var(--mx) / 804 * 100%);
+    top: calc(var(--my) / 1748 * 100%);
+    width: calc(var(--mw) / 804 * 100%);
+    height: calc(var(--mh) / 1748 * 100%);
+  }
+
+  /* The portrait board is a different shape from the desktop one, so the
+     group is placed by its own coordinates and needs neither the centring
+     shift nor the narrow-window scale. */
+  .ab__pins {
+    translate: none;
+    scale: none;
   }
 }

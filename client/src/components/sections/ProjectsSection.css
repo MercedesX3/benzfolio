@@ -66,22 +66,41 @@
   color: var(--ink);
 }
 
+/* Portrait — see the note in FlatLay.css. The stage keeps its geometry, so
+   only this section's own type and its mat need portrait numbers. */
 @media (max-width: 860px) {
   .pj {
     height: auto;
-    overflow: visible;
-    padding: 4.5rem 1.2rem 8.5rem;
+    overflow: hidden;
+    padding: 0;
   }
 
   .pj__head {
-    position: static;
+    top: calc(195 * var(--u));
+    left: calc(75 * var(--u));
   }
 
-  .pj__kicker { font-size: 1rem; }
-  .pj__title { font-size: 3rem; }
-  .pj__list { gap: 0.8rem; font-size: 0.75rem; }
+  .pj__kicker { font-size: calc(40 * var(--u)); }
+  .pj__title { font-size: calc(100 * var(--u)); }
+
+  .pj__list {
+    display: block;
+    margin-top: calc(40 * var(--u));
+    font-size: calc(30 * var(--u));
+    letter-spacing: 0;
+  }
+
+  .pj__list span {
+    display: block;
+    margin-top: calc(30 * var(--u));
+  }
+
+  .pj__list span:first-child { margin-top: 0; }
 
   .pj__mat {
-    display: none;
+    display: block;
+    left: calc(var(--mx) / 804 * 100%);
+    top: calc(var(--my) / 1748 * 100%);
+    width: calc(var(--mw) / 804 * 100%);
   }
 }

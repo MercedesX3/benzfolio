@@ -79,6 +79,10 @@ export default function AboutSection() {
                 '--y': ABOUT_MAT.y,
                 '--w': ABOUT_MAT.w,
                 '--h': ABOUT_MAT.h,
+                '--mx': ABOUT_MAT.m.x,
+                '--my': ABOUT_MAT.m.y,
+                '--mw': ABOUT_MAT.m.w,
+                '--mh': ABOUT_MAT.m.h,
               }}
             />
           </motion.div>

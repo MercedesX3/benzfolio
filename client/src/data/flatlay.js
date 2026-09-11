@@ -52,6 +52,12 @@ export const MAT = {
   x: 180,
   y: 250,
   w: 1900,
+
+  /* Portrait placement, in the 804 x 1748 mobile design space. The extra
+     rotation is real: the mat's angle is baked into the bitmap, so scaling it
+     cannot change how steeply it runs, and the phone mockup sits it much
+     flatter than the desktop composition does. */
+  m: { x: 109, y: 636, w: 1703, rotate: 5.6 },
 };
 
 export const ITEMS = [
@@ -67,6 +73,7 @@ export const ITEMS = [
     rotate: 0,
     hoverRotate: -3.5,
     z: 14,
+    m: { x: 519, y: 673, w: 185 },
     content: {
       kicker: 'AI advising platform',
       title: 'SAGE',
@@ -88,6 +95,7 @@ export const ITEMS = [
     rotate: 0,
     hoverRotate: 2.5,
     z: 5,
+    m: { x: 40, y: 1375, w: 450 },
     content: {
       kicker: 'Book discovery, by feeling',
       title: 'Semantica',
@@ -129,6 +137,7 @@ export const ITEMS = [
     rotate: 0,
     hoverRotate: 3,
     z: 12,
+    m: { x: 595, y: 1370, w: 260 },
     content: {
       kicker: 'Off the clock',
       title: 'The sketchbook',
@@ -148,6 +157,7 @@ export const ITEMS = [
     rotate: 0,
     hoverRotate: -4,
     z: 6,
+    m: { x: 52, y: 905, w: 293 },
     content: {
       kicker: 'Community',
       title: 'VP of ACM @ UTD',
@@ -167,6 +177,7 @@ export const ITEMS = [
     rotate: 0,
     hoverRotate: 4,
     z: 6,
+    m: { x: 432, y: 1100, w: 330 },
     content: {
       kicker: 'Internship',
       title: 'SWE Intern @ JPMorgan Chase',

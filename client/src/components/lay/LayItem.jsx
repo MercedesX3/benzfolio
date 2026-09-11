@@ -40,12 +40,21 @@ export default function LayItem({ item, selected, onSelect, index = 0, animate =
     ? { right: item.anchor.right, bottom: item.anchor.bottom, width: item.anchor.width }
     : { '--x': item.x, '--y': item.y, '--w': item.w };
 
+  /* Both placements ship as custom properties and the media query picks one.
+     No JS decides this — a layout that depended on a matchMedia read would
+     have to wait for the client, and the first paint would be the wrong one.
+
+     An item with no `m` has no portrait placement and is hidden there: the
+     phone composition is not the desktop one scaled down, and a couple of
+     objects (the Lumina phones) simply do not appear in it. */
   const style = {
     ...geometry,
     zIndex: item.z,
     '--rot': `${item.rotate}deg`,
     '--rot-hover': `${item.hoverRotate}deg`,
+    ...(item.m ? { '--mx': item.m.x, '--my': item.m.y, '--mw': item.m.w } : null),
   };
+  const place = item.m ? '' : 'fl__item--no-mobile';
 
   const motionProps = {
     initial: animate ? { opacity: 0, y: 26, scale: 0.97 } : false,
@@ -81,9 +90,9 @@ export default function LayItem({ item, selected, onSelect, index = 0, animate =
   if (!interactive) {
     return (
       <motion.div
-        className={`fl__item fl__item--still ${item.spin ? 'fl__item--spin' : ''} ${
-          item.anchor ? 'fl__item--anchored' : ''
-        }`}
+        className={`fl__item fl__item--still ${place} ${
+          item.spin ? 'fl__item--spin' : ''
+        } ${item.anchor ? 'fl__item--anchored' : ''}`}
         style={style}
         {...motionProps}
       >
@@ -95,7 +104,7 @@ export default function LayItem({ item, selected, onSelect, index = 0, animate =
   return (
     <motion.button
       type="button"
-      className={`fl__item ${item.anchor ? 'fl__item--anchored' : ''} ${
+      className={`fl__item ${place} ${item.anchor ? 'fl__item--anchored' : ''} ${
         selected ? 'is-active' : ''
       }`}
       style={style}

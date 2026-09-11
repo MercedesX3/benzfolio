@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { motion } from 'motion/react';
 import { STAGE } from '../../data/flatlay';
 import { EMAIL, RESUME, SOCIALS } from '../../data/site';
@@ -102,6 +103,20 @@ export default function ContactSection({ onNavigate }) {
               ))}
             </nav>
           </motion.div>
+
+          {/* Portrait only — the phone mockup fills the lower half of this
+              screen with the plane, where the desktop layout has the link
+              columns and a footer line instead. CSS hides it above the
+              breakpoint. */}
+          <Image
+            src="/flatlay/panel-plane.webp"
+            alt=""
+            width={434}
+            height={583}
+            loading="eager"
+            aria-hidden="true"
+            className="ct__plane"
+          />
 
           <motion.p className="ct__foot" {...rise(0.24)}>
             Designed and built by Mercedes Xiong

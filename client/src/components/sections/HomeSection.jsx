@@ -63,7 +63,15 @@ export default function HomeSection({ selected, onSelect }) {
               height={MAT.ih}
               priority
               className="fl__mat"
-              style={{ '--x': MAT.x, '--y': MAT.y, '--w': MAT.w }}
+              style={{
+                '--x': MAT.x,
+                '--y': MAT.y,
+                '--w': MAT.w,
+                '--mx': MAT.m.x,
+                '--my': MAT.m.y,
+                '--mw': MAT.m.w,
+                '--mrot': `${MAT.m.rotate}deg`,
+              }}
             />
           </motion.div>
 

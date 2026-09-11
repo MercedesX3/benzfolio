@@ -113,6 +113,11 @@
   color: var(--blue);
 }
 
+/* Portrait only; the media query at the bottom places and reveals it. */
+.ct__plane {
+  display: none;
+}
+
 .ct__foot {
   position: absolute;
   left: calc(56 * var(--u));
@@ -124,39 +129,63 @@
   color: var(--ink-faint);
 }
 
+/* Portrait — see the note in FlatLay.css. */
 @media (max-width: 860px) {
   .ct {
     height: auto;
-    overflow: visible;
-    padding: 4.5rem 1.2rem 9rem;
+    overflow: hidden;
+    padding: 0;
   }
 
-  /* Everything leaves the stage and stacks. The absolute geometry above is
-     design-space, which has no meaning once the stage stops being a fixed
-     canvas. */
-  .ct__mark,
-  .ct__lead,
-  .ct__cols,
-  .ct__foot {
-    position: static;
-    max-width: none;
+  .ct__mark {
+    top: calc(178 * var(--u));
+    left: calc(55 * var(--u));
+    font-size: calc(122 * var(--u));
   }
 
-  .ct__mark { font-size: 4.5rem; }
-  .ct__kicker { font-size: 0.8rem; }
-  .ct__email { font-size: 1.35rem; margin-top: 0.4rem; }
-  .ct__note { font-size: 0.95rem; }
+  .ct__lead {
+    top: calc(360 * var(--u));
+    left: calc(57 * var(--u));
+    max-width: calc(560 * var(--u));
+  }
 
-  .ct__lead { margin-top: 1.6rem; }
+  .ct__kicker { font-size: calc(28 * var(--u)); }
+
+  .ct__email {
+    font-size: calc(40 * var(--u));
+    text-underline-offset: 0.18em;
+  }
+
+  .ct__note {
+    margin-top: calc(26 * var(--u));
+    font-size: calc(28 * var(--u));
+    line-height: 1.5;
+  }
 
   .ct__cols {
-    gap: 2.4rem;
-    margin-top: 2.6rem;
+    top: calc(700 * var(--u));
+    right: auto;
+    left: calc(57 * var(--u));
+    gap: calc(115 * var(--u));
   }
 
-  .ct__col { gap: 0.6rem; min-width: 0; }
-  .ct__col-head { font-size: 0.68rem; }
-  .ct__link { font-size: 0.82rem; }
+  .ct__col { gap: calc(42 * var(--u)); min-width: calc(170 * var(--u)); }
+  .ct__col-head { font-size: calc(24 * var(--u)); margin-bottom: 0; }
+  .ct__link { font-size: calc(32 * var(--u)); }
 
-  .ct__foot { margin-top: 2.4rem; font-size: 0.7rem; }
+  /* The footer line has nowhere to sit on a phone — the plane fills the lower
+     half instead, which is what the mockup does. */
+  .ct__foot { display: none; }
+
+  .ct__plane {
+    display: block;
+    position: absolute;
+    left: calc(35 * var(--u));
+    top: calc(1115 * var(--u));
+    width: calc(470 * var(--u));
+    height: auto;
+    max-width: none;
+    pointer-events: none;
+    user-select: none;
+  }
 }

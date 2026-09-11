@@ -26,13 +26,17 @@ import './ProjectsSection.css';
  * body geometry into frame geometry before positioning it.
  */
 function matFrame(mat) {
-  const w = mat.w / mat.bodyW;
-  const h = w * (mat.ih / mat.iw);
-  return {
-    '--x': Math.round(mat.x - mat.inset.left * w),
-    '--y': Math.round(mat.y - mat.inset.top * h),
-    '--w': Math.round(w),
+  const frame = ({ x, y, w }) => {
+    const fw = w / mat.bodyW;
+    const fh = fw * (mat.ih / mat.iw);
+    return [Math.round(x - mat.inset.left * fw), Math.round(y - mat.inset.top * fh), Math.round(fw)];
   };
+  const [x, y, w] = frame(mat);
+  /* Both spaces get converted, because the body-to-frame conversion is not a
+     scale — it depends on the width — so the portrait numbers cannot be
+     derived from the desktop ones by CSS. */
+  const [mx, my, mw] = frame(mat.m);
+  return { '--x': x, '--y': y, '--w': w, '--mx': mx, '--my': my, '--mw': mw };
 }
 
 export default function ProjectsSection({ selected, onSelect }) {

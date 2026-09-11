@@ -664,98 +664,192 @@
    different, because a 1440-wide flat-lay on a phone is a picture
    of a portfolio rather than a portfolio. */
 
+/* ══ Portrait ═══════════════════════════════════════════════
+   A phone gets its own composition, not the desktop one reflowed.
+
+   The earlier version turned the stage into a two-column grid of
+   cards: every object became a rounded tile on a blue panel, the
+   mats were hidden, and nothing about it read like the site. The
+   objects ARE the design, so the portrait layout keeps them —
+   arranged for a tall screen, in their own 804 x 1748 design
+   space, with their own coordinates in the manifests (`m`).
+
+   Everything below is the same machinery as the desktop stage
+   with two numbers changed. The stage keeps its fixed aspect and
+   its container query; --u is redefined so `calc(N * var(--u))`
+   still means "N px in the mockup", now against an 804-wide
+   canvas; and the objects read --mx/--my/--mw instead of
+   --x/--y/--w. */
 @media (max-width: 860px) {
-  .fl {
-    overflow: visible;
-    min-height: auto;
-    /* Clears the fixed nav pill, which would otherwise sit on top of the
-       last row of cards. */
-    padding-bottom: 8.5rem;
+  /* --u, for the chrome as well as the stage.
+     The stage defines it from its own container width, but the menu button
+     and the panel are siblings of the rail, not descendants of the stage, so
+     that definition never reached them and every `calc(N * var(--u))` on them
+     was an invalid declaration that silently kept the desktop value. On a
+     phone the stage is full-bleed, so 100vw is the same length. */
+  .deck {
+    --u: calc(100vw / 804);
   }
 
-  .fl__head {
-    position: static;
-    padding: 5rem 1.4rem 0;
+  html.is-deck,
+  html.is-deck body {
+    overflow: visible;
+    height: auto;
+  }
+
+  /* Each section is its own screen here, so it clips its own objects. Without
+     this the home sketchbook and mat hang past the fold and appear at the top
+     of the Projects screen. */
+  .fl {
+    overflow: hidden;
+    min-height: auto;
+    padding-bottom: 0;
   }
 
   .fl__stage-wrap {
     position: static;
     display: block;
-    padding: 2rem 1.2rem 0;
+    padding: 0;
+    height: auto;
   }
 
   .fl__stage {
     width: 100%;
-    aspect-ratio: auto;
-    container-type: normal;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.2rem;
+    aspect-ratio: 804 / 1748;
+    container-type: inline-size;
+    display: block;
   }
 
-  /* The masthead leaves the grid and goes back to being a normal heading. */
+  /* One PORTRAIT design pixel. Same contract as the desktop --u, so the
+     numbers in the type rules below read straight off the phone mockup. */
+  .fl__stage > * {
+    --u: calc(100cqw / 804);
+  }
+
   .fl__head {
-    position: static;
-    grid-column: 1 / -1;
-    margin-bottom: 1rem;
+    position: absolute;
+    top: calc(195 * var(--u));
+    left: calc(75 * var(--u));
+    padding: 0;
+    margin: 0;
   }
 
-  .fl__hi { font-size: 1.1rem; }
-  .fl__name { font-size: 3rem; }
-  .fl__role { gap: 0.75rem; font-size: 0.72rem; }
+  .fl__hi {
+    font-size: calc(40 * var(--u));
+    color: #4b4b4b;
+  }
+
+  .fl__name {
+    font-size: calc(100 * var(--u));
+    line-height: 1.02;
+    /* Two lines on a phone. The desktop masthead is one long line, which at
+       this width would set at about a third the size and stop being a
+       masthead. */
+    max-width: calc(600 * var(--u));
+  }
+
+  /* The three role lines stack instead of sitting in a row — inline they wrap
+     mid-phrase at this width. */
+  .fl__role {
+    display: block;
+    margin-top: calc(34 * var(--u));
+    font-size: calc(30 * var(--u));
+    letter-spacing: 0;
+  }
+
+  .fl__role span,
+  .fl__role a {
+    display: block;
+    margin-top: calc(30 * var(--u));
+  }
+
+  .fl__role span:first-child {
+    margin-top: 0;
+  }
 
   .fl__mat {
-    display: none;
-  }
-
-  /* On small screens anchored objects rejoin the flow as ordinary cards. */
-  .fl__item--anchored {
-    right: auto;
-    bottom: auto;
-    width: 100% !important;
-    margin-top: 1.2rem;
+    display: block;
+    left: calc(var(--mx) / 804 * 100%);
+    top: calc(var(--my) / 1748 * 100%);
+    width: calc(var(--mw) / 804 * 100%);
+    /* The mat's tilt is baked into the bitmap, so scaling cannot change how
+       steeply it runs and the portrait composition sits it much flatter. */
+    rotate: var(--mrot, 0deg);
   }
 
   .fl__item {
-    position: static;
-    width: 100%;
-    rotate: none;
-    display: grid;
-    place-items: center;
-    padding: 1rem;
-    background: var(--mat);
-    border-radius: 16px;
+    position: absolute;
+    left: calc(var(--mx) / 804 * 100%);
+    top: calc(var(--my) / 1748 * 100%);
+    width: calc(var(--mw) / 804 * 100%);
+    /* Undo the card treatment the old mobile layout applied. */
+    margin: 0;
+    padding: 0;
+    background: none;
+    border-radius: 0;
+    display: block;
+    rotate: var(--rot);
+  }
+
+  /* Anchored objects have no corner to hang off here — the sketchbook is
+     placed like everything else in the portrait space. */
+  .fl__item--anchored {
+    right: auto;
+    bottom: auto;
+    width: calc(var(--mw) / 804 * 100%) !important;
+  }
+
+  /* No portrait placement in the manifest means it is not part of this
+     composition. */
+  .fl__item--no-mobile {
+    display: none;
   }
 
   .fl__tag {
-    position: static;
-    translate: none;
-    opacity: 1;
-    margin-top: 0.6rem;
-    font-size: 1.1rem;
-    padding: 0.1rem 0.7rem;
+    display: none;
   }
 
+  /* The pill is gone on a phone: four links and two icons across 390px
+     crowded the bottom of every screen, and the menu button already opens a
+     full nav. */
   .fl__pill {
-    position: fixed;
-    bottom: 1rem;
-    gap: 0.9rem;
-    padding: 0.6rem 1rem;
+    display: none;
   }
 
-  .fl__pill-link {
-    font-size: 0.95rem;
+  .fl__menu {
+    position: absolute;
+    top: calc(183 * var(--u));
+    right: calc(54 * var(--u));
+    width: calc(80 * var(--u));
+    height: calc(80 * var(--u));
   }
 
-  .fl__pill-icon {
-    width: 38px;
-    height: 38px;
+  /* ── The panel ─────────────────────────────────────────── */
+  .fl__panel {
+    width: 84vw;
+    padding: calc(280 * var(--u)) calc(24 * var(--u)) calc(60 * var(--u));
   }
 
-  /* On a phone the socials row wraps to two lines, which lifts it into the
-     plane — measured 12px of overlap at 390x844. Sit the plane higher. */
+  .fl__panel-list a {
+    font-size: calc(72 * var(--u));
+    line-height: 1.9;
+  }
+
+  .fl__panel-socials {
+    justify-content: center;
+    gap: calc(40 * var(--u));
+  }
+
+  .fl__panel-socials a {
+    font-size: calc(24 * var(--u));
+  }
+
   .fl__panel-plane {
-    bottom: 7rem;
+    right: auto;
+    left: calc(40 * var(--u));
+    bottom: calc(180 * var(--u));
+    width: calc(560 * var(--u));
+    rotate: -18deg;
   }
 }
 

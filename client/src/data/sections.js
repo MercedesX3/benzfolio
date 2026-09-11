@@ -51,6 +51,11 @@ export const PROJECT_MAT = {
      spans (1 - left - right inset). */
   inset: { left: 0.0728, top: 0.1259 },
   bodyW: 0.8533,
+
+  /* Portrait placement (804 x 1748 mobile space). Body coordinates, like the
+     desktop ones above — it runs off the left edge here rather than the
+     right. */
+  m: { x: -120, y: 745, w: 830 },
 };
 
 export const PROJECT_ITEMS = [
@@ -66,6 +71,7 @@ export const PROJECT_ITEMS = [
     rotate: -2,
     hoverRotate: 1.5,
     z: 4,
+    m: { x: 40, y: 815, w: 310 },
     content: {
       kicker: 'AI advising platform',
       title: 'SAGE',
@@ -87,6 +93,7 @@ export const PROJECT_ITEMS = [
     rotate: 0,
     hoverRotate: 2,
     z: 5,
+    m: { x: 400, y: 800, w: 390 },
     content: {
       kicker: 'Book discovery, by feeling',
       title: 'Semantica',
@@ -107,6 +114,7 @@ export const PROJECT_ITEMS = [
     rotate: 0,
     hoverRotate: -2,
     z: 6,
+    m: { x: 20, y: 1290, w: 460 },
     content: {
       kicker: 'A dictionary for architects',
       title: 'Archer',
@@ -127,6 +135,7 @@ export const PROJECT_ITEMS = [
     rotate: 2,
     hoverRotate: -1.5,
     z: 4,
+    m: { x: 520, y: 1185, w: 270 },
     content: {
       kicker: 'Stargazing forecaster',
       title: 'Lumina',
@@ -191,6 +200,11 @@ export const ABOUT_MAT = {
      With this set, a wrong asset can only look wrong; it cannot re-lay-out
      the page. Keep it equal to w * ih / iw (1660 * 953 / 2110 = 750). */
   h: 750,
+
+  /* Portrait placement. On a phone the board shows its left, top and bottom
+     frame and runs off only the right edge, so `m.h` is its real height here
+     rather than a crop of it. */
+  m: { x: 130, y: 800, w: 1815, h: 820 },
 };
 
 /**
@@ -218,6 +232,7 @@ export const ABOUT_ITEMS = [
     rotate: -3,
     hoverRotate: 1,
     z: 5,
+    m: { x: 185, y: 1000, w: 170 },
   },
   {
     id: 'a-piplup',
@@ -231,6 +246,7 @@ export const ABOUT_ITEMS = [
     rotate: 0,
     hoverRotate: -4,
     z: 6,
+    m: { x: 330, y: 1110, w: 105 },
   },
   {
     id: 'a-evelyn',
@@ -244,6 +260,7 @@ export const ABOUT_ITEMS = [
     rotate: 0,
     hoverRotate: -2.5,
     z: 7,
+    m: { x: 200, y: 1310, w: 145 },
   },
   {
     id: 'a-hamnet',
@@ -257,6 +274,7 @@ export const ABOUT_ITEMS = [
     rotate: 0,
     hoverRotate: 2,
     z: 8,
+    m: { x: 355, y: 1310, w: 148 },
   },
   {
     id: 'a-atmosphere',
@@ -270,6 +288,7 @@ export const ABOUT_ITEMS = [
     rotate: 0,
     hoverRotate: -2,
     z: 9,
+    m: { x: 505, y: 1310, w: 142 },
   },
   {
     id: 'a-books-note',
@@ -283,6 +302,7 @@ export const ABOUT_ITEMS = [
     rotate: 0,
     hoverRotate: 3,
     z: 10,
+    m: { x: 620, y: 1390, w: 160 },
   },
   {
     id: 'a-penguins',
@@ -296,6 +316,7 @@ export const ABOUT_ITEMS = [
     rotate: 0,
     hoverRotate: -3,
     z: 11,
+    m: { x: 305, y: 1440, w: 78 },
   },
   {
     id: 'a-strip',
@@ -309,6 +330,7 @@ export const ABOUT_ITEMS = [
     rotate: 0,
     hoverRotate: 0.8,
     z: 12,
+    m: { x: 420, y: 1010, w: 400 },
   },
 ];
 
@@ -327,6 +349,7 @@ export const ABOUT_SHELF = [
     hoverRotate: 0,
     spin: true,
     z: 4,
+    m: { x: 310, y: 568, w: 180 },
   },
   {
     id: 'a-acm',
@@ -340,6 +363,7 @@ export const ABOUT_SHELF = [
     rotate: -1,
     hoverRotate: 1.5,
     z: 4,
+    m: { x: 523, y: 458, w: 227 },
   },
 ];
 
