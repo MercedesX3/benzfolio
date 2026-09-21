@@ -79,6 +79,7 @@ export const ITEMS = [
       title: 'SAGE',
       body: 'An AI advising platform for UT Dallas. It parses your transcript, evaluates it against your degree plan, and answers course-planning questions in plain language through a RAG chatbot — so the answer comes with its source in view rather than as a guess.',
       meta: ['AWS Lambda', 'Pinecone', 'LangChain', 'Gemini', 'React'],
+      github: 'https://github.com/acmutd/sage-site',
       stat: '2,000+ students served',
       links: [{ label: 'Visit utdsage.com', href: 'https://utdsage.com/' }],
     },
@@ -101,7 +102,9 @@ export const ITEMS = [
       title: 'Semantica',
       body: 'A reading platform that matches you to books by emotional resonance instead of genre. Zero-shot theme classification turns each book into a weighted trait fingerprint, and the interface shows that fingerprint — the sentiment arc, the pacing, the themes — rather than asking you to trust a ranked list.',
       meta: ['Next.js', 'HuggingFace', 'BART-MNLI', 'Figma'],
+      github: 'https://github.com/MercedesX3/Semantica-v2',
       stat: '14 screens, drawn twice',
+      links: [{ label: 'Visit semantica.mjxiong.com', href: 'https://semantica.mjxiong.com/' }],
     },
   },
   {
@@ -121,6 +124,7 @@ export const ITEMS = [
       title: 'Lumina',
       body: 'Every stargazing app hands you five separate charts and lets you do the maths. Lumina folds cloud cover, moon phase, light pollution and celestial events into one score that answers the only question that matters: is tonight worth the drive?',
       meta: ['React Native', 'Data pipelines', 'Mobile'],
+      github: 'https://github.com/MercedesX3/Lumina',
       stat: 'Four feeds, one number',
     },
   },
@@ -143,6 +147,7 @@ export const ITEMS = [
       title: 'The sketchbook',
       body: 'I sketch buildings for fun, and kept hitting details I had no name for. That became Archer — a living dictionary of architectural vocabulary, where every term carries a definition, a period, and a visual collection, so an entry teaches by example instead of by paragraph.',
       meta: ['Next.js', 'styled-components', 'Redis'],
+      github: 'https://github.com/MercedesX3/archer',
     },
   },
   {

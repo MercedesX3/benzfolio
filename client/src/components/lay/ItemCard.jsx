@@ -1,6 +1,6 @@
 'use client';
 
-import { X } from 'lucide-react';
+import { Github, X } from 'lucide-react';
 
 /**
  * The detail popup.
@@ -44,11 +44,27 @@ export default function ItemCard({ item, onClose }) {
           </ul>
         )}
 
-        {content.links?.map((l) => (
-          <a key={l.href} className="card__link" href={l.href} target="_blank" rel="noreferrer">
-            {l.label} →
-          </a>
-        ))}
+        {(content.links || content.github) && (
+          <div className="card__actions">
+            {content.links?.map((l) => (
+              <a key={l.href} className="card__link" href={l.href} target="_blank" rel="noreferrer">
+                {l.label} →
+              </a>
+            ))}
+            {content.github && (
+              <a
+                className="card__icon-link"
+                href={content.github}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={`${content.title} on GitHub`}
+                title="View on GitHub"
+              >
+                <Github size={20} strokeWidth={2.25} />
+              </a>
+            )}
+          </div>
+        )}
       </article>
     </div>
   );
