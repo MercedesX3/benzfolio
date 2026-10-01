@@ -568,6 +568,53 @@
   animation: card-in 0.34s var(--ease-snap);
 }
 
+/* ── A project popup ────────────────────────────────────────────
+   Wider, and split: the clip on the left, everything you read on
+   the right. The single column asked you to scroll past the demo
+   to reach the words, which made the clip feel like an obstacle
+   rather than the fastest explanation on the card.
+
+   The two columns are deliberately unequal — the clip is 16:9 and
+   needs the width, the text wants a readable measure, not half a
+   dialog. */
+.card--project {
+  width: min(1020px, 100%);
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: clamp(1.4rem, 2.5vw, 2.4rem);
+  align-items: center;
+  /* Nothing scrolls: the content is sized to fit the dialog. */
+  overflow: visible;
+}
+
+.card__media {
+  min-width: 0;
+}
+
+.card__text {
+  min-width: 0;
+  /* The one place a scrollbar is allowed, and only if a long body on a
+     short window leaves no choice. */
+  max-height: 74dvh;
+  overflow-y: auto;
+}
+
+/* The clip needs the full dialog width before the two columns are worth
+   having, so below this the spread folds back to one column — and there the
+   card scrolls again, because a 16:9 clip plus five paragraphs cannot fit a
+   phone without it. */
+@media (max-width: 900px) {
+  .card--project {
+    grid-template-columns: minmax(0, 1fr);
+    overflow-y: auto;
+  }
+
+  .card__text {
+    max-height: none;
+    overflow: visible;
+  }
+}
+
 @keyframes card-in {
   from {
     opacity: 0;
@@ -666,18 +713,44 @@
   color: #fff;
 }
 
+/* Two tiers in one row. The case study is the primary move, so it keeps the
+   filled pill; the external links step back to outlines. Two filled blue
+   buttons side by side would make the viewer choose between equals. */
 .card__link {
-  display: inline-block;
-  padding: 0.7rem 1.4rem;
-  background: var(--blue);
-  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.7rem 1.3rem;
+  border: 2px solid var(--blue);
   border-radius: 999px;
+  color: var(--blue);
   font-weight: 700;
-  transition: background 0.18s var(--ease-out);
+  transition: background 0.18s var(--ease-out), color 0.18s var(--ease-out);
 }
 
 .card__link:hover {
+  background: var(--blue);
+  color: #fff;
+}
+
+.card__link--case {
+  background: var(--blue);
+  color: #fff;
+}
+
+.card__link--case:hover {
   background: var(--blue-deep);
+  border-color: var(--blue-deep);
+}
+
+/* The arrow leans forward on hover — the one bit of motion that says
+   "this goes somewhere" rather than "this changed colour". */
+.card__link--case svg {
+  transition: transform 0.18s var(--ease-out);
+}
+
+.card__link--case:hover svg {
+  transform: translateX(3px);
 }
 
 /* ── Small screens ──────────────────────────────────────────

@@ -12,8 +12,9 @@
 }
 
 .footer__logo {
-  font-style: italic;
-  font-size: 1.9rem;
+  font-size: 2.6rem;
+  line-height: 0.9;
+  color: var(--blue);
   margin: 0;
 }
 
@@ -52,10 +53,14 @@
   gap: 0.6rem;
 }
 
+/* Set like the deck's pill nav — same case, weight and tracking — so the
+   links at the bottom of a page read as the same navigation as the ones at
+   the top, a size down. The old 0.14em tracking belonged to the eyebrow
+   style and made them look like labels rather than links. */
 .footer__link {
-  font-size: 0.72rem;
+  font-size: 0.95rem;
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
   transition: color 0.2s var(--ease-out);
 }

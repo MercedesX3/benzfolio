@@ -31,6 +31,15 @@
   --ink-soft: #4a4a4a;
   --ink-faint: #9a9a9a;
 
+  /* The side gutter for .page-shell — the header, the footer, challenge
+     pages and case studies all measure from it.
+
+     It was referenced but never defined, which resolved to no padding at
+     all: fine at desktop, where the 1240 max-width leaves its own margins,
+     but it ran the header and footer flush to the edges of a phone. Zero
+     above 1280 keeps those wide layouts exactly as they were. */
+  --gutter: 1.25rem;
+
   /* The design is authored at this size and scaled to fit. Every
      coordinate in data/flatlay.js is in these units. */
   --stage-w: 1440;
@@ -38,6 +47,51 @@
 
   --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
   --ease-snap: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* ── Carried over from the previous palette ────────────────
+     The header, the footer and the challenge pages were written
+     against a red/yellow identity whose tokens left with it.
+     Every one of these was still being referenced and resolving
+     to nothing, which is why the footer had no background and
+     its hover states did nothing at all.
+
+     They are mapped onto the current palette rather than
+     reintroduced: the site has one accent, and --red is where
+     the old code asks for it. Nothing here invents a second
+     hue — the yellow that used to wash a hover is now a tint of
+     the blue. */
+  --paper: #fff;
+  --paper-2: #f6f7f9;
+  --red: var(--blue);
+  --yellow: #e9e6ff;
+  --green: #1f7a5a;
+  --accent: var(--blue);
+  --swatch: var(--blue);
+  --light: #f6f7f9;
+
+  /* --rule is a border WIDTH, not a colour — `border: var(--rule) solid
+     var(--ink)`. --line is the hairline's colour. */
+  --rule: 2px;
+  --rule-thick: 3px;
+  --line: rgba(24, 24, 24, 0.12);
+  --frame: rgba(24, 24, 24, 0.12);
+
+  --shadow-hard: 6px 6px 0 var(--ink);
+  --shadow-hard-sm: 3px 3px 0 var(--ink);
+
+  --header-h: 64px;
+  --section-y: clamp(3rem, 8vh, 5.5rem);
+
+  /* The display face these components ask for is the body face: mapping it to
+     Kelsi would set the logo and every section title in the bubble face, which
+     is a redesign rather than a repair. */
+  --font-display: var(--font-body);
+
+  /* The checkered wipe belonged to the old identity's flag motif. The element
+     is still in the footer's markup, so the token stays defined and explicitly
+     off — a checkerboard band above the footer would be new decoration, not a
+     fix. Give it an image here to bring it back. */
+  --checker: none;
 
   color-scheme: light;
   color: var(--ink);
@@ -79,6 +133,14 @@
 *::before,
 *::after {
   box-sizing: border-box;
+}
+
+/* Past the shell's own max-width the centred margins are the gutter, so the
+   padding goes back to nothing and wide layouts measure exactly as before. */
+@media (min-width: 1280px) {
+  :root {
+    --gutter: 0px;
+  }
 }
 
 html {

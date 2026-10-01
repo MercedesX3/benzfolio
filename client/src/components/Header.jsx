@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
-import { lockScroll, scrollToHash } from '../lib/scroll';
+import { lockScroll } from '../lib/scroll';
 import { EMAIL, RESUME, SECTIONS } from '../data/site';
 import './Header.css';
 
@@ -29,12 +29,9 @@ export default function Header() {
     return () => document.removeEventListener('keydown', onKey);
   }, [isMenuOpen, closeMenu]);
 
-  // On the home page these are anchors, so scroll through Lenis rather than
-  // letting the browser jump. Anywhere else, fall through to the router.
-  const onSectionClick = (e, hash) => {
-    closeMenu();
-    if (scrollToHash(hash)) e.preventDefault();
-  };
+  /* The nav links used to be hashes on '/', scrolled through Lenis. Each
+     section is its own route now and the deck opens on the one in the URL, so
+     they are ordinary links and only the drawer needs closing. */
 
   return (
     <>
@@ -48,9 +45,9 @@ export default function Header() {
             {SECTIONS.map((section) => (
               <Link
                 key={section.id}
-                href={`/#${section.id}`}
+                href={section.href}
                 className="header__link"
-                onClick={(e) => onSectionClick(e, `#${section.id}`)}
+                onClick={closeMenu}
               >
                 {section.label}
               </Link>
@@ -66,8 +63,11 @@ export default function Header() {
           </nav>
 
           <div className="header__right">
+            {/* Contact is a section of the deck now and sits in the nav, so
+                the button next to it is the mail link it always was, named
+                for what it actually does. */}
             <a href={`mailto:${EMAIL}`} className="header__cta">
-              Contact
+              Email
             </a>
 
             <button
@@ -98,10 +98,10 @@ export default function Header() {
           {SECTIONS.map((section, i) => (
             <Link
               key={section.id}
-              href={`/#${section.id}`}
+              href={section.href}
               className="drawer__link display"
               style={{ '--i': i }}
-              onClick={(e) => onSectionClick(e, `#${section.id}`)}
+              onClick={closeMenu}
             >
               <span className="drawer__num sign">0{i + 1}</span>
               {section.label}

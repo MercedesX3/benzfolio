@@ -11,7 +11,10 @@ export default function Footer() {
 
       <div className="footer__inner page-shell">
         <div>
-          <p className="footer__logo display">MX</p>
+          {/* The mark is the site's display face, same as the name on the
+              deck. It carried a `display` class that was never defined and an
+              italic from the previous identity, so it set in the body font. */}
+          <p className="footer__logo kelsi">MX</p>
           <p className="footer__note">Full-stack developer · Dallas, TX</p>
           <div className="footer__socials">
             {SOCIALS.map((social) => (
@@ -30,7 +33,7 @@ export default function Footer() {
 
         <nav className="footer__nav" aria-label="Footer">
           {SECTIONS.map((section) => (
-            <Link key={section.id} href={`/#${section.id}`} className="footer__link">
+            <Link key={section.id} href={section.href} className="footer__link">
               {section.label}
             </Link>
           ))}
@@ -43,7 +46,7 @@ export default function Footer() {
             Resume
           </a>
           <a href={`mailto:${EMAIL}`} className="footer__link">
-            Contact
+            Email
           </a>
         </nav>
 

@@ -30,13 +30,20 @@ export default function AppShell({ children }) {
   const pathname = usePathname();
   const isFlatLay = DECK_PATHS.has(pathname);
 
+  /* Case studies scroll like a document but carry the deck's own floating
+     pill nav instead of the document header, so they read as part of the same
+     site rather than a separate one. They opt out of the header only — the
+     footer and smooth scroll still apply. */
+  const isCaseStudy = pathname.startsWith('/projects/');
+  const showHeader = !isFlatLay && !isCaseStudy;
+
   useReveal();
 
   return (
     <>
       {!isFlatLay && <SmoothScroll />}
       <div className="app-container">
-        {!isFlatLay && <Header />}
+        {showHeader && <Header />}
         {/* One key for the whole deck, not the pathname. The nav moves
             between sections with history.pushState, which App Router reflects
             in usePathname — so keying on the pathname would change the key

@@ -9,6 +9,26 @@ const nextConfig = {
   turbopack: {
     root: __dirname,
   },
+  /**
+   * Lexicon used to live at /work/gopro-translation and is now a project
+   * case study. Permanent, because the old URL has been shared.
+   */
+  async redirects() {
+    return [
+      {
+        source: '/work/gopro-translation',
+        destination: '/projects/lexicon',
+        permanent: true,
+      },
+      /* Nothing else was ever published under /work, so the rest of the
+         segment goes to the projects section rather than a 404. */
+      {
+        source: '/work/:slug*',
+        destination: '/projects',
+        permanent: false,
+      },
+    ];
+  },
   async headers() {
     return [
       {

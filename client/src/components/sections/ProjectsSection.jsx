@@ -61,7 +61,7 @@ export default function ProjectsSection({ selected, onSelect }) {
             <motion.p className="pj__list" {...rise(0.14)}>
               <span>Sage</span>
               <span>Semantica</span>
-              <span>Archer</span>
+              <span>Lexicon</span>
               <span>Lumina</span>
             </motion.p>
           </header>

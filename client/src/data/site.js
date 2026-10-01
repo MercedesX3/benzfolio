@@ -36,10 +36,22 @@ export const ABOUT_LINKS = [
 ];
 
 /* Drives both the header nav and the mobile drawer. */
+/**
+ * The links in the header and the footer.
+ *
+ * These are the deck's own sections, and they are PATHS rather than hashes:
+ * every section is a real route (/projects, /about) and the deck opens on the
+ * one in the URL. The old list — work, playground, about — pointed at
+ * `/#work` and `/#playground`, which stopped existing when the site became a
+ * deck, so two of the five footer links went nowhere.
+ *
+ * Kept in step with PILL_NAV in data/flatlay.js, which is the same set.
+ */
 export const SECTIONS = [
-  { id: 'work', label: 'Work' },
-  { id: 'playground', label: 'Playground' },
-  { id: 'about', label: 'About' },
+  { id: 'home', label: 'Home', href: '/' },
+  { id: 'projects', label: 'Projects', href: '/projects' },
+  { id: 'about', label: 'About', href: '/about' },
+  { id: 'contact', label: 'Contact', href: '/contact' },
 ];
 
 export const MARQUEE = [

@@ -1,0 +1,202 @@
+/* ── The project reel ───────────────────────────────────────────
+   A 15s clip at the top of a project popup. The stage is a fixed
+   16:9 so the SVG never letterboxes, and everything inside sizes
+   from the viewBox rather than from the page. */
+
+.reel {
+  margin: 0 0 1.5rem;
+}
+
+.reel__stage {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #f6f7f9;
+  /* The contact shadow of something lying on the desk, not a floating card. */
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05);
+}
+
+.reel__stage--dark {
+  background: #0b0e20;
+}
+
+.reel__stage svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* The whole stage is the play/pause target. No permanent chrome over the
+   picture — the control is the picture. */
+.reel__hold {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.reel__hold:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: -3px;
+}
+
+.reel__track {
+  height: 3px;
+  margin-top: 0.5rem;
+  border-radius: 2px;
+  background: rgba(0, 0, 0, 0.07);
+  overflow: hidden;
+}
+
+.reel__bar {
+  display: block;
+  height: 100%;
+  background: var(--blue);
+  border-radius: 2px;
+}
+
+/* ── Type inside the clip ───────────────────────────────────────
+   Set in the viewBox's own units so it scales with the stage. The
+   display face is avoided for anything with a digit in it — Kelsi
+   has no numerals. */
+
+.reel__title {
+  font-family: 'Kelsi Fill', 'Kelsi', var(--font-body), sans-serif;
+  font-size: 46px;
+  fill: var(--ink);
+}
+
+/* Semantica sets its name in a Baskerville-style serif on the live site, so
+   its clip does too — recognition is the first job of a demo. Georgia is the
+   closest face already on every machine; no extra font is loaded for 2.4
+   seconds of a clip. */
+.reel__title--serif {
+  font-family: Georgia, 'Libre Baskerville', 'Times New Roman', serif;
+  font-size: 44px;
+  letter-spacing: 0.02em;
+}
+
+.reel__sub {
+  font-family: var(--font-body), sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  fill: var(--ink-faint);
+}
+
+/* SAGE sets its landing headline large and light, with the product name in a
+   heavier cut. DM Sans is the site's own body face. */
+.reel__sage-head {
+  font-family: 'DM Sans', var(--font-body), sans-serif;
+  font-size: 30px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.reel__sage-mark {
+  font-weight: 700;
+}
+
+.reel__pill {
+  font-family: 'DM Sans', var(--font-body), sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.reel__caption {
+  font-family: var(--font-body), sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  fill: var(--ink-soft);
+}
+
+.reel__row-label,
+.reel__trait,
+.reel__chip,
+.reel__def {
+  font-family: var(--font-body), sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  fill: var(--ink-soft);
+}
+
+.reel__def {
+  font-weight: 500;
+  font-size: 12px;
+}
+
+.reel__hrs {
+  font-family: 'DM Sans', var(--font-body), sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.reel__spine {
+  font-family: var(--font-body), sans-serif;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  fill: #6f68c9;
+  /* Spines read bottom-to-top, like books on an actual shelf. */
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: rotate(-90deg);
+}
+
+.reel__chat,
+.reel__source {
+  font-family: var(--font-body), sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  fill: #fff;
+}
+
+.reel__source {
+  font-size: 9px;
+  opacity: 0.9;
+}
+
+.reel__big,
+.reel__score {
+  font-family: var(--font-body), sans-serif;
+  font-size: 58px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.reel__score {
+  font-size: 40px;
+  fill: #fff;
+}
+
+.reel__outcome-label {
+  font-family: var(--font-body), sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.reel__term {
+  font-family: var(--font-body), sans-serif;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.reel__q {
+  font-family: var(--font-hand), cursive;
+  font-size: 26px;
+  fill: #9b8268;
+}
+
+.reel__feed {
+  font-family: var(--font-body), sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  fill: #8e97d4;
+}
