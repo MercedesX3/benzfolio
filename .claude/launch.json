@@ -15,7 +15,15 @@
       ],
       "port": 3000
     },
-    { "name": "benzfolio", "runtimeExecutable": "npm", "runtimeArgs": ["run", "dev"], "port": 3001 },
+    {
+      "name": "benzfolio",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
+      "port": 3001
+    },
     {
       "name": "symphony",
       "runtimeExecutable": "npm",
@@ -29,6 +37,20 @@
         "3002"
       ],
       "port": 3002
+    },
+    {
+      "name": "semantica-v2",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "/Users/thebenzsecrets/Semantica-v2/client",
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "3003"
+      ],
+      "port": 3003
     }
   ]
 }
