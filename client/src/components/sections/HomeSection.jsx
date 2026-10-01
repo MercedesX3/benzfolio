@@ -62,6 +62,7 @@ export default function HomeSection({ selected, onSelect }) {
               width={MAT.iw}
               height={MAT.ih}
               priority
+              sizes="(max-width: 860px) 226vw, 132vw"
               className="fl__mat"
               style={{
                 '--x': MAT.x,

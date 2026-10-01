@@ -192,11 +192,54 @@ export default function Deck() {
     [isDeck, index, startSlide]
   );
 
-  /* Deep links: /projects should open on that section. */
+  /* Deep links: /projects should open ON that section, not travel to it.
+     The slide is a transition between sections the reader asked for; on a
+     cold load there is nothing to transition from, so animating it meant
+     someone opening /contact watched an empty rail move past four screens of
+     not-yet-loaded sections before anything arrived. `placed` stays false
+     until the rail has been put in position once, and the rail uses it to
+     skip that first animation.
+
+     State rather than a ref: the rail reads it while rendering, and a ref
+     flipping does not re-render, so the transition stayed pinned at zero and
+     every later nav click jumped instead of sliding. */
+  const [placed, setPlaced] = useState(false);
+
   useEffect(() => {
     const at = SECTIONS.findIndex((s) => s.id === idFromPath());
     if (at > 0) setIndex(at);
   }, []);
+
+  /* The same deep link on a phone.
+     Below the breakpoint the deck is off and the page is an ordinary scrolling
+     document, so moving the rail does nothing — /about opened at the top of
+     the home section and the reader had to find it themselves. Nav clicks were
+     fine, because those scroll; only the cold load was stranded. */
+  const jumped = useRef(false);
+
+  useEffect(() => {
+    if (isDeck || jumped.current) return;
+    const id = idFromPath();
+    if (id === 'home') {
+      jumped.current = true;
+      return;
+    }
+    const el = document.getElementById(`section-${id}`);
+    if (!el) return;
+    /* Instant, not smooth: this is where the page opens, not a journey the
+       reader asked to watch. */
+    el.scrollIntoView({ block: 'start', behavior: 'auto' });
+    jumped.current = true;
+  }, [isDeck]);
+
+  /* Flipped after the first positioned frame, so only the opening placement
+     is instant. It waits for offsets, because before they are measured the
+     rail's target is still 0 and that frame is not the real placement. */
+  useEffect(() => {
+    if (placed || (isDeck && !offsets.length)) return undefined;
+    const id = requestAnimationFrame(() => setPlaced(true));
+    return () => cancelAnimationFrame(id);
+  }, [placed, isDeck, offsets.length]);
 
   /* Back and forward move the rail. Without this, pushState would change the
      URL while leaving the deck where it was. */
@@ -378,7 +421,7 @@ export default function Deck() {
         ref={railRef}
         className="deck__rail"
         animate={isDeck ? { y: -(offsets[index] ?? 0) } : { y: 0 }}
-        transition={reduced ? { duration: 0 } : slide}
+        transition={reduced || !placed ? { duration: 0 } : slide}
       >
         {sections.map(({ id, Component }) => {
           /* In mobile mode nothing slides, so every section is live. */

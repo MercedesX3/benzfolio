@@ -82,6 +82,7 @@ export default function ProjectsSection({ selected, onSelect }) {
               width={PROJECT_MAT.iw}
               height={PROJECT_MAT.ih}
               loading="eager"
+              sizes="(max-width: 860px) 104vw, 95vw"
               className="pj__mat"
               style={matFrame(PROJECT_MAT)}
             />

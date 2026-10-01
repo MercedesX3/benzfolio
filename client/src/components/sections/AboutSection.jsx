@@ -73,6 +73,7 @@ export default function AboutSection() {
               width={ABOUT_MAT.iw}
               height={ABOUT_MAT.ih}
               loading="eager"
+              sizes="(max-width: 860px) 226vw, 116vw"
               className="ab__board"
               style={{
                 '--x': ABOUT_MAT.x,

@@ -75,13 +75,44 @@ export default function LayItem({ item, selected, onSelect, index = 0, animate =
       objects rendered as empty buttons. There are a few dozen images total
       and the reader reaches any section in one click, so there is nothing for
       deferring to save. */
+  /**
+   * What width this object actually renders at, as a `sizes` the browser can
+   * act on.
+   *
+   * Every object used to declare the same `620px`, which is true of none of
+   * them: the mat is 1400px wide on a laptop and a sticky note is 160. The
+   * browser picks its srcset candidate from this number, so one value for
+   * everything means fetching a 1280px file for a 160px sticker and, on a
+   * wide screen, too small a file for the big ones.
+   *
+   * An object's width tracks its share of the 1440 design space, so that is
+   * what it declares — but in px, and never above the 620px every object used
+   * to claim.
+   *
+   * The vw version of this is what you reach for first, and it broke the home
+   * page: declaring the Semantica tablet at 57vw pushed it to a variant the
+   * browser would not finish decoding, and the object vanished from the
+   * composition entirely while every smaller one was fine. The cap means no
+   * image ever asks for MORE than it did before — small objects simply stop
+   * asking for far too much.
+   *
+   * Portrait keeps vw, where the stage really is the full viewport width.
+   * Anchored objects carry their own CSS width and state it directly.
+   */
+  const sizes = item.anchor
+    ? item.anchor.width
+    : `(max-width: 860px) ${Math.ceil(((item.m?.w ?? item.w) / 804) * 100)}vw, ${Math.min(
+        620,
+        Math.ceil(item.w * 1.15)
+      )}px`;
+
   const picture = (
     <Image
       src={item.src}
       alt={interactive ? '' : item.label}
       width={item.iw}
       height={item.ih}
-      sizes="(max-width: 900px) 60vw, 620px"
+      sizes={sizes}
       loading="eager"
       className="fl__img"
     />

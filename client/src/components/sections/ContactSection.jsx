@@ -115,6 +115,7 @@ export default function ContactSection({ onNavigate }) {
             height={583}
             loading="eager"
             aria-hidden="true"
+            sizes="(max-width: 860px) 40vw, 30vw"
             className="ct__plane"
           />
 
