@@ -58,11 +58,14 @@ export default function ProjectsSection({ selected, onSelect }) {
             <motion.h2 className="pj__title kelsi" {...rise(0.07)}>
               Projects
             </motion.h2>
+            {/* An index of what is on the mat. These read as links, so they
+                behave like them: each opens the same card as its object. */}
             <motion.p className="pj__list" {...rise(0.14)}>
-              <span>Sage</span>
-              <span>Semantica</span>
-              <span>Lexicon</span>
-              <span>Lumina</span>
+              {PROJECT_ITEMS.map((item) => (
+                <button key={item.id} type="button" onClick={() => onSelect(item.id)}>
+                  {item.label}
+                </button>
+              ))}
             </motion.p>
           </header>
 

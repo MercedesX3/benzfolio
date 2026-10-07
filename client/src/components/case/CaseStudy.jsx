@@ -4,7 +4,7 @@ import { useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion, useReducedMotion, useScroll, useSpring, useTransform } from 'motion/react';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight } from 'lucide-react';
 import ProjectReel from '../reel/ProjectReel';
 import ChallengeVideo from '../ChallengeVideo';
 import CaseNav from './CaseNav';
@@ -103,6 +103,7 @@ function Chapter({ chapter, index, reduced }) {
                 width={chapter.artifact.w}
                 height={chapter.artifact.h}
                 sizes="(max-width: 900px) 86vw, 42vw"
+                style={{ '--ar': chapter.artifact.w / chapter.artifact.h }}
               />
             )}
           </motion.div>
@@ -161,38 +162,63 @@ export default function CaseStudy({ study, next }) {
           {study.lede}
         </motion.p>
 
-        <motion.div
-          className="cs__reel"
-          initial={reduced ? false : { opacity: 0, y: 28 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.85, delay: 0.22, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <ProjectReel slug={study.slug} label={study.title} />
-        </motion.div>
+        {/* The clip and the facts side by side. The facts used to sit in a
+            strip under the clip and the links at the very bottom of the
+            page, so the three things a recruiter checks first — what was my
+            part, what is it built with, can I see it — were a full scroll
+            away, while the right half of the hero sat empty. */}
+        <div className="cs__show">
+          <motion.div
+            className="cs__reel"
+            initial={reduced ? false : { opacity: 0, y: 28 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.85, delay: 0.22, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <ProjectReel slug={study.slug} label={study.title} />
+          </motion.div>
 
-        {/* A project with a recorded walkthrough shows it under the clip: the
-            reel is the argument, the walkthrough is the evidence. Silent,
-            looping and muted, so it never grabs the page. */}
-        {/* The facts, as a strip of index cards under the clip. */}
-        <motion.dl
-          className="cs__facts"
-          initial={reduced ? false : { opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <div>
-            <dt>Role</dt>
-            <dd>{study.role}</dd>
-          </div>
-          <div>
-            <dt>When</dt>
-            <dd>{study.year}</dd>
-          </div>
-          <div>
-            <dt>{study.stat.label}</dt>
-            <dd className="cs__stat">{study.stat.value}</dd>
-          </div>
-        </motion.dl>
+          <motion.aside
+            className="cs__aside"
+            initial={reduced ? false : { opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <dl className="cs__facts">
+              <div>
+                <dt>{study.stat.label}</dt>
+                <dd className="cs__stat">{study.stat.value}</dd>
+              </div>
+              <div>
+                <dt>Role</dt>
+                <dd>{study.role}</dd>
+              </div>
+              <div>
+                <dt>When</dt>
+                <dd>{study.year}</dd>
+              </div>
+            </dl>
+
+            <div className="cs__stack">
+              <h2 className="eyebrow">Built with</h2>
+              <ul>
+                {study.stack.map((s) => (
+                  <li key={s}>{s}</li>
+                ))}
+              </ul>
+            </div>
+
+            {study.links.length > 0 && (
+              <div className="cs__links">
+                {study.links.map((l) => (
+                  <a key={l.href} href={l.href} target="_blank" rel="noreferrer" className="cs__link">
+                    {l.label}
+                    <ArrowUpRight size={16} strokeWidth={2.5} />
+                  </a>
+                ))}
+              </div>
+            )}
+          </motion.aside>
+        </div>
       </header>
 
       <div className="cs__chapters">
@@ -235,23 +261,19 @@ export default function CaseStudy({ study, next }) {
       )}
 
       <footer className="cs__foot">
-        <div className="cs__stack">
-          <h3 className="eyebrow">Built with</h3>
-          <ul>
-            {study.stack.map((s) => (
-              <li key={s}>{s}</li>
+        {/* The links again, for someone who has just read to the end and now
+            wants to see the thing. The stack is not repeated — it is a fact,
+            and it is already at the top. */}
+        {study.links.length > 0 && (
+          <div className="cs__links cs__links--row">
+            {study.links.map((l) => (
+              <a key={l.href} href={l.href} target="_blank" rel="noreferrer" className="cs__link">
+                {l.label}
+                <ArrowUpRight size={16} strokeWidth={2.5} />
+              </a>
             ))}
-          </ul>
-        </div>
-
-        <div className="cs__links">
-          {study.links.map((l) => (
-            <a key={l.href} href={l.href} target="_blank" rel="noreferrer" className="cs__link">
-              {l.label}
-              <ArrowRight size={16} strokeWidth={2.5} />
-            </a>
-          ))}
-        </div>
+          </div>
+        )}
 
         {next && (
           <Link href={`/projects/${next.slug}`} className="cs__next">

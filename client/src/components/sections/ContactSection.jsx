@@ -1,7 +1,9 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'motion/react';
+import { ArrowUpRight, Check, Copy } from 'lucide-react';
 import { STAGE } from '../../data/flatlay';
 import { EMAIL, RESUME, SOCIALS } from '../../data/site';
 import './ContactSection.css';
@@ -34,6 +36,26 @@ const ELSEWHERE = [
 ];
 
 export default function ContactSection({ onNavigate }) {
+  /* A mailto opens whatever mail app the OS has registered, which for a lot
+     of people is one they never use. Copying the address is the escape hatch,
+     and the button says so when it has worked. */
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    if (!copied) return undefined;
+    const id = setTimeout(() => setCopied(false), 2000);
+    return () => clearTimeout(id);
+  }, [copied]);
+
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(EMAIL);
+      setCopied(true);
+    } catch {
+      /* Clipboard blocked — the address is right there to select by hand. */
+    }
+  };
+
   const rise = (delay) => ({
     initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0 },
@@ -63,8 +85,27 @@ export default function ContactSection({ onNavigate }) {
               {EMAIL}
             </a>
             <p className="ct__note">
-              Looking for a software engineering or design roles. I’m currently open to new opportunities and would love to hear from you.
+              Open to software engineering and design roles. If you’re hiring, or just
+              building something interesting, I’d love to hear about it.
             </p>
+
+            <div className="ct__actions">
+              <a className="ct__btn ct__btn--fill" href={RESUME} target="_blank" rel="noreferrer">
+                View résumé
+                <ArrowUpRight size={18} strokeWidth={2.5} aria-hidden="true" />
+              </a>
+              <button type="button" className="ct__btn" onClick={copyEmail}>
+                {copied ? (
+                  <Check size={17} strokeWidth={2.5} aria-hidden="true" />
+                ) : (
+                  <Copy size={16} strokeWidth={2.5} aria-hidden="true" />
+                )}
+                {copied ? 'Copied' : 'Copy email'}
+              </button>
+              <span className="sr-only" aria-live="polite">
+                {copied ? 'Email address copied' : ''}
+              </span>
+            </div>
           </motion.div>
 
           <motion.div className="ct__cols" {...rise(0.16)}>
@@ -83,9 +124,6 @@ export default function ContactSection({ onNavigate }) {
                   {s.label}
                 </a>
               ))}
-              <a className="ct__link" href={RESUME} target="_blank" rel="noreferrer">
-                Résumé
-              </a>
             </nav>
 
             <nav className="ct__col" aria-label="Elsewhere">

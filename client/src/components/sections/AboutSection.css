@@ -134,9 +134,53 @@
   color: var(--blue);
 }
 
-/* A link with no URL yet renders as plain text rather than a dead anchor. */
-.ab__links span {
+/* ── The bio ────────────────────────────────────────────────
+   Body face, not Kelsi or the hand: this is the one block on the
+   board meant to be read rather than looked at. It fills the
+   empty band to the right of the name and stops above the
+   board's top frame at design y 256. */
+.ab__bio {
+  color: var(--ink-soft);
+}
+
+.ab__bio p {
+  margin: 0;
+}
+
+.ab__bio--stage {
+  position: absolute;
+  top: calc(36 * var(--u));
+  left: calc(740 * var(--u));
+  width: calc(600 * var(--u));
+  z-index: 20;
+  display: grid;
+  gap: calc(10 * var(--u));
+  font-size: calc(16 * var(--u));
+  line-height: 1.55;
+}
+
+.ab__bio--stage p:first-child {
+  color: var(--ink);
+}
+
+.ab__tools {
+  margin-top: calc(4 * var(--u)) !important;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.ab__tools-head {
+  margin-right: 0.8em;
+  font-size: 0.8em;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   color: var(--ink-faint);
+}
+
+/* Portrait only — see the note on Bio in AboutSection.jsx. */
+.ab__bio--flow {
+  display: none;
 }
 
 /* Portrait — see the note in FlatLay.css. */
@@ -162,8 +206,7 @@
     letter-spacing: 0;
   }
 
-  .ab__links a,
-  .ab__links span {
+  .ab__links a {
     display: block;
     margin-top: calc(30 * var(--u));
   }
@@ -176,6 +219,22 @@
     top: calc(var(--my) / 1748 * 100%);
     width: calc(var(--mw) / 804 * 100%);
     height: calc(var(--mh) / 1748 * 100%);
+  }
+
+  .ab__bio--stage {
+    display: none;
+  }
+
+  .ab__bio--flow {
+    display: grid;
+    gap: calc(28 * var(--u));
+    padding: calc(20 * var(--u)) calc(75 * var(--u)) calc(140 * var(--u));
+    font-size: calc(30 * var(--u));
+    line-height: 1.55;
+  }
+
+  .ab__bio--flow p:first-child {
+    color: var(--ink);
   }
 
   /* The portrait board is a different shape from the desktop one, so the

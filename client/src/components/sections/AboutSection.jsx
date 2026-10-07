@@ -5,7 +5,7 @@ import { motion } from 'motion/react';
 import LayItem from '../lay/LayItem';
 import { ABOUT_ITEMS, ABOUT_MAT, ABOUT_SHELF } from '../../data/sections';
 import { STAGE } from '../../data/flatlay';
-import { ABOUT_LINKS } from '../../data/site';
+import { ABOUT_BIO, ABOUT_LINKS, TOOLBOX } from '../../data/site';
 import './AboutSection.css';
 
 /**
@@ -25,6 +25,29 @@ import './AboutSection.css';
  * transition; re-animating on arrival would make the sections read as separate
  * screens swapping rather than one surface moving past.
  */
+/**
+ * The two paragraphs and the toolbox line.
+ *
+ * Rendered twice, and only one copy is ever displayed: on desktop it sits in
+ * the stage, in the empty band above the board; in portrait the stage has no
+ * room for it, so the second copy follows the board in normal flow. The
+ * hidden one is `display: none`, which also takes it out of the
+ * accessibility tree — a screen reader hears it once.
+ */
+function Bio({ className, ...rest }) {
+  return (
+    <motion.div className={`ab__bio ${className}`} {...rest}>
+      {ABOUT_BIO.map((p) => (
+        <p key={p.slice(0, 24)}>{p}</p>
+      ))}
+      <p className="ab__tools">
+        <span className="ab__tools-head">Usually in</span>
+        {TOOLBOX.join(' · ')}
+      </p>
+    </motion.div>
+  );
+}
+
 export default function AboutSection() {
   const rise = (delay) => ({
     initial: { opacity: 0, y: 22 },
@@ -44,17 +67,15 @@ export default function AboutSection() {
               Mercedes
             </motion.h2>
             <motion.p className="ab__links" {...rise(0.14)}>
-              {ABOUT_LINKS.map((link) =>
-                link.href ? (
-                  <a key={link.label} href={link.href} target="_blank" rel="noreferrer">
-                    {link.label}
-                  </a>
-                ) : (
-                  <span key={link.label}>{link.label}</span>
-                )
-              )}
+              {ABOUT_LINKS.filter((link) => link.href).map((link) => (
+                <a key={link.label} href={link.href} target="_blank" rel="noreferrer">
+                  {link.label}
+                </a>
+              ))}
             </motion.p>
           </header>
+
+          <Bio className="ab__bio--stage" {...rise(0.2)} />
 
           {/* The board slides up from under what's pinned to it. Wrapped,
               and the wrapper is stage-sized and absolutely positioned: a
@@ -105,6 +126,8 @@ export default function AboutSection() {
           </div>
         </div>
       </div>
+
+      <Bio className="ab__bio--flow" />
     </div>
   );
 }

@@ -27,10 +27,26 @@ const hand = Caveat({
   display: 'swap',
 });
 
+const DESCRIPTION =
+  'CS @ UT Dallas. Full-stack developer and designer. SAGE, Semantica, Lexicon, Lumina — and everything else on the desk.';
+
+/* The icon, apple-icon and opengraph/twitter images are files beside this one
+   (app/icon.png and friends), which Next wires into <head> by name. These
+   fields only describe the link preview around them. */
 export const metadata = {
   title: 'Mercedes Xiong — Full-Stack Developer',
-  description:
-    'CS @ UT Dallas. Full-stack developer and designer. SAGE, Semantica, Lumina — and everything else on the desk.',
+  description: DESCRIPTION,
+  openGraph: {
+    type: 'website',
+    siteName: 'Mercedes Xiong',
+    title: 'Mercedes Xiong — Full-Stack Developer',
+    description: DESCRIPTION,
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Mercedes Xiong — Full-Stack Developer',
+    description: DESCRIPTION,
+  },
 };
 
 export default function RootLayout({ children }) {

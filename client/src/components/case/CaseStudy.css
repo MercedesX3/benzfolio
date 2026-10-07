@@ -78,16 +78,27 @@
 }
 
 .cs__lede {
-  max-width: 34ch;
+  max-width: 44ch;
   margin: 1.25rem 0 0;
   font-size: clamp(1.05rem, 1.6vw, 1.3rem);
   line-height: 1.55;
   color: var(--ink-soft);
 }
 
-.cs__reel {
-  max-width: 820px;
+/* Clip on the left at the width it always had, facts in the column the
+   hero used to leave empty. */
+.cs__show {
+  display: grid;
+  grid-template-columns: minmax(0, 820px) minmax(0, 1fr);
+  gap: clamp(2rem, 4vw, 3.5rem);
+  align-items: start;
   margin: clamp(2rem, 4vw, 3rem) 0 0;
+}
+
+.cs__aside {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
 }
 
 /* A phone walkthrough is tall, so it is capped by height and sits beside the
@@ -108,12 +119,14 @@
   border-radius: 10px;
 }
 
-/* The facts, set as index cards rather than a table. */
+/* The facts, stacked: the stat leads because it is the one number. */
 .cs__facts {
   display: flex;
-  flex-wrap: wrap;
-  gap: 2.5rem;
-  margin: 2rem 0 0;
+  flex-direction: column;
+  gap: 1.1rem;
+  margin: 0;
+  padding-bottom: 1.6rem;
+  border-bottom: 1px solid rgba(16, 20, 40, 0.1);
 }
 
 .cs__facts dt {
@@ -130,7 +143,8 @@
 }
 
 .cs__stat {
-  font-size: 1.6rem;
+  font-size: 2rem;
+  line-height: 1.1;
   font-weight: 800;
   letter-spacing: -0.02em;
   color: var(--blue);
@@ -252,12 +266,17 @@
 
 /* Capped by height as well as width: a phone screen is 402 x 874, and at the
    column's full width one frame runs well past a screenful — the reader loses
-   the paragraph it belongs to. Portrait artwork centres in its column. */
+   the paragraph it belongs to. Portrait artwork centres in its column.
+
+   The width is computed from the artwork's aspect ratio (--ar, set from the
+   manifest), NOT left as `width: auto`. With auto, the rendered size came from
+   the pixel count of whichever srcset file the browser picked, so any source
+   smaller than the candidate it asked for shrank: the 428px SAGE cover drew at
+   134px wide in a 580px column. */
 .cs__artifact img {
   display: block;
+  width: min(100%, calc(72vh * var(--ar, 1)));
   max-width: 100%;
-  max-height: 72vh;
-  width: auto;
   height: auto;
   margin-inline: auto;
   border-radius: 6px;
@@ -321,10 +340,14 @@
 
 .cs__foot {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: clamp(2rem, 5vw, 4rem);
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(1.5rem, 3vw, 2rem);
   padding: clamp(2.5rem, 6vw, 5rem) 0 clamp(3rem, 8vw, 6rem);
   border-top: 1px solid rgba(16, 20, 40, 0.1);
+}
+
+.cs__stack .eyebrow {
+  font-size: 0.72rem;
 }
 
 .cs__stack ul {
@@ -346,7 +369,7 @@
 
 .cs__links {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   align-items: flex-start;
   gap: 0.7rem;
 }
@@ -373,14 +396,12 @@
 }
 
 .cs__link:hover svg {
-  transform: translateX(3px);
+  transform: translate(2px, -2px);
 }
 
-/* The way onward. Full width under the two columns. */
+/* The way onward. */
 .cs__next {
-  grid-column: 1 / -1;
   display: block;
-  margin-top: 1.5rem;
   padding: clamp(1.5rem, 4vw, 2.5rem);
   border-radius: 10px;
   background: var(--mat);
@@ -414,7 +435,7 @@
 
 @media (max-width: 860px) {
   .cs__chapter,
-  .cs__foot {
+  .cs__show {
     grid-template-columns: minmax(0, 1fr);
   }
 
@@ -424,8 +445,11 @@
     order: 0;
   }
 
+  /* Three short facts fit in a row again on a phone, under the clip. */
   .cs__facts {
-    gap: 1.5rem 2rem;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1.25rem 2rem;
   }
 
   /* Two across rather than four — at phone width a row of four screens is

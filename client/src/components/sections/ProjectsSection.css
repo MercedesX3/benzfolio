@@ -66,6 +66,30 @@
   color: var(--ink);
 }
 
+.pj__list button {
+  /* The header ignores the pointer so the mat stays hoverable through it;
+     the index hands it back. */
+  pointer-events: auto;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 0.1em;
+  text-underline-offset: 0.3em;
+  transition: color 0.18s var(--ease-out), text-decoration-color 0.18s var(--ease-out);
+}
+
+.pj__list button:hover {
+  color: var(--blue);
+  text-decoration-color: currentColor;
+}
+
 /* Portrait — see the note in FlatLay.css. The stage keeps its geometry, so
    only this section's own type and its mat need portrait numbers. */
 @media (max-width: 860px) {
@@ -90,12 +114,12 @@
     letter-spacing: 0;
   }
 
-  .pj__list span {
+  .pj__list button {
     display: block;
     margin-top: calc(30 * var(--u));
   }
 
-  .pj__list span:first-child { margin-top: 0; }
+  .pj__list button:first-child { margin-top: 0; }
 
   .pj__mat {
     display: block;

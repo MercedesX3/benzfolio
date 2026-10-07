@@ -19,16 +19,16 @@
   gap: 1rem;
 }
 
+/* The same Kelsi mark as the footer and the contact screen — it was set in
+   the body face with a leftover italic from an older identity. */
 .header__logo {
-  font-family: var(--font-display), sans-serif;
-  font-style: italic;
-  font-size: 1.2rem;
-  letter-spacing: -0.02em;
+  font-size: 1.9rem;
+  color: var(--blue);
   transition: color 0.2s var(--ease-out);
 }
 
 .header__logo:hover {
-  color: var(--red);
+  color: var(--blue-deep);
 }
 
 .header__nav {

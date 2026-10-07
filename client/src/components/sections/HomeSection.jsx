@@ -50,6 +50,37 @@ export default function HomeSection({ selected, onSelect }) {
             </motion.p>
           </header>
 
+          {/* Marginalia that says what the page never otherwise does: the
+              objects open. A first-time visitor sees a collage, and a
+              recruiter with thirty seconds will not discover a hover halo on
+              their own. It lands after the objects have, so it reads as a
+              note added to a finished desk. Pointer users only need telling —
+              to a screen reader every object is already a labelled button. */}
+          <motion.div
+            className="fl__hint"
+            aria-hidden="true"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 1.1, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <p className="hand">psst — everything on the desk opens</p>
+            <svg viewBox="0 0 120 70" fill="none">
+              <path
+                d="M6 6 C 14 40, 50 60, 106 52"
+                stroke="currentColor"
+                strokeWidth="3"
+                strokeLinecap="round"
+              />
+              <path
+                d="M94 41 L 108 52 L 93 62"
+                stroke="currentColor"
+                strokeWidth="3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </motion.div>
+
           <motion.div
             className="fl__mat-wrap"
             initial={{ opacity: 0, y: 34 }}

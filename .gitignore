@@ -1,5 +1,8 @@
+# Local tooling and scratch output
 .claude
-Claude outputs/flatlay-v8.png
-Claude outputs/nav-panel.png
-Claude outputs/welcome-v2.png
 /Claude outputs
+
+# Build output and OS noise — the app's own ignores live in client/.gitignore
+node_modules
+.next
+.DS_Store

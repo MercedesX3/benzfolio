@@ -76,6 +76,53 @@
   color: var(--ink-soft);
 }
 
+/* The résumé leads because it is what a recruiter on this screen came for;
+   the copy button sits beside it as the quieter twin. Same pill vocabulary
+   as the popup card's links. */
+.ct__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(14 * var(--u));
+  margin-top: calc(30 * var(--u));
+}
+
+.ct__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: calc(13 * var(--u)) calc(26 * var(--u));
+  border: 2px solid var(--blue);
+  border-radius: 999px;
+  background: none;
+  color: var(--blue);
+  font: inherit;
+  font-size: calc(17 * var(--u));
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.18s var(--ease-out), color 0.18s var(--ease-out),
+    border-color 0.18s var(--ease-out);
+}
+
+.ct__btn:hover {
+  background: var(--blue);
+  color: #fff;
+}
+
+.ct__btn--fill {
+  background: var(--blue);
+  color: #fff;
+}
+
+.ct__btn--fill:hover {
+  background: var(--blue-deep);
+  border-color: var(--blue-deep);
+}
+
+.ct__btn svg {
+  width: 1.05em;
+  height: 1.05em;
+}
+
 .ct__cols {
   position: absolute;
   top: calc(110 * var(--u));
@@ -146,7 +193,7 @@
   .ct__lead {
     top: calc(360 * var(--u));
     left: calc(57 * var(--u));
-    max-width: calc(560 * var(--u));
+    max-width: calc(690 * var(--u));
   }
 
   .ct__kicker { font-size: calc(28 * var(--u)); }
@@ -162,8 +209,22 @@
     line-height: 1.5;
   }
 
+  /* One row, always: wrapped, the second pill dropped into the link
+     columns below. */
+  .ct__actions {
+    flex-wrap: nowrap;
+    gap: calc(16 * var(--u));
+    margin-top: calc(36 * var(--u));
+  }
+
+  .ct__btn {
+    padding: calc(18 * var(--u)) calc(28 * var(--u));
+    font-size: calc(26 * var(--u));
+    white-space: nowrap;
+  }
+
   .ct__cols {
-    top: calc(700 * var(--u));
+    top: calc(870 * var(--u));
     right: auto;
     left: calc(57 * var(--u));
     gap: calc(115 * var(--u));
@@ -181,8 +242,8 @@
     display: block;
     position: absolute;
     left: calc(35 * var(--u));
-    top: calc(1115 * var(--u));
-    width: calc(470 * var(--u));
+    top: calc(1240 * var(--u));
+    width: calc(370 * var(--u));
     height: auto;
     max-width: none;
     pointer-events: none;

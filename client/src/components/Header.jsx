@@ -37,7 +37,7 @@ export default function Header() {
     <>
       <header className="header">
         <div className="header__inner page-shell">
-          <Link href="/" className="header__logo display" aria-label="Home">
+          <Link href="/" className="header__logo kelsi" aria-label="Home">
             MX
           </Link>
 

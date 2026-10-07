@@ -71,6 +71,33 @@
   color: var(--blue-deep);
 }
 
+/* ── The hint ───────────────────────────────────────────────
+   A note written on the grey beside the mat's corner, with an
+   arrow drawn toward the polaroids. Blue like every other mark
+   she makes on the desk; never clickable. */
+.fl__hint {
+  position: absolute;
+  left: calc(70 * var(--u));
+  top: calc(318 * var(--u));
+  width: calc(270 * var(--u));
+  z-index: 3;
+  color: var(--blue);
+  rotate: -5deg;
+  pointer-events: none;
+}
+
+.fl__hint p {
+  margin: 0;
+  font-size: calc(30 * var(--u));
+  line-height: 1.05;
+}
+
+.fl__hint svg {
+  display: block;
+  width: calc(110 * var(--u));
+  margin: calc(6 * var(--u)) 0 0 calc(120 * var(--u));
+}
+
 /* ── Menu button + drawer ───────────────────────────────── */
 
 .fl__menu {
@@ -875,6 +902,23 @@
 
   .fl__role span:first-child {
     margin-top: 0;
+  }
+
+  /* In the free space right of the role list, with the arrow dropping onto
+     the SAGE phone below it. */
+  .fl__hint {
+    left: calc(350 * var(--u));
+    top: calc(578 * var(--u));
+    width: calc(380 * var(--u));
+  }
+
+  .fl__hint p {
+    font-size: calc(34 * var(--u));
+  }
+
+  .fl__hint svg {
+    width: calc(90 * var(--u));
+    margin: 0 0 0 calc(150 * var(--u));
   }
 
   .fl__mat {
